@@ -67,7 +67,12 @@ The approved frontend/backend contract is documented in:
 src/docs/auth-contract.md
 ```
 
-This document is the source of truth for:
+This document is a frontend reference derived from, and required to remain
+aligned with, the approved backend documentation. It does not change the
+backend contract or create frontend behavior that the backend has not
+documented.
+
+It records:
 
 - Approved authentication endpoints.
 - JWT handling.
@@ -79,6 +84,18 @@ This document is the source of truth for:
 
 Do not invent endpoints, request fields, response fields, or permissions that
 are not approved in the contract.
+
+For Doctor and NGO registration, keep the two backend concepts separate:
+
+- The User Account begins as `INACTIVE`.
+- The Join Request begins as `PENDING`.
+- On approval, the Join Request becomes `APPROVED` and the User Account becomes
+  `ACTIVE`.
+
+`REJECTED` is a Join Request Status, not a User Account Status. The current
+frontend must not infer a Join Request status or rejection reason from login,
+because no applicant-facing backend response field or endpoint is documented
+for that purpose.
 
 ## Current Authentication Pages
 
@@ -163,7 +180,7 @@ More shared authentication functions will be added in Issue 8.2.
 | Login API integration | Not started | 8.3 |
 | Patient registration API integration | Not started | 8.4 |
 | Doctor and NGO registration | Not started | 8.5 |
-| Pending and rejected approval pages | Not started | 8.6 |
+| Approval-status views | Not started; requires documented applicant-facing backend behavior | 8.6 |
 | Protected and role-restricted routes | Not started | 8.7 |
 | Shared role-based layouts | Not started | 8.8 |
 | Role dashboards | Not started | 8.9 |
@@ -196,3 +213,10 @@ Continue with Issue 8.2:
 2. Add shared authentication functions for login and current user.
 3. Add centralized handling for unauthorized requests.
 4. Prepare a reusable authentication state foundation.
+
+## Future Enhancements
+
+The current release does not implement:
+
+- Re-application after a rejected Join Request while retaining request history.
+- Email notification when a Join Request is approved or rejected.

@@ -19,7 +19,7 @@ The current release includes:
 - Reading the authenticated user.
 - JWT storage and transmission.
 - Logout on the frontend.
-- Pending and rejected approval states for Doctor and NGO accounts.
+- The documented registration outcome for Doctor and NGO accounts.
 
 Password recovery and password reset are outside the current release scope.
 
@@ -163,7 +163,13 @@ Doctor registration requires the approved doctor fields, including:
 - Specialization.
 - Unique license number.
 
-A Doctor account requires approval and starts in the Pending state.
+A Doctor registration creates two separate records:
+
+- The User Account starts as `INACTIVE`.
+- The Join Request starts as `PENDING`.
+
+When an administrator approves the request, the Join Request becomes
+`APPROVED` and the User Account becomes `ACTIVE`.
 
 ## NGO Registration
 
@@ -174,17 +180,53 @@ NGO registration requires the approved NGO fields, including:
 - Password and password confirmation.
 - Organization name.
 
-An NGO account requires approval and starts in the Pending state.
+An NGO registration creates two separate records:
 
-## Account States
+- The User Account starts as `INACTIVE`.
+- The Join Request starts as `PENDING`.
 
-| State | Meaning | Frontend behavior |
-| --- | --- | --- |
-| Active | The account is approved. | Redirect to the role dashboard. |
-| Pending | The account awaits approval. | Show a pending-approval page. |
-| Rejected | The account request was rejected. | Show a rejected-approval page and backend message if available. |
+When an administrator approves the request, the Join Request becomes
+`APPROVED` and the User Account becomes `ACTIVE`.
 
-Pending and Rejected states apply to Doctor and NGO accounts.
+## User Account Status and Join Request Status
+
+User Account Status and Join Request Status are different backend concepts.
+The frontend must never use one as though it were the other.
+
+### User Account Status
+
+| Status | Meaning |
+| --- | --- |
+| `INACTIVE` | A newly registered Doctor or NGO cannot access authenticated features. |
+| `ACTIVE` | The account is enabled after the associated Join Request is approved. |
+
+### Join Request Status
+
+| Status | Meaning |
+| --- | --- |
+| `PENDING` | The Doctor or NGO registration awaits administrator review. |
+| `APPROVED` | The administrator approved the request; the associated User Account becomes `ACTIVE`. |
+| `REJECTED` | The administrator rejected the request. This is not a User Account Status. |
+
+## Current Frontend Visibility of Approval Status
+
+`POST /api/auth/login` must be handled only according to its documented backend
+response. The frontend must not infer a Join Request status from a failed login
+or assume that login returns `PENDING`, `APPROVED`, `REJECTED`, or a rejection
+reason.
+
+The current frontend contract does not document an endpoint or response field
+that exposes a Doctor or NGO Join Request status or rejection reason to the
+applicant. Do not build a status lookup, rejected-account screen, or
+re-application flow until the backend documents the required API behavior.
+
+HTTP authentication and authorization errors are separate from both status
+models:
+
+| HTTP status | Meaning |
+| --- | --- |
+| `401 Unauthorized` | The request does not contain valid credentials or a valid token. |
+| `403 Forbidden` | The authenticated request is not permitted to perform the requested action. |
 
 ## JWT Handling
 
@@ -229,7 +271,7 @@ No backend logout endpoint is used in the current release.
 | Doctor and NGO registration | Not implemented | 8.5 |
 | Shared API client | Basic Axios setup exists | 8.2 |
 | Authenticated-user state | Not implemented | 8.2 |
-| Pending and rejected pages | Not implemented | 8.6 |
+| Approval-status views | Not implemented; wait for a documented applicant-facing backend contract | 8.6 |
 | Role-based layouts and dashboards | Not implemented | 8.8 and 8.9 |
 | Password recovery | Excluded from scope | Do not implement |
 
@@ -241,3 +283,12 @@ No backend logout endpoint is used in the current release.
 - Send the JWT through the `Authorization: Bearer <token>` header.
 - Keep API calls inside API or service modules.
 - Use the approved backend documentation as the source of truth.
+
+## Future Enhancements
+
+The following items are not implemented in the current release and must not be
+assumed by Sprint 8:
+
+- A Doctor or NGO re-application flow after a rejected Join Request, including
+  retaining previous request history.
+- Email notifications when a Join Request is approved or rejected.
