@@ -1,1 +1,82 @@
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/inter/latin-600.css";
+@import "@fontsource/inter/latin-700.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-400.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-500.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-600.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-700.css";
 @import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-ui);
+  --color-primary: var(--hcms-primary);
+  --color-background: var(--hcms-background);
+  --color-surface: var(--hcms-surface);
+  --color-text-primary: var(--hcms-text-primary);
+  --color-text-secondary: var(--hcms-text-secondary);
+  --color-border: var(--hcms-border);
+  --color-success: var(--hcms-success);
+  --color-warning: var(--hcms-warning);
+  --color-danger: var(--hcms-danger);
+}
+
+:root {
+  color-scheme: light;
+  --font-ui: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --hcms-primary: #1660c4;
+  --hcms-background: #f7f9fc;
+  --hcms-surface: #ffffff;
+  --hcms-text-primary: #101828;
+  --hcms-text-secondary: #667085;
+  --hcms-border: #d0d5dd;
+  --hcms-success: #16a34a;
+  --hcms-warning: #f59e0b;
+  --hcms-danger: #dc2626;
+}
+
+html[lang="ar"] {
+  --font-ui: "IBM Plex Sans Arabic", Tahoma, Arial, sans-serif;
+}
+
+html.dark,
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --hcms-primary: #1660c4;
+  --hcms-background: #0b1220;
+  --hcms-surface: #111827;
+  --hcms-text-primary: #f9fafb;
+  --hcms-text-secondary: #9ca3af;
+  --hcms-border: #374151;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html {
+  font-family: var(--font-ui);
+  background-color: var(--hcms-background);
+}
+
+body {
+  margin: 0;
+  background-color: var(--hcms-background);
+  color: var(--hcms-text-primary);
+  font-family: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}

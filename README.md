@@ -1,14 +1,28 @@
 # HCMS Frontend
 
+## Project Overview
+
 Frontend application for the **Healthcare Conflict Management System (HCMS)**.
 
-## Technologies
+## Features
+
+* Responsive React user interface
+* English and Arabic localization with LTR and RTL support
+* Shared HCMS light and dark design tokens
+* Language-aware typography using Inter and IBM Plex Sans Arabic
+* Reusable HCMS logo and icon component with light and dark presentations
+* Persistent light and dark theme foundation with operating-system fallback
+* Landing page integrated with the shared brand, language, and theme controls
+
+## Dependencies
 
 * React
 * Vite
 * React Router
 * Axios
 * ESLint
+* Tailwind CSS
+* Fontsource packages for Inter and IBM Plex Sans Arabic
 
 ## Requirements
 
@@ -18,7 +32,7 @@ Make sure the following are installed:
 * npm
 * Git
 
-## Installation
+## Setup
 
 Clone the repository:
 
@@ -85,6 +99,32 @@ The shared Axios configuration is located at:
 ```text
 src/services/api.js
 ```
+
+## Brand Assets
+
+Use the shared `Logo` component with the full wordmark or icon-only variant:
+
+```jsx
+import Logo from "./components/common/Logo";
+
+<Logo variant="logo" appearance="light" className="h-12 w-auto" />
+<Logo variant="mark" appearance="dark" className="size-10" />
+```
+
+The `appearance="dark"` option selects artwork intended for dark backgrounds.
+
+## Theme
+
+`ThemeProvider` initializes the interface from the saved `hcms-theme` value or
+the operating-system color preference. Components can read or update the theme
+with `useTheme`:
+
+```jsx
+const { theme, setTheme, toggleTheme } = useTheme();
+```
+
+`ThemeToggle` is mounted in the Landing navigation and remains available as a
+reusable control for future approved pages.
 
 ## Branching
 

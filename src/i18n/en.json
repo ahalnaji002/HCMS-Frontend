@@ -1,0 +1,37 @@
+{
+  "common": {
+    "brand": "HCMS",
+    "brandSubtitle": "Healthcare Coordination",
+    "login": "Log in",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More"
+  },
+  "nav": {
+    "about": "About",
+    "features": "Features",
+    "whoWeServe": "Who We Serve"
+  },
+  "landing": {
+    "badge": "Healthcare Conflict Management System",
+    "heroTitle": "Better coordination for",
+    "heroHighlight": "critical healthcare.",
+    "heroDescription": "A unified healthcare platform that helps patients, doctors, organizations, and administrators coordinate care and essential medical support during conflict.",
+    "connectedCare": "Connected Care",
+    "connectedCareDescription": "One coordinated healthcare system",
+    "patients": "Patients",
+    "patientDescription": "Care & follow-up",
+    "doctors": "Doctors",
+    "doctorDescription": "Medical coordination",
+    "organizations": "Organizations",
+    "organizationDescription": "Support & resources",
+    "admin": "Admin",
+    "adminDescription": "Coordination",
+    "care": "Care",
+    "treatment": "Treatment",
+    "resources": "Resources"
+  },
+  "language": {
+    "english": "English",
+    "arabic": "العربية"
+  }
+}

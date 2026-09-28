@@ -1,0 +1,37 @@
+{
+  "common": {
+    "brand": "HCMS",
+    "brandSubtitle": "تنسيق الرعاية الصحية",
+    "login": "تسجيل الدخول",
+    "getStarted": "ابدأ الآن",
+    "learnMore": "اعرف المزيد"
+  },
+  "nav": {
+    "about": "عن النظام",
+    "features": "المميزات",
+    "whoWeServe": "الفئات المستفيدة"
+  },
+  "landing": {
+    "badge": "نظام إدارة الرعاية الصحية في حالات النزاع",
+    "heroTitle": "تنسيق أفضل من أجل",
+    "heroHighlight": "رعاية صحية فعّالة.",
+    "heroDescription": "منصة صحية موحدة تساعد المرضى والأطباء والمؤسسات والمسؤولين على تنسيق الرعاية والدعم الطبي الأساسي خلال حالات النزاع.",
+    "connectedCare": "رعاية مترابطة",
+    "connectedCareDescription": "نظام موحد لتنسيق الرعاية الصحية",
+    "patients": "المرضى",
+    "patientDescription": "الرعاية والمتابعة",
+    "doctors": "الأطباء",
+    "doctorDescription": "التنسيق الطبي",
+    "organizations": "المؤسسات",
+    "organizationDescription": "الدعم والموارد",
+    "admin": "الإدارة",
+    "adminDescription": "التنسيق",
+    "care": "الرعاية",
+    "treatment": "العلاج",
+    "resources": "الموارد"
+  },
+  "language": {
+    "english": "English",
+    "arabic": "العربية"
+  }
+}
