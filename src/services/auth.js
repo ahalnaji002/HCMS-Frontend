@@ -1,9 +1,26 @@
-import API from "./api";
+import api from "./api";
+
+export async function login(credentials) {
+  const response = await api.post("/api/auth/login", credentials, {
+    skipAuth: true,
+  });
+
+  return response.data;
+}
+
+export async function getCurrentUser() {
+  const response = await api.get("/api/auth/me");
+
+  return response.data;
+}
 
 export async function registerPatient(patientData) {
-  const response = await API.post(
+  const response = await api.post(
     "/api/auth/register/patient",
-    patientData
+    patientData,
+    {
+      skipAuth: true,
+    },
   );
 
   return response.data;
