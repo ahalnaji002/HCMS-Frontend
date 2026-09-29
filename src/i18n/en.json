@@ -9,7 +9,10 @@
   "nav": {
     "about": "About",
     "features": "Features",
-    "whoWeServe": "Who We Serve"
+    "whoWeServe": "Who We Serve",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "mobileNavigation": "Mobile navigation"
   },
   "landing": {
     "badge": "Healthcare Conflict Management System",
@@ -28,10 +31,140 @@
     "adminDescription": "Coordination",
     "care": "Care",
     "treatment": "Treatment",
-    "resources": "Resources"
+    "resources": "Resources",
+    "liveEvents": {
+      "medicalRecordUpdated": "Medical record updated",
+      "emergencyAlert": "Emergency alert",
+      "resourceAllocated": "Resource allocated",
+      "treatmentFollowUpUpdated": "Treatment follow-up updated"
+    },
+    "about": {
+      "eyebrow": "About HCMS",
+      "heading": "Coordinating healthcare when every connection matters",
+      "description": "HCMS brings patients, doctors, healthcare organizations, and administrators into one coordinated system designed to support medical follow-up, communication, resource coordination, and continuity of care during conflict and emergency conditions.",
+      "values": {
+        "connectedCare": {
+          "title": "Connected Care",
+          "description": "Keep patients and healthcare providers connected throughout follow-up."
+        },
+        "coordinatedResources": {
+          "title": "Coordinated Resources",
+          "description": "Help healthcare organizations coordinate assistance and available resources."
+        },
+        "continuityOfCare": {
+          "title": "Continuity of Care",
+          "description": "Keep essential medical information and follow-up organized across the care journey."
+        }
+      }
+    },
+    "features": {
+      "eyebrow": "Platform Capabilities",
+      "heading": "Built for coordinated healthcare delivery",
+      "introduction": "Essential tools for managing care, communication, assistance, and critical events in one connected platform.",
+      "items": {
+        "medicalRecords": {
+          "title": "Medical Records",
+          "description": "Organize essential patient medical information and follow-up history."
+        },
+        "treatmentFollowUp": {
+          "title": "Treatment Follow-up",
+          "description": "Support treatment plans, medications, appointments, and medical notes."
+        },
+        "doctorPatientCoordination": {
+          "title": "Doctor–Patient Coordination",
+          "description": "Keep assigned doctors and patients connected throughout active care."
+        },
+        "assistanceResources": {
+          "title": "Assistance & Resources",
+          "description": "Coordinate assistance requests and resource allocation between patients and healthcare organizations."
+        },
+        "emergencyAlerts": {
+          "title": "Emergency Alerts",
+          "description": "Surface critical situations quickly so the appropriate teams can respond."
+        },
+        "secureCommunication": {
+          "title": "Secure Communication",
+          "description": "Support communication between patients and their assigned healthcare providers."
+        }
+      }
+    },
+    "whoWeServe": {
+      "eyebrow": "Who We Serve",
+      "heading": "Care coordination for every role",
+      "description": "HCMS connects patients, doctors, healthcare organizations, and administrators within one coordinated system that supports care across every role.",
+      "roles": {
+        "patients": {
+          "title": "Patients",
+          "description": "Stay informed and connected throughout the care journey.",
+          "capabilities": {
+            "medicalInformation": "Access essential medical information",
+            "treatmentTracking": "Follow treatment plans, medications, and appointments",
+            "doctorCommunication": "Communicate with the assigned doctor",
+            "assistanceAlerts": "Request assistance and send emergency alerts"
+          }
+        },
+        "doctors": {
+          "title": "Doctors",
+          "description": "Coordinate ongoing care for assigned patients.",
+          "capabilities": {
+            "assignedPatients": "Follow assigned patients",
+            "carePlanning": "Manage medical notes and treatment plans",
+            "medicationsAppointments": "Track medications and appointments",
+            "patientCommunication": "Communicate with patients during care"
+          }
+        },
+        "organizations": {
+          "title": "Healthcare Organizations",
+          "description": "Coordinate assistance and resources where they are needed.",
+          "capabilities": {
+            "assistanceRequests": "Manage assistance requests",
+            "resourceCoordination": "Coordinate and allocate available resources",
+            "careContinuity": "Support continuity of care during conflict and emergencies"
+          }
+        },
+        "administrators": {
+          "title": "Administrators",
+          "description": "Oversee users, activity, and essential system operations.",
+          "capabilities": {
+            "userManagement": "Manage users and joining requests",
+            "systemOversight": "Oversee the system and its activities",
+            "alertsOperations": "Monitor alerts and administrative operations"
+          }
+        }
+      }
+    },
+    "cta": {
+      "title": "Ready to coordinate care with HCMS?",
+      "description": "Choose your role and create your account to get started.",
+      "rolePickerTitle": "Choose your role",
+      "rolePickerDescription": "Select the account type you want to create.",
+      "closeRolePicker": "Close role selection",
+      "comingSoon": "Coming soon",
+      "roles": {
+        "patient": "Patient",
+        "doctor": "Doctor",
+        "organization": "Healthcare Organization"
+      }
+    },
+    "footer": {
+      "description": "Connecting patients, doctors, healthcare organizations, and administrators through coordinated care during conflict and emergencies.",
+      "navigationTitle": "Explore",
+      "navigationLabel": "Footer navigation",
+      "accountTitle": "Account",
+      "copyright": "© {{year}} HCMS. All rights reserved."
+    }
   },
   "language": {
     "english": "English",
     "arabic": "العربية"
+  },
+  "accessibility": {
+    "home": "HCMS home",
+    "logoAlt": "HCMS — Healthcare Conflict Management System",
+    "mainNavigation": "Main navigation",
+    "switchToEnglish": "Switch to English",
+    "switchToArabic": "Switch to Arabic",
+    "switchToLightTheme": "Switch to light theme",
+    "switchToDarkTheme": "Switch to dark theme"
   }
 }

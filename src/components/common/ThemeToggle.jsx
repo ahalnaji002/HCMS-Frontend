@@ -1,9 +1,13 @@
 import { useTheme } from "../../context/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 function ThemeToggle({ className = "" }) {
+  const { t } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
-  const label = isDark ? "Switch to light theme" : "Switch to dark theme";
+  const label = isDark
+    ? t("accessibility.switchToLightTheme")
+    : t("accessibility.switchToDarkTheme");
 
   return (
     <button

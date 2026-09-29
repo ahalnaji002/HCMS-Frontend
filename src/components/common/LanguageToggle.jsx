@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 function LanguageToggle() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const currentLanguage = i18n.resolvedLanguage || i18n.language;
   const isArabic = currentLanguage.startsWith("ar");
@@ -15,7 +15,11 @@ function LanguageToggle() {
       type="button"
       onClick={toggleLanguage}
       className="inline-flex h-10 items-center justify-center rounded-lg border border-border bg-surface px-3 text-sm font-semibold text-text-secondary transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-      aria-label={isArabic ? "Switch to English" : "التبديل إلى العربية"}
+      aria-label={
+        isArabic
+          ? t("accessibility.switchToEnglish")
+          : t("accessibility.switchToArabic")
+      }
     >
       {isArabic ? "EN" : "AR"}
     </button>

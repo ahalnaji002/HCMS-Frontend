@@ -13,6 +13,11 @@ Frontend application for the **Healthcare Conflict Management System (HCMS)**.
 * Reusable HCMS logo and icon component with light and dark presentations
 * Persistent light and dark theme foundation with operating-system fallback
 * Landing page integrated with the shared brand, language, and theme controls
+* Landing About and Platform Capabilities sections with localized content
+* Role-based Who We Serve section for patients, doctors, organizations, and administrators
+* Smooth Landing section navigation with active-section tracking
+* Final Landing CTA with a shared public registration-role entry flow
+* Responsive localized Landing footer with section navigation and account entry actions
 
 ## Dependencies
 
@@ -125,6 +130,18 @@ const { theme, setTheme, toggleTheme } = useTheme();
 
 `ThemeToggle` is mounted in the Landing navigation and remains available as a
 reusable control for future approved pages.
+
+## Registration Entry
+
+The Navbar, Hero, final Landing CTA, and Footer share the same role picker. Patient
+registration opens the existing `/register/patient` route. Doctor and healthcare
+organization registration are shown as coming soon until their frontend routes
+and pages are implemented. Administrator registration is intentionally excluded
+from this public entry flow.
+
+The Landing Page supports English/Arabic, LTR/RTL, light/dark themes, and mobile
+layouts. A previously observed Firefox-only decorative-corner artifact is not
+treated as a layout defect unless it can be reproduced as an actual CSS issue.
 
 ## Branching
 

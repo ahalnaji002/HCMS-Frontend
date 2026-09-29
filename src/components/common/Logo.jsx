@@ -3,7 +3,12 @@ import logoDark from "../../assets/brand/hcms-logo-dark.svg";
 import mark from "../../assets/brand/hcms-mark.svg";
 import markWhite from "../../assets/brand/hcms-mark-white.svg";
 
-function Logo({ variant = "logo", appearance = "light", className = "" }) {
+function Logo({
+  variant = "logo",
+  appearance = "light",
+  className = "",
+  alt: altText,
+}) {
   const isMark = variant === "mark";
   const isDark = appearance === "dark";
   const src = isMark
@@ -13,11 +18,11 @@ function Logo({ variant = "logo", appearance = "light", className = "" }) {
     : isDark
       ? logoDark
       : logo;
-  const alt = isMark
+  const defaultAlt = isMark
     ? "HCMS"
     : "HCMS — Healthcare Conflict Management System";
 
-  return <img src={src} alt={alt} className={className} />;
+  return <img src={src} alt={altText ?? defaultAlt} className={className} />;
 }
 
 export default Logo;
