@@ -1,0 +1,170 @@
+{
+  "common": {
+    "brand": "HCMS",
+    "brandSubtitle": "تنسيق الرعاية الصحية",
+    "login": "تسجيل الدخول",
+    "getStarted": "ابدأ الآن",
+    "learnMore": "اعرف المزيد"
+  },
+  "nav": {
+    "about": "عن النظام",
+    "features": "المميزات",
+    "whoWeServe": "الفئات المستفيدة",
+    "openMenu": "فتح قائمة التنقل",
+    "closeMenu": "إغلاق قائمة التنقل",
+    "mobileNavigation": "التنقل عبر الهاتف"
+  },
+  "landing": {
+    "badge": "نظام إدارة الرعاية الصحية في حالات النزاع",
+    "heroTitle": "تنسيق أفضل من أجل",
+    "heroHighlight": "رعاية صحية فعّالة.",
+    "heroDescription": "منصة صحية موحدة تساعد المرضى والأطباء والمؤسسات والمسؤولين على تنسيق الرعاية والدعم الطبي الأساسي خلال حالات النزاع.",
+    "connectedCare": "رعاية مترابطة",
+    "connectedCareDescription": "نظام موحد لتنسيق الرعاية الصحية",
+    "patients": "المرضى",
+    "patientDescription": "الرعاية والمتابعة",
+    "doctors": "الأطباء",
+    "doctorDescription": "التنسيق الطبي",
+    "organizations": "المؤسسات",
+    "organizationDescription": "الدعم والموارد",
+    "admin": "الإدارة",
+    "adminDescription": "التنسيق",
+    "care": "الرعاية",
+    "treatment": "العلاج",
+    "resources": "الموارد",
+    "liveEvents": {
+      "medicalRecordUpdated": "تم تحديث السجل الطبي",
+      "emergencyAlert": "تنبيه طارئ",
+      "resourceAllocated": "تم تخصيص الموارد",
+      "treatmentFollowUpUpdated": "تم تحديث متابعة العلاج"
+    },
+    "about": {
+      "eyebrow": "حول HCMS",
+      "heading": "تنسيق الرعاية الصحية عندما يكون لكل اتصال أهمية",
+      "description": "يجمع HCMS المرضى والأطباء والمؤسسات الصحية والإداريين ضمن نظام موحد يدعم المتابعة الطبية والتواصل وتنسيق الموارد واستمرارية الرعاية خلال ظروف النزاع والطوارئ.",
+      "values": {
+        "connectedCare": {
+          "title": "رعاية مترابطة",
+          "description": "إبقاء المرضى ومقدمي الرعاية الصحية على تواصل مستمر طوال مراحل المتابعة."
+        },
+        "coordinatedResources": {
+          "title": "تنسيق الموارد",
+          "description": "مساعدة المؤسسات الصحية على تنسيق المساعدات والموارد المتاحة بكفاءة."
+        },
+        "continuityOfCare": {
+          "title": "استمرارية الرعاية",
+          "description": "تنظيم المعلومات الطبية الأساسية والمتابعة عبر مختلف مراحل رحلة الرعاية."
+        }
+      }
+    },
+    "features": {
+      "eyebrow": "إمكانات المنصة",
+      "heading": "مصمم لتقديم رعاية صحية منسقة",
+      "introduction": "أدوات أساسية لإدارة الرعاية والتواصل والمساعدات والحالات الحرجة ضمن منصة واحدة مترابطة.",
+      "items": {
+        "medicalRecords": {
+          "title": "السجلات الطبية",
+          "description": "تنظيم المعلومات الطبية الأساسية للمريض وسجل المتابعة الخاص به."
+        },
+        "treatmentFollowUp": {
+          "title": "متابعة العلاج",
+          "description": "دعم خطط العلاج والأدوية والمواعيد والملاحظات الطبية."
+        },
+        "doctorPatientCoordination": {
+          "title": "التنسيق بين الطبيب والمريض",
+          "description": "إبقاء الأطباء المكلّفين والمرضى على تواصل مستمر طوال فترة الرعاية الفعلية."
+        },
+        "assistanceResources": {
+          "title": "المساعدات والموارد",
+          "description": "تنسيق طلبات المساعدة وتخصيص الموارد بين المرضى والمؤسسات الصحية."
+        },
+        "emergencyAlerts": {
+          "title": "تنبيهات الطوارئ",
+          "description": "إبراز الحالات الحرجة بسرعة لتمكين الفرق المناسبة من الاستجابة."
+        },
+        "secureCommunication": {
+          "title": "تواصل آمن",
+          "description": "دعم التواصل بين المرضى ومقدمي الرعاية الصحية المكلّفين بمتابعتهم."
+        }
+      }
+    },
+    "whoWeServe": {
+      "eyebrow": "الفئات المستفيدة",
+      "heading": "رعاية منسقة لكل دور",
+      "description": "يربط HCMS المرضى والأطباء والمؤسسات الصحية والإدارة ضمن نظام موحد ينسّق الرعاية ويدعم احتياجات كل دور.",
+      "roles": {
+        "patients": {
+          "title": "المرضى",
+          "description": "متابعة الرعاية والبقاء على تواصل في مختلف مراحلها.",
+          "capabilities": {
+            "medicalInformation": "الوصول إلى المعلومات الطبية الأساسية",
+            "treatmentTracking": "متابعة خطط العلاج والأدوية والمواعيد",
+            "doctorCommunication": "التواصل مع الطبيب المكلّف",
+            "assistanceAlerts": "طلب المساعدة وإرسال تنبيهات الطوارئ"
+          }
+        },
+        "doctors": {
+          "title": "الأطباء",
+          "description": "تنسيق الرعاية المستمرة للمرضى المكلّفين بمتابعتهم.",
+          "capabilities": {
+            "assignedPatients": "متابعة المرضى المكلّفين بهم",
+            "carePlanning": "إدارة الملاحظات الطبية وخطط العلاج",
+            "medicationsAppointments": "متابعة الأدوية والمواعيد",
+            "patientCommunication": "التواصل مع المرضى خلال فترة الرعاية"
+          }
+        },
+        "organizations": {
+          "title": "المؤسسات الصحية",
+          "description": "تنسيق المساعدات والموارد وتوجيهها إلى حيث تدعو الحاجة.",
+          "capabilities": {
+            "assistanceRequests": "إدارة طلبات المساعدة",
+            "resourceCoordination": "تنسيق الموارد المتاحة وتخصيصها",
+            "careContinuity": "دعم استمرارية الرعاية خلال النزاع والطوارئ"
+          }
+        },
+        "administrators": {
+          "title": "الإدارة",
+          "description": "الإشراف على المستخدمين والأنشطة والعمليات الأساسية للنظام.",
+          "capabilities": {
+            "userManagement": "إدارة المستخدمين وطلبات الانضمام",
+            "systemOversight": "الإشراف على النظام والأنشطة",
+            "alertsOperations": "متابعة التنبيهات والعمليات الإدارية"
+          }
+        }
+      }
+    },
+    "cta": {
+      "title": "جاهز للبدء مع HCMS؟",
+      "description": "اختر دورك وأنشئ حسابك للبدء باستخدام النظام.",
+      "rolePickerTitle": "اختر دورك",
+      "rolePickerDescription": "حدّد نوع الحساب الذي ترغب في إنشائه.",
+      "closeRolePicker": "إغلاق اختيار الدور",
+      "comingSoon": "قريبًا",
+      "roles": {
+        "patient": "مريض",
+        "doctor": "طبيب",
+        "organization": "مؤسسة صحية"
+      }
+    },
+    "footer": {
+      "description": "يربط HCMS المرضى والأطباء والمؤسسات الصحية والإدارة ضمن رعاية منسقة خلال ظروف النزاع والطوارئ.",
+      "navigationTitle": "استكشف",
+      "navigationLabel": "روابط تذييل الصفحة",
+      "accountTitle": "الحساب",
+      "copyright": "© {{year}} HCMS. جميع الحقوق محفوظة."
+    }
+  },
+  "language": {
+    "english": "English",
+    "arabic": "العربية"
+  },
+  "accessibility": {
+    "home": "الصفحة الرئيسية لنظام HCMS",
+    "logoAlt": "HCMS — نظام إدارة الرعاية الصحية في حالات النزاع",
+    "mainNavigation": "التنقل الرئيسي",
+    "switchToEnglish": "التبديل إلى الإنجليزية",
+    "switchToArabic": "التبديل إلى العربية",
+    "switchToLightTheme": "التبديل إلى الوضع الفاتح",
+    "switchToDarkTheme": "التبديل إلى الوضع الداكن"
+  }
+}
