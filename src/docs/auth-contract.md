@@ -163,6 +163,23 @@ After successful login:
 
 A Patient account becomes active after successful registration.
 
+The request requires `full_name`, `email`, `password`,
+`password_confirmation`, `national_id`, `date_of_birth`, and `gender`. Optional
+fields are `phone` and `address`. The frontend validates the same approved
+constraints as the backend: National ID is nine digits and does not start with
+zero; a supplied phone has ten digits and starts with `059` or `056`; date of
+birth is a valid non-future `YYYY-MM-DD` date; gender is `MALE` or `FEMALE`;
+password has at least eight characters, an uppercase letter, a lowercase
+letter, and a digit; confirmation matches; and address is at most 255
+characters. Email must be valid, full name at most 150 characters, and email
+at most 255 characters. Passwords over 72 UTF-8 bytes are rejected by the
+backend.
+
+The frontend displays backend `400` field errors next to their fields and a
+recoverable `409` conflict message for duplicate email or National ID. A
+successful `201` response displays the active-account outcome and a link to
+login. It does not store a token or start an authenticated session.
+
 ## Doctor Registration
 
 Doctor registration requires the approved doctor fields, including:

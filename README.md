@@ -19,6 +19,7 @@ Frontend application for the **Healthcare Conflict Management System (HCMS)**.
 * Final Landing CTA with a shared public registration-role entry flow
 * Responsive localized Landing footer with section navigation and account entry actions
 * Login redirects each authenticated role to its own protected role home route
+* Patient registration validates approved fields and integrates with the backend API
 
 ## Dependencies
 
@@ -143,6 +144,15 @@ from this public entry flow.
 The Landing Page supports English/Arabic, LTR/RTL, light/dark themes, and mobile
 layouts. A previously observed Firefox-only decorative-corner artifact is not
 treated as a layout defect unless it can be reproduced as an actual CSS issue.
+
+## Patient Registration
+
+The public `/register/patient` route submits the approved patient fields to
+`POST /api/auth/register/patient`. It validates the National ID, optional phone,
+date of birth, gender, password policy, and confirmation before sending. The
+form preserves entries after validation, conflict, network, or server errors.
+On a `201` response, it confirms that the Patient account is active and offers
+a link to log in; registration does not start a session or return a token.
 
 ## Role Home Routes
 
