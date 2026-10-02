@@ -154,6 +154,31 @@
       "copyright": "© {{year}} HCMS. All rights reserved."
     }
   },
+  "login": {
+    "title": "Log in",
+    "description": "Log in to access the Healthcare Conflict Management System.",
+    "email": "Email address",
+    "emailPlaceholder": "name@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "submit": "Log in",
+    "submitting": "Logging in...",
+    "noAccount": "Don't have an account?",
+    "registerPatient": "Register as Patient",
+    "registerDoctor": "Register as Doctor",
+    "registerOrganization": "Register as Organization",
+    "errors": {
+      "required": "Please enter your email address and password.",
+      "emailRequired": "Please enter your email address.",
+      "passwordRequired": "Please enter your password.",
+      "invalidCredentials": "The email address or password is incorrect.",
+      "inactiveAccount": "This account is currently inactive. You cannot log in.",
+      "invalidRequest": "Please check your login information.",
+      "network": "Unable to connect to the server. Check your connection and try again.",
+      "server": "An error occurred while logging in. Please try again.",
+      "unknownRole": "Unable to determine the account type."
+    }
+  },
   "language": {
     "english": "English",
     "arabic": "العربية"
