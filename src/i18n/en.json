@@ -154,6 +154,54 @@
       "copyright": "© {{year}} HCMS. All rights reserved."
     }
   },
+  "login": {
+    "title": "Log in",
+    "description": "Log in to access the Healthcare Conflict Management System.",
+    "email": "Email address",
+    "emailPlaceholder": "name@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "submit": "Log in",
+    "submitting": "Logging in...",
+    "noAccount": "Don't have an account?",
+    "registerPatient": "Register as Patient",
+    "registerDoctor": "Register as Doctor",
+    "registerOrganization": "Register as Organization",
+    "errors": {
+      "required": "Please enter your email address and password.",
+      "emailRequired": "Please enter your email address.",
+      "passwordRequired": "Please enter your password.",
+      "invalidCredentials": "The email address or password is incorrect.",
+      "inactiveAccount": "This account is currently inactive. You cannot log in.",
+      "invalidRequest": "Please check your login information.",
+      "network": "Unable to connect to the server. Check your connection and try again.",
+      "server": "An error occurred while logging in. Please try again.",
+      "unknownRole": "Unable to determine the account type."
+    }
+  },
+  "roleHome": {
+    "loading": "Checking your session...",
+    "logout": "Log out",
+    "dashboardPending": "Your role-specific workspace is being prepared. The full dashboard and its features will be added in a later development task.",
+    "roles": {
+      "patient": {
+        "label": "Patient workspace",
+        "title": "Welcome to your patient area"
+      },
+      "doctor": {
+        "label": "Doctor workspace",
+        "title": "Welcome to your doctor area"
+      },
+      "ngo": {
+        "label": "Organization workspace",
+        "title": "Welcome to your organization area"
+      },
+      "admin": {
+        "label": "Administrator workspace",
+        "title": "Welcome to your administration area"
+      }
+    }
+  },
   "language": {
     "english": "English",
     "arabic": "العربية"

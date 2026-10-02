@@ -92,7 +92,17 @@ These routes are available before login:
 
 Protected routes require a valid JWT token.
 
-The frontend will later protect:
+The frontend currently provides role-specific placeholder routes while the full
+dashboards are pending:
+
+| Route | Required role |
+| --- | --- |
+| `/patient` | `PATIENT` |
+| `/doctor` | `DOCTOR` |
+| `/ngo` | `NGO` |
+| `/admin` | `ADMIN` |
+
+The full role dashboards and feature pages will be implemented later:
 
 - Patient dashboard.
 - Doctor dashboard.

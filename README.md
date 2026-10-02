@@ -18,6 +18,7 @@ Frontend application for the **Healthcare Conflict Management System (HCMS)**.
 * Smooth Landing section navigation with active-section tracking
 * Final Landing CTA with a shared public registration-role entry flow
 * Responsive localized Landing footer with section navigation and account entry actions
+* Login redirects each authenticated role to its own protected role home route
 
 ## Dependencies
 
@@ -142,6 +143,14 @@ from this public entry flow.
 The Landing Page supports English/Arabic, LTR/RTL, light/dark themes, and mobile
 layouts. A previously observed Firefox-only decorative-corner artifact is not
 treated as a layout defect unless it can be reproduced as an actual CSS issue.
+
+## Role Home Routes
+
+After login, patients, doctors, healthcare organizations (NGO), and administrators
+are redirected to `/patient`, `/doctor`, `/ngo`, and `/admin`, respectively.
+These routes require an authenticated user with the matching backend-confirmed
+role. Until the role dashboards are implemented, each route displays a localized
+role-specific placeholder with a logout action.
 
 ## Branching
 
