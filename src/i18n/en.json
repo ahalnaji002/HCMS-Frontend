@@ -179,6 +179,29 @@
       "unknownRole": "Unable to determine the account type."
     }
   },
+  "roleHome": {
+    "loading": "Checking your session...",
+    "logout": "Log out",
+    "dashboardPending": "Your role-specific workspace is being prepared. The full dashboard and its features will be added in a later development task.",
+    "roles": {
+      "patient": {
+        "label": "Patient workspace",
+        "title": "Welcome to your patient area"
+      },
+      "doctor": {
+        "label": "Doctor workspace",
+        "title": "Welcome to your doctor area"
+      },
+      "ngo": {
+        "label": "Organization workspace",
+        "title": "Welcome to your organization area"
+      },
+      "admin": {
+        "label": "Administrator workspace",
+        "title": "Welcome to your administration area"
+      }
+    }
+  },
   "language": {
     "english": "English",
     "arabic": "العربية"

@@ -10,13 +10,7 @@ import { useAuth } from "../../context/useAuth";
 import { useTheme } from "../../context/ThemeContext";
 import { login } from "../../services/auth";
 import { normalizeApiError } from "../../services/apiError";
-
-const roleRoutes = {
-  PATIENT: "/patient",
-  DOCTOR: "/doctor",
-  NGO: "/ngo",
-  ADMIN: "/admin",
-};
+import { roleRoutes } from "../../services/roleRoutes";
 
 function Login() {
   const navigate = useNavigate();
