@@ -3,12 +3,12 @@ import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-// Public signup deliberately excludes administrators. Missing routes stay visible
-// as disabled options so future registration pages can be enabled in one place.
+// Public signup deliberately excludes administrators. Each available role links
+// directly to its public registration route.
 const registrationRoles = [
   { key: "patient", route: "/register/patient" },
-  { key: "doctor", route: null },
-  { key: "organization", route: null },
+  { key: "doctor", route: "/register/doctor" },
+  { key: "organization", route: "/register/ngo" },
 ];
 
 function RoleIcon({ role }) {
