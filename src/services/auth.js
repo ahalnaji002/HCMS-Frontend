@@ -25,3 +25,19 @@ export async function registerPatient(patientData) {
 
   return response.data;
 }
+
+export async function registerDoctor(doctorData) {
+  const response = await api.post("/api/auth/register/doctor", doctorData, {
+    skipAuth: true,
+  });
+
+  return response.data;
+}
+
+export async function registerNgo(ngoData) {
+  const response = await api.post("/api/auth/register/ngo", ngoData, {
+    skipAuth: true,
+  });
+
+  return response.data;
+}

@@ -20,6 +20,7 @@ Frontend application for the **Healthcare Conflict Management System (HCMS)**.
 * Responsive localized Landing footer with section navigation and account entry actions
 * Login redirects each authenticated role to its own protected role home route
 * Patient registration validates approved fields and integrates with the backend API
+* Doctor and healthcare organization registrations submit approved fields and clearly show administrator approval status
 
 ## Dependencies
 
@@ -135,11 +136,10 @@ reusable control for future approved pages.
 
 ## Registration Entry
 
-The Navbar, Hero, final Landing CTA, and Footer share the same role picker. Patient
-registration opens the existing `/register/patient` route. Doctor and healthcare
-organization registration are shown as coming soon until their frontend routes
-and pages are implemented. Administrator registration is intentionally excluded
-from this public entry flow.
+The Navbar, Hero, final Landing CTA, and Footer share the same role picker. Patient,
+doctor, and healthcare organization options open `/register/patient`,
+`/register/doctor`, and `/register/ngo`. Administrator registration is intentionally
+excluded from this public entry flow.
 
 The Landing Page supports English/Arabic, LTR/RTL, light/dark themes, and mobile
 layouts. A previously observed Firefox-only decorative-corner artifact is not
@@ -153,6 +153,17 @@ date of birth, gender, password policy, and confirmation before sending. The
 form preserves entries after validation, conflict, network, or server errors.
 On a `201` response, it confirms that the Patient account is active and offers
 a link to log in; registration does not start a session or return a token.
+
+## Doctor and Organization Registration
+
+The public `/register/doctor` and `/register/ngo` routes submit the approved
+role-specific fields to `POST /api/auth/register/doctor` and
+`POST /api/auth/register/ngo`. Both forms validate shared contact and password
+fields; the doctor form collects specialization and license number, while the
+organization form collects its name and optional registration number and address.
+Neither form includes patient-only fields. Validation, duplicate, server, and
+network errors preserve entered values. Successful requests show that the account
+is pending administrator approval and do not create an authenticated session.
 
 ## Role Home Routes
 

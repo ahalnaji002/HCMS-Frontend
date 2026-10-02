@@ -239,6 +239,71 @@
       "login": "Go to log in"
     }
   },
+  "registerProfessional": {
+    "doctor": { "title": "Register as a doctor" },
+    "ngo": { "title": "Register a healthcare organization" },
+    "description": "Enter the approved details. Your account will be reviewed by an administrator before activation.",
+    "submit": "Submit registration",
+    "submitting": "Submitting registration...",
+    "haveAccount": "Already have an account?",
+    "login": "Log in",
+    "passwordHint": "Use at least 8 characters, including an uppercase letter, a lowercase letter, and a number.",
+    "fields": {
+      "full_name": "Full name",
+      "email": "Email address",
+      "phone": "Phone number (optional)",
+      "specialization": "Specialization",
+      "license_number": "Professional license number",
+      "organization_name": "Organization name",
+      "registration_number": "Organization registration number (optional)",
+      "address": "Address (optional)",
+      "password": "Password",
+      "password_confirmation": "Confirm password"
+    },
+    "errors": {
+      "fullNameRequired": "Enter your full name.",
+      "fullNameTooLong": "Full name must be 150 characters or fewer.",
+      "emailInvalid": "Enter a valid email address.",
+      "emailTooLong": "Email address must be 255 characters or fewer.",
+      "phoneInvalid": "Enter a 10-digit phone number starting with 059 or 056.",
+      "specializationRequired": "Enter your medical specialization.",
+      "specializationTooLong": "Specialization must be 100 characters or fewer.",
+      "license_numberRequired": "Enter your professional license number.",
+      "license_numberTooLong": "License number must be 100 characters or fewer.",
+      "organization_nameRequired": "Enter the organization name.",
+      "organization_nameTooLong": "Organization name must be 150 characters or fewer.",
+      "registration_numberTooLong": "Registration number must be 100 characters or fewer.",
+      "addressTooLong": "Address must be 255 characters or fewer.",
+      "passwordPolicy": "Use at least 8 characters with an uppercase letter, a lowercase letter, and a number.",
+      "passwordTooLong": "Password must be 72 bytes or fewer.",
+      "confirmationRequired": "Confirm your password.",
+      "passwordMismatch": "The passwords do not match.",
+      "validation": "Some details need attention. Review the fields below and try again.",
+      "doctorConflict": "This email address or professional license number is already registered.",
+      "ngoConflict": "This email address or organization registration number is already registered.",
+      "network": "Unable to connect to the server. Check your connection and try again.",
+      "server": "The server could not submit your registration. Please try again.",
+      "generic": "We could not submit your registration. Check your details and try again.",
+      "serverFields": {
+        "full_name": "Enter a full name of 150 characters or fewer.",
+        "email": "Enter a valid email address of 255 characters or fewer.",
+        "phone": "Enter a 10-digit phone number starting with 059 or 056.",
+        "specialization": "Enter a specialization of 100 characters or fewer.",
+        "license_number": "Enter a license number of 100 characters or fewer.",
+        "organization_name": "Enter an organization name of 150 characters or fewer.",
+        "registration_number": "Enter a registration number of 100 characters or fewer.",
+        "address": "Address must be 255 characters or fewer.",
+        "password": "Check the password requirements.",
+        "password_confirmation": "Confirm that both passwords match."
+      }
+    },
+    "success": {
+      "doctor": { "title": "Doctor registration submitted" },
+      "ngo": { "title": "Organization registration submitted" },
+      "description": "Your registration is pending administrator approval. Your account is not active yet, and no login session has been created. You can log in after approval.",
+      "login": "Go to log in"
+    }
+  },
   "roleHome": {
     "loading": "Checking your session...",
     "logout": "Log out",

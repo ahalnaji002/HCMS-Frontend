@@ -254,19 +254,19 @@ function Login() {
                 {t("login.registerPatient")}
               </Link>
 
-              <span
-                className="cursor-not-allowed text-text-secondary"
-                title={t("landing.cta.comingSoon")}
+              <Link
+                to="/register/doctor"
+                className="font-semibold text-primary transition hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 {t("login.registerDoctor")}
-              </span>
+              </Link>
 
-              <span
-                className="cursor-not-allowed text-text-secondary"
-                title={t("landing.cta.comingSoon")}
+              <Link
+                to="/register/ngo"
+                className="font-semibold text-primary transition hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 {t("login.registerOrganization")}
-              </span>
+              </Link>
             </div>
           </div>
         </section>
