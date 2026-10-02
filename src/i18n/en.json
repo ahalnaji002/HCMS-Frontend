@@ -179,6 +179,66 @@
       "unknownRole": "Unable to determine the account type."
     }
   },
+  "registerPatient": {
+    "title": "Create your patient account",
+    "description": "Enter your details to create an active HCMS patient account.",
+    "submit": "Create account",
+    "submitting": "Creating account...",
+    "haveAccount": "Already have an account?",
+    "login": "Log in",
+    "passwordHint": "Use at least 8 characters, including an uppercase letter, a lowercase letter, and a number.",
+    "fields": {
+      "full_name": "Full name",
+      "email": "Email address",
+      "phone": "Phone number (optional)",
+      "national_id": "National ID",
+      "date_of_birth": "Date of birth",
+      "gender": "Gender",
+      "genderPlaceholder": "Select gender",
+      "male": "Male",
+      "female": "Female",
+      "address": "Address (optional)",
+      "password": "Password",
+      "password_confirmation": "Confirm password"
+    },
+    "errors": {
+      "fullNameRequired": "Enter your full name.",
+      "fullNameTooLong": "Full name must be 150 characters or fewer.",
+      "emailInvalid": "Enter a valid email address.",
+      "emailTooLong": "Email address must be 255 characters or fewer.",
+      "phoneInvalid": "Enter a 10-digit phone number starting with 059 or 056.",
+      "nationalIdInvalid": "Enter a 9-digit National ID that does not start with 0.",
+      "dateInvalid": "Enter a valid date of birth.",
+      "dateFuture": "Date of birth cannot be in the future.",
+      "genderRequired": "Select your gender.",
+      "passwordPolicy": "Use at least 8 characters with an uppercase letter, a lowercase letter, and a number.",
+      "passwordTooLong": "Password must be 72 bytes or fewer.",
+      "confirmationRequired": "Confirm your password.",
+      "passwordMismatch": "The passwords do not match.",
+      "addressTooLong": "Address must be 255 characters or fewer.",
+      "validation": "Some details need attention. Review the fields below and try again.",
+      "conflict": "An account with this email address or National ID already exists. Check your details or log in.",
+      "network": "Unable to connect to the server. Check your connection and try again.",
+      "server": "The server could not create your account. Please try again.",
+      "generic": "We could not create your account. Check your details and try again.",
+      "serverFields": {
+        "full_name": "Enter a full name of 150 characters or fewer.",
+        "email": "Enter a valid email address of 255 characters or fewer.",
+        "phone": "Enter a 10-digit phone number starting with 059 or 056.",
+        "national_id": "Enter a unique 9-digit National ID that does not start with 0.",
+        "date_of_birth": "Enter a valid date of birth that is not in the future.",
+        "gender": "Select Male or Female.",
+        "address": "Address must be 255 characters or fewer.",
+        "password": "Use at least 8 characters with an uppercase letter, a lowercase letter, and a number.",
+        "password_confirmation": "Confirm that both passwords match."
+      }
+    },
+    "success": {
+      "title": "Your account is ready",
+      "description": "Your patient account is active. Log in to continue to HCMS.",
+      "login": "Go to log in"
+    }
+  },
   "roleHome": {
     "loading": "Checking your session...",
     "logout": "Log out",
