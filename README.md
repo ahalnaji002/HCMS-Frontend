@@ -22,6 +22,14 @@ Frontend application for the **Healthcare Conflict Management System (HCMS)**.
 * Patient registration validates approved fields and integrates with the backend API
 * Doctor and healthcare organization registrations submit approved fields and clearly show administrator approval status
 * Doctor and NGO applicants can check pending or rejected application status, including the recorded rejection reason, from the login page
+* Patient workspace for submitting and updating a self-reported health-intake form before administration begins review
+* Administrator workspace for reviewing patient intake, locking edits explicitly, and assigning one or more doctors with an internal reason
+* Administrator controls for doctor availability and capacity with separate active-assignment and open-emergency workload counts
+* Patient access to profile information and emergency alerts before health-intake submission
+* Doctor workspace for assigned-patient intake review, private medical notes, and separate patient diagnoses
+* Patient read-only view of diagnoses recorded by assigned doctors
+* Administrator workflow for assigning emergency alerts to eligible active doctors, including unavailable doctors
+* Patient correction requests sent directly to the administration after intake review locks editing, with request status and administrative responses
 
 ## Dependencies
 
@@ -181,8 +189,38 @@ re-application flow in this release. The response contract is documented in
 After login, patients, doctors, healthcare organizations (NGO), and administrators
 are redirected to `/patient`, `/doctor`, `/ngo`, and `/admin`, respectively.
 These routes require an authenticated user with the matching backend-confirmed
-role. Until the role dashboards are implemented, each route displays a localized
-role-specific placeholder with a logout action.
+role. The patient route includes the health-intake form, profile information,
+emergency-alert access, correction requests, and read-only doctor diagnoses.
+The administrator route includes intake review, doctor assignment, workload
+management, and emergency-alert assignment. The doctor route includes assigned
+patient intake, private medical notes, and separate diagnoses. The NGO route
+still displays a localized placeholder with a logout action. Patient, doctor,
+admin, and placeholder role pages include a language toggle with RTL support.
+
+## Patient Health Intake
+
+The matching backend APIs and migrations are implemented in the backend
+working tree on `feature/close-patient-intake-gaps`; that backend work still
+needs to be committed and integrated. Apply its development migrations and run
+that backend branch to use these workflows end to end.
+
+After login, patients can submit one self-reported health-intake form from
+`/patient`. The form does not ask the patient to provide a diagnosis. Patients
+can edit the submission until an administrator explicitly starts review; after
+that it is read-only. The patient workspace shows the current workflow status
+and lets the patient send correction requests directly to the administration.
+Sending or resolving a request does not unlock the form. The backend enforces
+these workflow rules and access permissions.
+
+## Administrator Intake Review
+
+The `/admin` workspace lists patient submissions. Opening a form does not lock
+it. An administrator starts review explicitly, then may assign one or more
+active doctors, each with a required internal follow-up reason. Routine
+assignment prevents selecting unavailable doctors, while capacity remains an
+administrative warning only. Emergency alerts can be assigned to eligible
+active doctors regardless of availability or capacity. The backend enforces
+these rules and assignment authorization.
 
 ## Branching
 

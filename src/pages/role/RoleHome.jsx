@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/useAuth";
+import LanguageToggle from "../../components/common/LanguageToggle";
 
 function RoleHome({ role }) {
   const { t } = useTranslation();
@@ -20,13 +21,16 @@ function RoleHome({ role }) {
           <Link to="/" className="text-lg font-bold text-primary" aria-label={t("accessibility.home")}>
             HCMS
           </Link>
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-text-primary transition hover:bg-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-          >
-            {t("roleHome.logout")}
-          </button>
+          <div className="flex items-center gap-3">
+            <LanguageToggle />
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-text-primary transition hover:bg-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              {t("roleHome.logout")}
+            </button>
+          </div>
         </div>
       </header>
 

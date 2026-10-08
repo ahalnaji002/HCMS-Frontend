@@ -180,13 +180,19 @@
     },
     "applicationStatus": {
       "title": "Application status",
-      "status": { "PENDING": "Under review", "REJECTED": "Not approved" },
+      "status": {
+        "PENDING": "Under review",
+        "REJECTED": "Not approved"
+      },
       "message": {
         "PENDING": "Your registration is awaiting administrator review. You cannot access the platform until it is approved. Check again here later using the same email and password.",
         "REJECTED": "The administration reviewed your registration and did not approve it. Any recorded reason appears below."
       },
       "applicationType": "Application type",
-      "type": { "DOCTOR": "Doctor", "NGO": "Organization" },
+      "type": {
+        "DOCTOR": "Doctor",
+        "NGO": "Organization"
+      },
       "submitted": "Submitted {{date}}",
       "reviewed": "Reviewed {{date}}",
       "rejectionReason": "Reason provided by the administration",
@@ -254,8 +260,12 @@
     }
   },
   "registerProfessional": {
-    "doctor": { "title": "Register as a doctor" },
-    "ngo": { "title": "Register a healthcare organization" },
+    "doctor": {
+      "title": "Register as a doctor"
+    },
+    "ngo": {
+      "title": "Register a healthcare organization"
+    },
     "description": "Enter the approved details. Your account will be reviewed by an administrator before activation.",
     "submit": "Submit registration",
     "submitting": "Submitting registration...",
@@ -312,8 +322,12 @@
       }
     },
     "success": {
-      "doctor": { "title": "Doctor registration submitted" },
-      "ngo": { "title": "Organization registration submitted" },
+      "doctor": {
+        "title": "Doctor registration submitted"
+      },
+      "ngo": {
+        "title": "Organization registration submitted"
+      },
       "description": "Your registration is pending administrator review. Your account is not active yet, and no login session has been created. To check its status later, return to log in and submit the same email and password. Once approved, you can log in normally.",
       "login": "Go to log in"
     }
@@ -340,6 +354,162 @@
         "title": "Welcome to your administration area"
       }
     }
+  },
+  "patientWorkspace": {
+    "sections": "Patient workspace navigation",
+    "profile": "My profile",
+    "profileLoading": "Loading profile details...",
+    "profileName": "Name",
+    "profileEmail": "Email address",
+    "profilePhone": "Phone number",
+    "profileAddress": "Address",
+    "emergency": "Emergency alert",
+    "emergencyHint": "You can send an emergency alert at any time, even before completing the health form.",
+    "alertPhone": "Contact phone",
+    "alertLocation": "Location (optional)",
+    "alertDescription": "Short description (optional)",
+    "sendAlert": "Send emergency alert",
+    "alertSubmitted": "Emergency alert sent.",
+    "alertError": "Could not send the alert. Check the information and try again.",
+    "myAlerts": "My recent alerts",
+    "alertStatuses": {
+      "PENDING_ASSIGNMENT": "Pending assignment",
+      "ASSIGNED": "Doctor assigned",
+      "IN_PROGRESS": "In progress",
+      "RESOLVED": "Resolved",
+      "CANCELLED": "Cancelled"
+    },
+    "assignedDoctors": "Doctors assigned to your care",
+    "assignmentStatus": "Assignment status",
+    "active": "Active",
+    "assignmentNextStep": "You will be contacted about your follow-up care.",
+    "eyebrow": "Patient workspace",
+    "title": "Welcome",
+    "intro": "You can continue using your personal area. To let the administration review your situation and assign a doctor, complete this form once. Your description is not a medical diagnosis.",
+    "formTitle": "Health information",
+    "formHint": "After submission, you can review and edit your answers until the administration starts its review. Starting the review locks editing.",
+    "submittedHint": "Please review your answers for accuracy. You can edit this form until the administration starts reviewing it; after that it will be read-only.",
+    "lockedHint": "The administration has started reviewing this form, so it is now read-only. You can send a correction request directly to the administration.",
+    "correctionTitle": "Correction or addition request",
+    "correctionHint": "Your request goes directly to the administration. Sending it does not unlock the form.",
+    "sendCorrection": "Send request to administration",
+    "correctionSent": "Your request was sent to the administration.",
+    "correctionError": "Could not send the request. Try again.",
+    "correctionStatus": {
+      "OPEN": "Being handled by administration",
+      "RESOLVED": "Response received"
+    },
+    "adminResponse": "Administration response",
+    "loading": "Loading your health form...",
+    "currentProblem": "What current health problem would you like the doctor to know about?",
+    "symptoms": "What symptoms are you experiencing?",
+    "onset": "When did the symptoms start?",
+    "onsetPlaceholder": "Enter an approximate time or: I don't know",
+    "chronicConditions": "Do you have a chronic disease or previous health condition?",
+    "medications": "Are you currently taking medication?",
+    "allergies": "Do you have any known allergies?",
+    "additionalInformation": "Is there anything else you would like to add? (optional)",
+    "detailsPlaceholder": "Enter details",
+    "answers": {
+      "YES": "Yes",
+      "NO": "No",
+      "UNKNOWN": "I don't know"
+    },
+    "submit": "Submit form",
+    "saveChanges": "Save changes",
+    "saving": "Saving...",
+    "submitted": "Request submitted. You can edit your answers until the administration starts its review.",
+    "updated": "Your changes were saved.",
+    "loadError": "Could not load the health form. Try refreshing the page.",
+    "saveError": "Could not save the form. Check your connection and try again.",
+    "lockedError": "The administration has started reviewing this form, so it is read-only.",
+    "status": {
+      "NOT_SUBMITTED": "Form not submitted",
+      "SUBMITTED": "Request submitted",
+      "UNDER_REVIEW": "Under review",
+      "DOCTOR_ASSIGNED": "Doctor assigned"
+    },
+    "diagnosesTitle": "Doctors’ diagnoses",
+    "diagnosesDescription": "These diagnoses were documented by your assigned doctors. This section is read-only.",
+    "noDiagnoses": "Your doctors have not documented a diagnosis yet."
+  },
+  "adminIntakes": {
+    "eyebrow": "Case administration",
+    "title": "Review patient forms",
+    "description": "Review the patient's report. Opening the form does not lock it; it becomes locked only after you select Start review.",
+    "loading": "Loading patient cases...",
+    "empty": "There are no patient forms right now.",
+    "startReview": "Start review and lock editing",
+    "assignTitle": "Assign a doctor",
+    "doctor": "Doctor",
+    "selectDoctor": "Select a doctor",
+    "reason": "Internal assignment reason",
+    "multipleAssignments": "A patient may have more than one doctor for different needs. Enter what this doctor will follow.",
+    "workloadTitle": "Doctor availability and workload",
+    "workloadDescription": "Capacity is an administrative warning and never blocks assignment. Unavailability blocks routine assignment only; emergency assignment remains an administrative decision.",
+    "noDoctors": "There are no active doctors.",
+    "activeAssignments": "Active assignments",
+    "openEmergencies": "Open assigned emergency alerts",
+    "availability": "Availability",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "capacity": "Administrative capacity",
+    "notConfigured": "Not configured",
+    "capacityAlert": "At capacity — warning only",
+    "saveWorkload": "Save availability and capacity",
+    "workloadSaved": "Availability and capacity updated.",
+    "availabilityValues": {
+      "AVAILABLE": "Available",
+      "UNAVAILABLE": "Unavailable"
+    },
+    "assign": "Save assignment",
+    "working": "Working...",
+    "reviewStarted": "Review started. The form is now read-only to the patient.",
+    "correctionsTitle": "Patient form correction requests",
+    "correctionsDescription": "These requests go directly to the administration. Reviewing and responding does not automatically unlock form editing.",
+    "noCorrections": "There are no correction requests.",
+    "correctionStatus": {
+      "OPEN": "Open",
+      "RESOLVED": "Responded"
+    },
+    "adminResponse": "Administration response",
+    "responsePlaceholder": "Write a response to the patient (optional)",
+    "resolveCorrection": "Save response and close request",
+    "correctionResolved": "The response was saved and the correction request was closed.",
+    "assignmentSaved": "Doctor assignment saved.",
+    "assignmentRequired": "Select a doctor and enter an assignment reason.",
+    "loadError": "Could not load patient forms and doctors.",
+    "actionError": "Could not complete the action. Refresh the page and try again.",
+    "emergencyTitle": "Emergency alerts",
+    "emergencyDescription": "Assign pending alerts to an active doctor. Availability and capacity are shown as information; the administration may assign an unavailable or full doctor for an emergency.",
+    "noEmergencies": "No emergency alerts.",
+    "emergencyDoctor": "Emergency doctor",
+    "assignEmergency": "Assign emergency alert",
+    "emergencyDoctorRequired": "Choose a doctor for this emergency alert.",
+    "emergencyAssigned": "Emergency alert assigned."
+  },
+  "doctorWorkspace": {
+    "eyebrow": "Doctor workspace",
+    "title": "Assigned patients and care follow-up",
+    "loading": "Loading assigned patients...",
+    "loadingDetails": "Loading case information...",
+    "patients": "My patients",
+    "empty": "You do not have assigned patients right now.",
+    "loadError": "Could not load the patient list.",
+    "detailError": "Could not load the case details. Check that an active assignment exists.",
+    "noIntake": "This patient has no health-intake report.",
+    "patientReport": "Patient's health report (not a diagnosis)",
+    "documentCare": "Document clinical evaluation",
+    "privateNote": "Medical note (visible only to its authoring doctor)",
+    "save": "Save medical note",
+    "saving": "Saving...",
+    "saved": "The medical note was saved.",
+    "saveError": "Could not save the medical note. Try again.",
+    "diagnosesTitle": "Medical diagnoses",
+    "diagnosisLabel": "Diagnosis",
+    "saveDiagnosis": "Save diagnosis",
+    "diagnosisSaved": "Diagnosis saved.",
+    "noDiagnoses": "No diagnoses documented for this patient."
   },
   "language": {
     "english": "English",
