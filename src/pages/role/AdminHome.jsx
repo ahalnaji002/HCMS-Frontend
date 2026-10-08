@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../../context/useAuth";
-import LanguageToggle from "../../components/common/LanguageToggle";
+import RoleLayout from "../../layouts/RoleLayout";
 import {
   assignDoctorToPatient,
   listActiveDoctors,
@@ -17,8 +15,6 @@ import {
 
 function AdminHome() {
   const { t } = useTranslation();
-  const { logout } = useAuth();
-  const navigate = useNavigate();
   const [intakes, setIntakes] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [reasons, setReasons] = useState({});
@@ -171,20 +167,8 @@ function AdminHome() {
     }
   }
 
-  function handleLogout() {
-    logout();
-    navigate("/login", { replace: true });
-  }
-
   return (
-    <div className="min-h-screen bg-background text-text-primary">
-      <header className="border-b border-border bg-surface">
-        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8">
-          <Link to="/" className="text-lg font-bold text-primary" aria-label={t("accessibility.home")}>HCMS</Link>
-          <div className="flex items-center gap-3"><LanguageToggle /><button type="button" onClick={handleLogout} className="rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-background">{t("roleHome.logout")}</button></div>
-        </div>
-      </header>
-      <main className="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
+    <RoleLayout mainClassName="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
         <p className="text-sm font-semibold text-primary">{t("adminIntakes.eyebrow")}</p>
         <h1 className="mt-2 text-3xl font-bold">{t("adminIntakes.title")}</h1>
         <p className="mt-3 max-w-3xl leading-7 text-text-secondary">{t("adminIntakes.description")}</p>
@@ -287,8 +271,7 @@ function AdminHome() {
             ))}
           </div>
         )}
-      </main>
-    </div>
+    </RoleLayout>
   );
 }
 

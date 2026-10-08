@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../../context/useAuth";
-import LanguageToggle from "../../components/common/LanguageToggle";
+import RoleLayout from "../../layouts/RoleLayout";
 import {
   createPatientMedicalNote,
   createPatientMedicalRecord,
@@ -16,8 +14,6 @@ import {
 
 function DoctorHome() {
   const { t } = useTranslation();
-  const { logout } = useAuth();
-  const navigate = useNavigate();
   const [patients, setPatients] = useState([]);
   const [selectedPatientId, setSelectedPatientId] = useState("");
   const [intake, setIntake] = useState(null);
@@ -121,22 +117,10 @@ function DoctorHome() {
     }
   }
 
-  function handleLogout() {
-    logout();
-    navigate("/login", { replace: true });
-  }
-
   const currentPatient = patients.find((patient) => String(patient.id) === String(selectedPatientId));
 
   return (
-    <div className="min-h-screen bg-background text-text-primary">
-      <header className="border-b border-border bg-surface">
-        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8">
-          <Link to="/" className="text-lg font-bold text-primary" aria-label={t("accessibility.home")}>HCMS</Link>
-          <div className="flex items-center gap-3"><LanguageToggle /><button type="button" onClick={handleLogout} className="rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-background">{t("roleHome.logout")}</button></div>
-        </div>
-      </header>
-      <main className="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
+    <RoleLayout mainClassName="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
         <p className="text-sm font-semibold text-primary">{t("doctorWorkspace.eyebrow")}</p>
         <h1 className="mt-2 text-3xl font-bold">{t("doctorWorkspace.title")}</h1>
         {error && <p role="alert" className="mt-6 rounded-xl bg-danger/10 p-4 text-sm text-danger">{error}</p>}
@@ -189,8 +173,7 @@ function DoctorHome() {
             </div>
           </div>
         )}
-      </main>
-    </div>
+    </RoleLayout>
   );
 }
 

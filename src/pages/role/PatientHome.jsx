@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../../context/useAuth";
-import LanguageToggle from "../../components/common/LanguageToggle";
+import RoleLayout from "../../layouts/RoleLayout";
 import {
   getPatientIntake,
   submitPatientIntake,
@@ -33,8 +31,6 @@ const EMPTY_FORM = {
 
 function PatientHome() {
   const { t } = useTranslation();
-  const { logout } = useAuth();
-  const navigate = useNavigate();
   const [intake, setIntake] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [isLoading, setIsLoading] = useState(true);
@@ -160,37 +156,13 @@ function PatientHome() {
     }
   }
 
-  function handleLogout() {
-    logout();
-    navigate("/login", { replace: true });
-  }
-
   const canEdit = !intake || intake.status === "SUBMITTED";
   const statusLabel = intake
     ? t(`patientWorkspace.status.${intake.status}`)
     : t("patientWorkspace.status.NOT_SUBMITTED");
 
   return (
-    <div className="min-h-screen bg-background text-text-primary">
-      <header className="border-b border-border bg-surface">
-        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8">
-          <Link to="/" className="text-lg font-bold text-primary" aria-label={t("accessibility.home")}>
-            HCMS
-          </Link>
-          <div className="flex items-center gap-3">
-            <LanguageToggle />
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-text-primary transition hover:bg-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            >
-              {t("roleHome.logout")}
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-5xl px-5 py-10 sm:px-6 lg:px-8">
+    <RoleLayout mainClassName="mx-auto max-w-5xl px-5 py-10 sm:px-6 lg:px-8">
         <div className="mb-8">
           <p className="text-sm font-semibold text-primary">{t("patientWorkspace.eyebrow")}</p>
           <h1 className="mt-2 text-3xl font-bold">{t("patientWorkspace.title")}</h1>
@@ -292,8 +264,7 @@ function PatientHome() {
           </form>
           {alerts.length > 0 && <div className="mt-6"><h3 className="font-bold">{t("patientWorkspace.myAlerts")}</h3><ul className="mt-3 space-y-2">{alerts.map((alert) => <li key={alert.id} className="rounded-lg border border-border bg-background px-4 py-3 text-sm">{t(`patientWorkspace.alertStatuses.${alert.status}`, { defaultValue: alert.status })} · {new Date(alert.sent_at).toLocaleString()}</li>)}</ul></div>}
         </section>
-      </main>
-    </div>
+    </RoleLayout>
   );
 }
 
