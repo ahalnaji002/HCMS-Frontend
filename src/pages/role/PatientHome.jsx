@@ -162,18 +162,12 @@ function PatientHome() {
     : t("patientWorkspace.status.NOT_SUBMITTED");
 
   return (
-    <RoleLayout mainClassName="mx-auto max-w-5xl px-5 py-10 sm:px-6 lg:px-8">
+    <RoleLayout role="PATIENT" mainClassName="max-w-5xl">
         <div className="mb-8">
           <p className="text-sm font-semibold text-primary">{t("patientWorkspace.eyebrow")}</p>
           <h1 className="mt-2 text-3xl font-bold">{t("patientWorkspace.title")}</h1>
           <p className="mt-3 max-w-3xl leading-7 text-text-secondary">{t("patientWorkspace.intro")}</p>
         </div>
-
-        <nav aria-label={t("patientWorkspace.sections")} className="mb-6 flex flex-wrap gap-3">
-          <a href="#patient-intake" className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-semibold">{t("patientWorkspace.formTitle")}</a>
-          <a href="#patient-profile" className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-semibold">{t("patientWorkspace.profile")}</a>
-          <a href="#emergency-alerts" className="rounded-lg border border-danger/30 bg-danger/5 px-4 py-2 text-sm font-semibold text-danger">{t("patientWorkspace.emergency")}</a>
-        </nav>
 
         <section id="patient-intake" className="rounded-2xl border border-border bg-surface p-6 shadow-lg shadow-primary/5 sm:p-8">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">

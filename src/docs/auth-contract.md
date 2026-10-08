@@ -323,7 +323,7 @@ No backend logout endpoint is used in the current release.
 | Shared API client | Complete | 8.2 |
 | Authenticated-user state | Complete | 8.2 |
 | Approval-status views | Complete; shown after credential verification on login | 8.6 |
-| Shared role workspace layout | Implemented in 8.8; role pages use the common layout component | 8.9 |
+| Shared role workspace layout and role navigation | Shared shell with localized role-specific menus; documented future modules are disabled until their pages exist | 8.9 |
 | Full role dashboards | Not implemented | 8.9 |
 | Password recovery | Excluded from scope | Do not implement |
 

@@ -120,7 +120,7 @@ function DoctorHome() {
   const currentPatient = patients.find((patient) => String(patient.id) === String(selectedPatientId));
 
   return (
-    <RoleLayout mainClassName="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
+    <RoleLayout role="DOCTOR">
         <p className="text-sm font-semibold text-primary">{t("doctorWorkspace.eyebrow")}</p>
         <h1 className="mt-2 text-3xl font-bold">{t("doctorWorkspace.title")}</h1>
         {error && <p role="alert" className="mt-6 rounded-xl bg-danger/10 p-4 text-sm text-danger">{error}</p>}
@@ -129,7 +129,7 @@ function DoctorHome() {
           <p className="mt-8 rounded-xl border border-border bg-surface p-6 text-text-secondary">{t("doctorWorkspace.empty")}</p>
         ) : (
           <div className="mt-8 grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
-            <aside className="rounded-2xl border border-border bg-surface p-5">
+            <aside id="doctor-patients" className="rounded-2xl border border-border bg-surface p-5">
               <h2 className="font-bold">{t("doctorWorkspace.patients")}</h2>
               <div className="mt-4 space-y-2">
                 {patients.map((patient) => <button key={patient.id} type="button" onClick={() => { setError(""); if (String(patient.id) !== String(selectedPatientId)) setDetailLoading(true); setSelectedPatientId(String(patient.id)); }} className={`w-full rounded-xl px-4 py-3 text-start text-sm font-semibold ${String(patient.id) === String(selectedPatientId) ? "bg-primary text-white" : "bg-background hover:bg-primary/10"}`}>{patient.full_name}</button>)}
@@ -137,7 +137,7 @@ function DoctorHome() {
             </aside>
             <div className="space-y-6">
               {detailLoading ? <p className="py-12 text-center text-text-secondary">{t("doctorWorkspace.loadingDetails")}</p> : currentPatient && <>
-                <section className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
+                <section id="doctor-medical-record" className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
                   <h2 className="text-xl font-bold">{currentPatient.full_name}</h2>
                   <p className="mt-1 text-sm text-text-secondary">{currentPatient.email}</p>
                   <h3 className="mt-6 font-bold">{t("doctorWorkspace.patientReport")}</h3>
@@ -152,7 +152,7 @@ function DoctorHome() {
                   </div> : <p className="mt-3 text-sm text-text-secondary">{t("doctorWorkspace.noIntake")}</p>}
                 </section>
 
-                <section className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
+                <section id="doctor-diagnoses" className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
                   <h2 className="text-xl font-bold">{t("doctorWorkspace.diagnosesTitle")}</h2>
                   <form onSubmit={handleDiagnosisSubmit} className="mt-5 space-y-4">
                     <label className="block space-y-2 text-sm font-semibold">{t("doctorWorkspace.diagnosisLabel")}<textarea required rows={4} maxLength={10000} value={diagnosisText} onChange={(event) => setDiagnosisText(event.target.value)} className="w-full rounded-xl border border-border bg-background px-4 py-3 font-normal" /></label>
@@ -161,7 +161,7 @@ function DoctorHome() {
                   <div className="mt-6 space-y-3">{diagnoses.length ? diagnoses.map((diagnosis) => <Info key={diagnosis.id} label={`${diagnosis.doctor_name} · ${diagnosis.specialization} · ${new Date(diagnosis.documented_at).toLocaleString()}`} value={diagnosis.diagnosis} />) : <p className="text-sm text-text-secondary">{t("doctorWorkspace.noDiagnoses")}</p>}</div>
                 </section>
 
-                <section className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
+                <section id="doctor-notes" className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
                   <h2 className="text-xl font-bold">{t("doctorWorkspace.documentCare")}</h2>
                   <form onSubmit={handleNoteSubmit} className="mt-5 space-y-4">
                     <label className="block space-y-2 text-sm font-semibold">{t("doctorWorkspace.privateNote")}<textarea required rows={5} maxLength={10000} value={noteForm.note} onChange={(event) => setNoteForm((current) => ({ ...current, note: event.target.value }))} className="w-full rounded-xl border border-border bg-background px-4 py-3 font-normal" /></label>

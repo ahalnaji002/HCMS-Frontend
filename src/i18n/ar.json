@@ -356,6 +356,63 @@
       }
     }
   },
+  "roleNavigation": {
+    "label": "التنقل في مساحة العمل",
+    "open": "القائمة",
+    "close": "إغلاق القائمة",
+    "comingSoon": "قريبًا",
+    "patient": {
+      "home": "نظرة عامة",
+      "profile": "ملفي الشخصي",
+      "intake": "معلومات الحالة الصحية",
+      "medicalRecords": "السجلات الطبية",
+      "treatmentPlans": "الخطط العلاجية",
+      "medications": "الأدوية",
+      "appointments": "المواعيد",
+      "assistanceRequests": "طلبات المساعدة",
+      "emergencyAlerts": "التنبيهات الطارئة",
+      "messages": "الرسائل",
+      "reminders": "التذكيرات",
+      "notifications": "الإشعارات"
+    },
+    "doctor": {
+      "home": "نظرة عامة",
+      "profile": "ملفي الشخصي",
+      "patients": "المرضى المعيّنون",
+      "medicalRecords": "المعلومات الصحية للمرضى",
+      "notes": "الملاحظات الطبية",
+      "diagnoses": "التشخيصات",
+      "treatmentPlans": "الخطط العلاجية",
+      "medications": "الأدوية",
+      "appointments": "المواعيد",
+      "emergencyAlerts": "التنبيهات الطارئة",
+      "assistanceRequests": "طلبات المساعدة",
+      "messages": "الرسائل",
+      "notifications": "الإشعارات"
+    },
+    "ngo": {
+      "home": "نظرة عامة",
+      "profile": "ملف المؤسسة",
+      "assistanceRequests": "طلبات المساعدة المُسندة",
+      "resources": "تخصيص الموارد",
+      "notifications": "الإشعارات"
+    },
+    "admin": {
+      "home": "نظرة عامة",
+      "profile": "ملف الإدارة",
+      "joinRequests": "طلبات انضمام الأطباء وNGOs",
+      "userManagement": "إدارة المستخدمين والمؤسسات",
+      "patientIntakes": "حالات المرضى وتعيين الأطباء",
+      "doctorWorkload": "توفر الأطباء وعبء الحالات",
+      "emergencyAlerts": "التنبيهات الطارئة",
+      "assistanceRequests": "طلبات المساعدة",
+      "support": "طلبات الدعم الفني",
+      "reports": "التقارير والإحصاءات",
+      "activityLogs": "سجل النشاط",
+      "settings": "إعدادات النظام",
+      "notifications": "الإشعارات"
+    }
+  },
   "patientWorkspace": {
     "sections": "التنقل في مساحة المريض",
     "profile": "ملفي الشخصي",

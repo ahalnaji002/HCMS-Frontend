@@ -6,7 +6,7 @@ function RoleHome({ role }) {
   const roleKey = role.toLowerCase();
 
   return (
-    <RoleLayout mainClassName="mx-auto flex min-h-[calc(100vh-72px)] max-w-7xl items-center px-5 py-12 sm:px-6 lg:px-8">
+    <RoleLayout role={role} mainClassName="flex min-h-[calc(100vh-12rem)] items-center">
         <section className="w-full rounded-2xl border border-border bg-surface p-6 shadow-lg shadow-primary/5 sm:p-10">
           <p className="text-sm font-semibold uppercase tracking-wide text-primary">
             {t(`roleHome.roles.${roleKey}.label`)}
