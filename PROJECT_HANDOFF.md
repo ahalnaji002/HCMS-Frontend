@@ -11,44 +11,70 @@ System. It communicates with the HCMS Backend through the shared Axios client.
 - English and Arabic localization with LTR/RTL support.
 - Node.js and npm are required.
 - Copy `.env.example` to `.env` and set `VITE_API_URL` to the backend URL.
-- Run `npm install`, then `npm run dev` to start the local application.
+- Run `npm install`, then `npm run dev` to start the application.
 - Run `npm run lint` and `npm run build` for frontend verification.
 
 ## Current Routes
 
-`src/App.jsx` defines the public and role-restricted routes:
+`src/App.jsx` defines public and role-restricted routes:
 
-| URL | Access | Behavior |
+| URL | Access | Current behavior |
 | --- | --- | --- |
 | `/` | Public | Landing page |
-| `/login` | Public | Login and professional application-status result |
+| `/login` | Public | Login and Doctor/NGO application-status result |
 | `/register/patient` | Public | Patient registration |
 | `/register/doctor` | Public | Doctor registration |
 | `/register/ngo` | Public | NGO registration |
-| `/patient` | Authenticated PATIENT | Role home |
-| `/doctor` | Authenticated DOCTOR | Role home |
-| `/ngo` | Authenticated NGO | Role home |
-| `/admin` | Authenticated ADMIN | Role home |
+| `/patient` | Authenticated PATIENT | Patient workspace |
+| `/doctor` | Authenticated DOCTOR | Doctor workspace |
+| `/ngo` | Authenticated NGO | Localized placeholder |
+| `/admin` | Authenticated ADMIN | Administrator workspace |
 
 Role routes are guarded by `RequireRole`; backend authorization remains the
 security boundary. Password recovery and reset are out of scope.
 
 ## Authentication and Application Status
 
-The approved frontend/backend authentication contract is in
-`src/docs/auth-contract.md`. Keep it aligned with the backend API documentation.
-
-Doctor and NGO registration creates an inactive account and a pending Join
-Request. After registration, the applicant returns to `/login` and submits the
-same email and password to check status. The backend verifies the credentials
-first, then returns the latest `PENDING` or `REJECTED` application projection in
-the `403` response. The login page displays the status and, when rejected, the
-administrator's recorded reason. No token or authenticated session is created.
-Approved applicants log in normally. Invalid credentials never reveal status.
+The approved frontend/backend contract is in `src/docs/auth-contract.md`.
+Doctor and NGO applicants check status on `/login` by entering the same email
+and password used at registration. The backend verifies credentials first,
+then returns the latest `PENDING` or `REJECTED` application projection in a
+`403` response. The login page shows the status and any rejection reason. No
+session is created. Wrong credentials never reveal application status.
 
 There is no separate status-lookup endpoint, re-application flow, or email
-notification for this release. Do not add endpoints or infer application state
-in the frontend.
+notification in this release. Issue 8.6 was merged into `develop` in commit
+`1deb743`.
+
+## Patient Intake and Care Coordination
+
+The patient-intake and care-coordination frontend is implemented on
+`feature/patient-intake-and-care-coordination`.
+
+- Patients can submit one self-reported health-intake form and edit it until an
+  administrator starts review. Once review starts, the form becomes read-only.
+- Patients can view their profile, create emergency alerts, and send correction
+  requests to the administration after the form is locked.
+- Administrators can review intake forms, start review explicitly, and assign
+  one or more doctors with an internal follow-up reason.
+- The administrator workspace shows doctor availability, active assignments,
+  open emergency workload, and capacity as an advisory signal. Capacity does
+  not block assignment; unavailability blocks routine assignment only.
+- Doctors can view assigned patients and their self-reported intake, write
+  private medical notes, and record separate diagnoses for each patient.
+- Patients can view diagnoses recorded by their assigned doctors; this view is
+  read-only. Each doctor retains their own diagnosis records.
+- Administrators can assign pending emergency alerts to eligible active
+  doctors, including doctors marked unavailable or at capacity. Routine
+  assignment prevents choosing unavailable doctors; capacity is advisory and
+  does not block assignment.
+- The matching backend endpoints and database migrations are implemented in
+  the backend working tree on `feature/close-patient-intake-gaps`; that backend
+  work still needs to be committed and integrated. Apply the backend
+  development migrations before running the frontend workflow against it.
+- English and Arabic are available throughout patient, doctor, and admin
+  workspaces, including the role-header language toggle.
+- The NGO role remains a placeholder in this working tree.
 
 ## Sprint 8 Status
 
@@ -59,17 +85,13 @@ in the frontend.
 | 8.3 — Login integration | Complete |
 | 8.4 — Patient registration integration | Complete |
 | 8.5 — Doctor and NGO registration | Complete |
-| 8.6 — Applicant approval-status visibility | Implemented on `feature/8-6-applicant-status-ui`; verify before integration |
+| 8.6 — Applicant approval-status visibility | Complete and merged into `develop` |
 | 8.7 — Protected and role-restricted routes | Complete |
-| 8.8 — Shared role layouts | Next |
-| 8.9 — Role dashboards | Pending roadmap |
+| 8.8 — Shared role layouts | Next roadmap issue |
+| 8.9 — Full role dashboards | Pending roadmap |
 
 ## Git Workflow
 
-- `main` is the stable branch.
-- `develop` is the integration branch.
+- `main` is the stable branch; `develop` is the integration branch.
 - Focused work belongs on `feature/...` branches.
-- Do not commit directly to `main` or change API contracts without approval.
-
-Before committing, review `git status` and `git diff`. Do not include unrelated
-working-tree changes in the feature branch.
+- Before committing, review `git status` and `git diff`.

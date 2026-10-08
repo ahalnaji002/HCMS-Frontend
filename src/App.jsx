@@ -5,6 +5,9 @@ import RegisterPatient from "./pages/auth/RegisterPatient";
 import RegisterProfessional from "./pages/auth/RegisterProfessional";
 import RequireRole from "./components/auth/RequireRole";
 import RoleHome from "./pages/role/RoleHome";
+import PatientHome from "./pages/role/PatientHome";
+import AdminHome from "./pages/role/AdminHome";
+import DoctorHome from "./pages/role/DoctorHome";
 import { roleRoutes } from "./services/roleRoutes";
 
 function App() {
@@ -27,7 +30,15 @@ function App() {
           path={path}
           element={
             <RequireRole role={role}>
+            {role === "PATIENT" ? (
+              <PatientHome />
+            ) : role === "ADMIN" ? (
+              <AdminHome />
+            ) : role === "DOCTOR" ? (
+              <DoctorHome />
+            ) : (
               <RoleHome role={role} />
+            )}
             </RequireRole>
           }
         />
