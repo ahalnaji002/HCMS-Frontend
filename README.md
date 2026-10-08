@@ -30,6 +30,7 @@ Frontend application for the **Healthcare Conflict Management System (HCMS)**.
 * Patient read-only view of diagnoses recorded by assigned doctors
 * Administrator workflow for assigning emergency alerts to eligible active doctors, including unavailable doctors
 * Patient correction requests sent directly to the administration after intake review locks editing, with request status and administrative responses
+* Shared role workspace layout with the full logo, language and light/dark theme controls, logout behavior, and role-specific content widths
 
 ## Dependencies
 
@@ -184,7 +185,7 @@ approved applicants can log in normally. There is no separate status lookup or
 re-application flow in this release. The response contract is documented in
 `src/docs/auth-contract.md`.
 
-## Role Home Routes
+## Role Home Routes and Layout
 
 After login, patients, doctors, healthcare organizations (NGO), and administrators
 are redirected to `/patient`, `/doctor`, `/ngo`, and `/admin`, respectively.
@@ -194,15 +195,17 @@ emergency-alert access, correction requests, and read-only doctor diagnoses.
 The administrator route includes intake review, doctor assignment, workload
 management, and emergency-alert assignment. The doctor route includes assigned
 patient intake, private medical notes, and separate diagnoses. The NGO route
-still displays a localized placeholder with a logout action. Patient, doctor,
-admin, and placeholder role pages include a language toggle with RTL support.
+still displays a localized placeholder. All four role routes use the shared
+`src/layouts/RoleLayout.jsx` for the full logo, language and light/dark theme
+controls, logout behavior, and the common page frame; each route can set its
+own content width.
+The role layout does not replace backend authorization.
 
 ## Patient Health Intake
 
-The matching backend APIs and migrations are implemented in the backend
-working tree on `feature/close-patient-intake-gaps`; that backend work still
-needs to be committed and integrated. Apply its development migrations and run
-that backend branch to use these workflows end to end.
+The matching backend APIs and migrations are implemented and merged into the
+backend `develop` branch through PR #95. Apply the backend development
+migrations before running these workflows end to end.
 
 After login, patients can submit one self-reported health-intake form from
 `/patient`. The form does not ask the patient to provide a diagnosis. Patients

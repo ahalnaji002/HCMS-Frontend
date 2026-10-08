@@ -49,7 +49,7 @@ notification in this release. Issue 8.6 was merged into `develop` in commit
 ## Patient Intake and Care Coordination
 
 The patient-intake and care-coordination frontend is implemented on
-`feature/patient-intake-and-care-coordination`.
+`develop` (merged in PR #46).
 
 - Patients can submit one self-reported health-intake form and edit it until an
   administrator starts review. Once review starts, the form becomes read-only.
@@ -68,12 +68,11 @@ The patient-intake and care-coordination frontend is implemented on
   doctors, including doctors marked unavailable or at capacity. Routine
   assignment prevents choosing unavailable doctors; capacity is advisory and
   does not block assignment.
-- The matching backend endpoints and database migrations are implemented in
-  the backend working tree on `feature/close-patient-intake-gaps`; that backend
-  work still needs to be committed and integrated. Apply the backend
-  development migrations before running the frontend workflow against it.
+- The matching backend endpoints and database migrations are implemented and
+  merged into backend `develop` through PR #95. Apply the backend development
+  migrations before running the frontend workflow against it.
 - English and Arabic are available throughout patient, doctor, and admin
-  workspaces, including the role-header language toggle.
+  workspaces, including the role-header language and light/dark theme toggles.
 - The NGO role remains a placeholder in this working tree.
 
 ## Sprint 8 Status
@@ -87,7 +86,7 @@ The patient-intake and care-coordination frontend is implemented on
 | 8.5 — Doctor and NGO registration | Complete |
 | 8.6 — Applicant approval-status visibility | Complete and merged into `develop` |
 | 8.7 — Protected and role-restricted routes | Complete |
-| 8.8 — Shared role layouts | Next roadmap issue |
+| 8.8 — Shared role layouts | Implemented locally on `feature/8-8-shared-role-layouts`; lint and production build pass; not yet committed or merged |
 | 8.9 — Full role dashboards | Pending roadmap |
 
 ## Git Workflow
