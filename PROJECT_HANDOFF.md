@@ -2,221 +2,74 @@
 
 ## Project Purpose
 
-HCMS is a frontend for the Healthcare Conflict Management System.
+HCMS is a responsive React frontend for the Healthcare Conflict Management
+System. It communicates with the HCMS Backend through the shared Axios client.
 
-The project uses React, Vite, Tailwind CSS, React Router, and Axios.
-The current Sprint 8 work builds the authentication foundation and interfaces
-before role-based dashboards and HCMS features.
+## Technology and Setup
 
-## Technology Stack
+- React 19, Vite 8, React Router 7, Tailwind CSS 4, and Axios.
+- English and Arabic localization with LTR/RTL support.
+- Node.js and npm are required.
+- Copy `.env.example` to `.env` and set `VITE_API_URL` to the backend URL.
+- Run `npm install`, then `npm run dev` to start the local application.
+- Run `npm run lint` and `npm run build` for frontend verification.
 
-- React 19
-- Vite 8
-- React Router 7
-- Tailwind CSS 4
-- Axios
-- Git and GitHub
+## Current Routes
 
-## Running the Project
+`src/App.jsx` defines the public and role-restricted routes:
 
-From the project folder, run:
-
-```bash
-npm run dev
-```
-
-Then open the local address shown by Vite, usually:
-
-```text
-http://localhost:5173
-```
-
-## Styling Setup
-
-Tailwind CSS is enabled through:
-
-- `vite.config.js` using `@tailwindcss/vite`.
-- `src/index.css` using:
-
-```css
-@import "tailwindcss";
-```
-
-## Routing
-
-`src/main.jsx` wraps the application with `BrowserRouter`.
-
-`src/App.jsx` currently defines:
-
-| URL | Behavior |
-| --- | --- |
-| `/` | Redirects to `/login` |
-| `/login` | Displays the login page |
-| `/register/patient` | Displays the patient-registration page |
-
-Doctor and NGO registration routes will be added in Issue 8.5.
-
-Password recovery and password-reset routes are intentionally excluded from the
-current release.
-
-## Authentication Contract
-
-The approved frontend/backend contract is documented in:
-
-```text
-src/docs/auth-contract.md
-```
-
-This document is a frontend reference derived from, and required to remain
-aligned with, the approved backend documentation. It does not change the
-backend contract or create frontend behavior that the backend has not
-documented.
-
-It records:
-
-- Approved authentication endpoints.
-- JWT handling.
-- Roles.
-- Account states.
-- Registration requirements.
-- API response and error behavior.
-- Public and protected routes.
-
-Do not invent endpoints, request fields, response fields, or permissions that
-are not approved in the contract.
-
-For Doctor and NGO registration, keep the two backend concepts separate:
-
-- The User Account begins as `INACTIVE`.
-- The Join Request begins as `PENDING`.
-- On approval, the Join Request becomes `APPROVED` and the User Account becomes
-  `ACTIVE`.
-
-`REJECTED` is a Join Request Status, not a User Account Status. The current
-frontend must not infer a Join Request status or rejection reason from login,
-because no applicant-facing backend response field or endpoint is documented
-for that purpose.
-
-## Current Authentication Pages
-
-### `src/pages/auth/Login.jsx`
-
-The Login page includes:
-
-- Controlled email and password fields using React `useState`.
-- Local validation for required fields.
-- A submit handler that currently logs valid data to the browser console.
-- A React Router link to `/register/patient`.
-- Temporary Doctor and NGO registration links until their pages exist.
-
-The page is not connected to the backend login endpoint yet.
-That work belongs to Issue 8.3.
-
-### `src/pages/auth/RegisterPatient.jsx`
-
-The Patient Registration page includes:
-
-- Full name.
-- Email.
-- Optional Palestinian phone number.
-- National ID.
-- Date of birth.
-- Gender.
-- Address.
-- Password.
-- Password confirmation.
-
-The page includes local validation for:
-
-- Required fields.
-- Palestinian phone numbers beginning with `059` or `056`.
-- A nine-digit national ID that does not begin with zero.
-- A date of birth that is not in the future.
-- A strong password.
-- Matching password confirmation.
-
-The page is not connected to the backend yet.
-The backend integration belongs to Issue 8.4.
-
-## API Layer
-
-### `src/services/api.js`
-
-This file creates the shared Axios client.
-
-It:
-
-- Reads the API URL from `VITE_API_URL`.
-- Retrieves `hcms_access_token` from `localStorage`.
-- Adds the token to authenticated requests through:
-
-```http
-Authorization: Bearer <token>
-```
-
-### `src/services/auth.js`
-
-This file contains authentication-related API functions.
-
-It currently includes:
-
-- `registerPatient(patientData)`
-
-The function sends a request to:
-
-```http
-POST /api/auth/register/patient
-```
-
-More shared authentication functions will be added in Issue 8.2.
-
-## Authentication Status
-
-| Area | Status | Related Issue |
+| URL | Access | Behavior |
 | --- | --- | --- |
-| Authentication contract | Complete | 8.1 |
-| Existing frontend audit | Complete | 8.1 |
-| Shared API foundation | In progress | 8.2 |
-| Login API integration | Not started | 8.3 |
-| Patient registration API integration | Not started | 8.4 |
-| Doctor and NGO registration | Not started | 8.5 |
-| Approval-status views | Not started; requires documented applicant-facing backend behavior | 8.6 |
-| Protected and role-restricted routes | Not started | 8.7 |
-| Shared role-based layouts | Not started | 8.8 |
-| Role dashboards | Not started | 8.9 |
+| `/` | Public | Landing page |
+| `/login` | Public | Login and professional application-status result |
+| `/register/patient` | Public | Patient registration |
+| `/register/doctor` | Public | Doctor registration |
+| `/register/ngo` | Public | NGO registration |
+| `/patient` | Authenticated PATIENT | Role home |
+| `/doctor` | Authenticated DOCTOR | Role home |
+| `/ngo` | Authenticated NGO | Role home |
+| `/admin` | Authenticated ADMIN | Role home |
 
-## Git Repository
+Role routes are guarded by `RequireRole`; backend authorization remains the
+security boundary. Password recovery and reset are out of scope.
 
-Remote repository:
+## Authentication and Application Status
 
-```text
-https://github.com/ahalnaji002/HCMS-Frontend.git
-```
+The approved frontend/backend authentication contract is in
+`src/docs/auth-contract.md`. Keep it aligned with the backend API documentation.
 
-Current development branch:
+Doctor and NGO registration creates an inactive account and a pending Join
+Request. After registration, the applicant returns to `/login` and submits the
+same email and password to check status. The backend verifies the credentials
+first, then returns the latest `PENDING` or `REJECTED` application projection in
+the `403` response. The login page displays the status and, when rejected, the
+administrator's recorded reason. No token or authenticated session is created.
+Approved applicants log in normally. Invalid credentials never reveal status.
 
-```text
-feature/auth-pages
-```
+There is no separate status-lookup endpoint, re-application flow, or email
+notification for this release. Do not add endpoints or infer application state
+in the frontend.
 
-Before committing changes, check the working tree:
+## Sprint 8 Status
 
-```bash
-git status
-```
+| Issue | Status |
+| --- | --- |
+| 8.1 — Authentication contract and audit | Complete |
+| 8.2 — Shared API and authentication foundation | Complete |
+| 8.3 — Login integration | Complete |
+| 8.4 — Patient registration integration | Complete |
+| 8.5 — Doctor and NGO registration | Complete |
+| 8.6 — Applicant approval-status visibility | Implemented on `feature/8-6-applicant-status-ui`; verify before integration |
+| 8.7 — Protected and role-restricted routes | Complete |
+| 8.8 — Shared role layouts | Next |
+| 8.9 — Role dashboards | Pending roadmap |
 
-## Next Step
+## Git Workflow
 
-Continue with Issue 8.2:
+- `main` is the stable branch.
+- `develop` is the integration branch.
+- Focused work belongs on `feature/...` branches.
+- Do not commit directly to `main` or change API contracts without approval.
 
-1. Complete the shared Axios API client.
-2. Add shared authentication functions for login and current user.
-3. Add centralized handling for unauthorized requests.
-4. Prepare a reusable authentication state foundation.
-
-## Future Enhancements
-
-The current release does not implement:
-
-- Re-application after a rejected Join Request while retaining request history.
-- Email notification when a Join Request is approved or rejected.
+Before committing, review `git status` and `git diff`. Do not include unrelated
+working-tree changes in the feature branch.

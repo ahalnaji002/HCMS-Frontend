@@ -21,6 +21,7 @@ Frontend application for the **Healthcare Conflict Management System (HCMS)**.
 * Login redirects each authenticated role to its own protected role home route
 * Patient registration validates approved fields and integrates with the backend API
 * Doctor and healthcare organization registrations submit approved fields and clearly show administrator approval status
+* Doctor and NGO applicants can check pending or rejected application status, including the recorded rejection reason, from the login page
 
 ## Dependencies
 
@@ -164,6 +165,16 @@ organization form collects its name and optional registration number and address
 Neither form includes patient-only fields. Validation, duplicate, server, and
 network errors preserve entered values. Successful requests show that the account
 is pending administrator approval and do not create an authenticated session.
+
+## Doctor and NGO Application Status
+
+After submitting a professional registration, return to `/login` and enter the
+same email and password to check the latest application status. The login page
+shows whether the request is pending or rejected, along with the recorded
+rejection reason when available. Checking status does not create a session;
+approved applicants can log in normally. There is no separate status lookup or
+re-application flow in this release. The response contract is documented in
+`src/docs/auth-contract.md`.
 
 ## Role Home Routes
 

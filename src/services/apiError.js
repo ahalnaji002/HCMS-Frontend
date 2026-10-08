@@ -32,6 +32,7 @@ export function normalizeApiError(error) {
     return {
       type: "forbidden",
       status,
+      application: data?.data?.application || null,
       message: "You are not allowed to perform this action.",
       fieldErrors: {},
     };

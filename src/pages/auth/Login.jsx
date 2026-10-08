@@ -14,7 +14,7 @@ import { roleRoutes } from "../../services/roleRoutes";
 
 function Login() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { startSession } = useAuth();
   const { theme } = useTheme();
@@ -22,6 +22,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [application, setApplication] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -45,6 +46,7 @@ function Login() {
     }
 
     setError("");
+    setApplication(null);
     setFieldErrors({});
     setIsSubmitting(true);
 
@@ -65,14 +67,19 @@ function Login() {
       startSession(token, user);
       navigate(destination, { replace: true });
     } catch (requestError) {
-      const { type } = normalizeApiError(requestError);
+      const { type, application: applicantStatus } =
+        normalizeApiError(requestError);
 
       if (type === "validation") {
         setError(t("login.errors.invalidRequest"));
       } else if (type === "unauthorized") {
         setError(t("login.errors.invalidCredentials"));
       } else if (type === "forbidden") {
-        setError(t("login.errors.inactiveAccount"));
+        if (applicantStatus) {
+          setApplication(applicantStatus);
+        } else {
+          setError(t("login.errors.inactiveAccount"));
+        }
       } else if (type === "network") {
         setError(t("login.errors.network"));
       } else {
@@ -96,6 +103,8 @@ function Login() {
     if (error) {
       setError("");
     }
+
+    setApplication(null);
   }
 
   function handlePasswordChange(event) {
@@ -111,6 +120,20 @@ function Login() {
     if (error) {
       setError("");
     }
+
+    setApplication(null);
+  }
+
+  function formatApplicationDate(value) {
+    if (!value) return null;
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return null;
+
+    return new Intl.DateTimeFormat(i18n.language, {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(date);
   }
 
   return (
@@ -160,6 +183,67 @@ function Login() {
             >
               {error}
             </div>
+          )}
+
+          {application && (
+            <section
+              aria-live="polite"
+              className={`mb-5 rounded-xl border px-4 py-4 text-sm ${
+                application.status === "REJECTED"
+                  ? "border-danger/25 bg-danger/5"
+                  : "border-primary/25 bg-primary/5"
+              }`}
+            >
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 className="font-semibold text-text-primary">
+                  {t("login.applicationStatus.title")}
+                </h2>
+                <span className="rounded-full bg-surface px-3 py-1 text-xs font-semibold text-text-primary">
+                  {t(`login.applicationStatus.status.${application.status}`)}
+                </span>
+              </div>
+              <p className="mt-2 leading-6 text-text-secondary">
+                {t(`login.applicationStatus.message.${application.status}`)}
+              </p>
+              {application.request_type && (
+                <p className="mt-3 text-text-primary">
+                  <span className="font-medium">
+                    {t("login.applicationStatus.applicationType")}: {" "}
+                  </span>
+                  {t(`login.applicationStatus.type.${application.request_type}`)}
+                </p>
+              )}
+              {formatApplicationDate(application.submitted_at) && (
+                <p className="mt-2 text-text-secondary">
+                  {t("login.applicationStatus.submitted", {
+                    date: formatApplicationDate(application.submitted_at),
+                  })}
+                </p>
+              )}
+              {application.status === "REJECTED" && (
+                <div className="mt-3 rounded-lg bg-surface/80 p-3 text-text-primary">
+                  <p className="font-medium">
+                    {t("login.applicationStatus.rejectionReason")}
+                  </p>
+                  {application.rejection_reason ? (
+                    <p className="mt-1 whitespace-pre-wrap leading-6">
+                      {application.rejection_reason}
+                    </p>
+                  ) : (
+                    <p className="mt-1 leading-6 text-text-secondary">
+                      {t("login.applicationStatus.noRejectionReason")}
+                    </p>
+                  )}
+                </div>
+              )}
+              {application.reviewed_at && (
+                <p className="mt-2 text-text-secondary">
+                  {t("login.applicationStatus.reviewed", {
+                    date: formatApplicationDate(application.reviewed_at),
+                  })}
+                </p>
+              )}
+            </section>
           )}
 
           {/* Form */}

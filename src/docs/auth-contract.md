@@ -20,6 +20,7 @@ The current release includes:
 - JWT storage and transmission.
 - Logout on the frontend.
 - The documented registration outcome for Doctor and NGO accounts.
+- Displaying the latest Doctor or NGO application status returned by login.
 
 Password recovery and password reset are outside the current release scope.
 
@@ -237,15 +238,39 @@ The frontend must never use one as though it were the other.
 
 ## Current Frontend Visibility of Approval Status
 
-`POST /api/auth/login` must be handled only according to its documented backend
-response. The frontend must not infer a Join Request status from a failed login
-or assume that login returns `PENDING`, `APPROVED`, `REJECTED`, or a rejection
-reason.
+Doctor and NGO applicants can check their latest status from the login page by
+submitting the same email and password used at registration. The backend checks
+the credentials first. For valid credentials belonging to an inactive
+professional account, `POST /api/auth/login` returns `403` without a token and
+includes `data.application` only when the latest Join Request is `PENDING` or
+`REJECTED`:
 
-The current frontend contract does not document an endpoint or response field
-that exposes a Doctor or NGO Join Request status or rejection reason to the
-applicant. Do not build a status lookup, rejected-account screen, or
-re-application flow until the backend documents the required API behavior.
+```json
+{
+  "success": false,
+  "message": "Account is not active",
+  "data": {
+    "application": {
+      "request_type": "DOCTOR",
+      "status": "PENDING",
+      "rejection_reason": null,
+      "submitted_at": "2026-10-08T09:30:00.000Z",
+      "reviewed_at": null
+    }
+  }
+}
+```
+
+For a rejected request, `status` is `REJECTED`, `rejection_reason` contains
+the administrator's recorded reason, and `reviewed_at` may be populated. The
+frontend displays this response on the login page and creates no session. A
+wrong email or password returns `401` and must never display application data.
+Other inactive or suspended accounts continue to receive the generic inactive
+account message. Successful login remains the only outcome for active accounts.
+
+There is no separate status-lookup endpoint. The frontend must not store or
+infer application status across login attempts, provide a re-application flow,
+or assume email notifications are sent.
 
 HTTP authentication and authorization errors are separate from both status
 models:
@@ -253,7 +278,7 @@ models:
 | HTTP status | Meaning |
 | --- | --- |
 | `401 Unauthorized` | The request does not contain valid credentials or a valid token. |
-| `403 Forbidden` | The authenticated request is not permitted to perform the requested action. |
+| `403 Forbidden` | Login credentials may be valid for an inactive account; professional applicants can receive the documented `data.application` projection. Other forbidden responses remain generic. |
 
 ## JWT Handling
 
@@ -292,13 +317,13 @@ No backend logout endpoint is used in the current release.
 | Area | Current status | Next issue |
 | --- | --- | ---|
 | React, Vite, and Tailwind setup | Complete | — |
-| Public routes | Basic routes exist | 8.7 |
-| Login interface | Local validation exists | 8.3 |
-| Patient registration | Local form and validation exist | 8.4 |
-| Doctor and NGO registration | Not implemented | 8.5 |
-| Shared API client | Basic Axios setup exists | 8.2 |
-| Authenticated-user state | Not implemented | 8.2 |
-| Approval-status views | Not implemented; wait for a documented applicant-facing backend contract | 8.6 |
+| Public and role-restricted routes | Complete | 8.7 |
+| Login API integration | Complete | 8.3 |
+| Patient registration API integration | Complete | 8.4 |
+| Doctor and NGO registration | Complete | 8.5 |
+| Shared API client | Complete | 8.2 |
+| Authenticated-user state | Complete | 8.2 |
+| Approval-status views | Complete; shown after credential verification on login | 8.6 |
 | Role-based layouts and dashboards | Not implemented | 8.8 and 8.9 |
 | Password recovery | Excluded from scope | Do not implement |
 

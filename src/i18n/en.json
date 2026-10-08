@@ -177,6 +177,20 @@
       "network": "Unable to connect to the server. Check your connection and try again.",
       "server": "An error occurred while logging in. Please try again.",
       "unknownRole": "Unable to determine the account type."
+    },
+    "applicationStatus": {
+      "title": "Application status",
+      "status": { "PENDING": "Under review", "REJECTED": "Not approved" },
+      "message": {
+        "PENDING": "Your registration is awaiting administrator review. You cannot access the platform until it is approved. Check again here later using the same email and password.",
+        "REJECTED": "The administration reviewed your registration and did not approve it. Any recorded reason appears below."
+      },
+      "applicationType": "Application type",
+      "type": { "DOCTOR": "Doctor", "NGO": "Organization" },
+      "submitted": "Submitted {{date}}",
+      "reviewed": "Reviewed {{date}}",
+      "rejectionReason": "Reason provided by the administration",
+      "noRejectionReason": "No rejection reason was included in the status response. Contact the administration for clarification."
     }
   },
   "registerPatient": {
@@ -300,7 +314,7 @@
     "success": {
       "doctor": { "title": "Doctor registration submitted" },
       "ngo": { "title": "Organization registration submitted" },
-      "description": "Your registration is pending administrator approval. Your account is not active yet, and no login session has been created. You can log in after approval.",
+      "description": "Your registration is pending administrator review. Your account is not active yet, and no login session has been created. To check its status later, return to log in and submit the same email and password. Once approved, you can log in normally.",
       "login": "Go to log in"
     }
   },
