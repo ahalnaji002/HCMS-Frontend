@@ -91,10 +91,16 @@ These routes are available before login:
 
 ## Protected Routes
 
-Protected routes require a valid JWT token.
+Protected routes require an authenticated session and enforce the required
+user role. The frontend route guard is implemented:
 
-The frontend currently provides role-specific placeholder routes while the full
-dashboards are pending:
+- While the session is loading, the route shows a loading state.
+- If the user is not authenticated, the route redirects to `/login`.
+- If the authenticated user's role does not match the route, the user is
+  redirected to the home route for their own role.
+- If the role matches, the route renders its page.
+
+The protected role routes are:
 
 | Route | Required role |
 | --- | --- |
@@ -103,16 +109,9 @@ dashboards are pending:
 | `/ngo` | `NGO` |
 | `/admin` | `ADMIN` |
 
-The full role dashboards and feature pages will be implemented later:
-
-- Patient dashboard.
-- Doctor dashboard.
-- NGO dashboard.
-- Admin dashboard.
-- Profile pages.
-- Role-specific HCMS features.
-
-If no valid token exists, redirect the user to `/login`.
+The route guard protects access; the contents and feature coverage of each
+role's pages are documented and delivered separately from this authentication
+contract.
 
 ## API Endpoints
 
