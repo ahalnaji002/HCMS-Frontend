@@ -86,7 +86,7 @@ The patient-intake and care-coordination frontend is implemented on
 | 8.5 — Doctor and NGO registration | Complete |
 | 8.6 — Applicant approval-status visibility | Complete and merged into `develop` |
 | 8.7 — Protected and role-restricted routes | Complete |
-| 8.8 — Shared role layouts | Implemented locally on `feature/8-8-shared-role-layouts`; lint and production build pass; not yet committed or merged |
+| 8.8 — Shared role layouts and navigation | Shared shell merged through PR #47; role-specific menus are being completed locally on `feature/8-8-role-navigation` |
 | 8.9 — Full role dashboards | Pending roadmap |
 
 ## Git Workflow

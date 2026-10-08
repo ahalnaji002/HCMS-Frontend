@@ -197,8 +197,10 @@ management, and emergency-alert assignment. The doctor route includes assigned
 patient intake, private medical notes, and separate diagnoses. The NGO route
 still displays a localized placeholder. All four role routes use the shared
 `src/layouts/RoleLayout.jsx` for the full logo, language and light/dark theme
-controls, logout behavior, and the common page frame; each route can set its
-own content width.
+controls, logout behavior, and the common page frame. The layout provides an
+Arabic/English role-specific navigation menu with active section state and a
+keyboard-accessible mobile toggle. Menu entries for documented modules whose
+pages are not implemented yet are shown as disabled “Coming soon” items.
 The role layout does not replace backend authorization.
 
 ## Patient Health Intake

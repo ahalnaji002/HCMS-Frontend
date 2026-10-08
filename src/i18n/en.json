@@ -355,6 +355,63 @@
       }
     }
   },
+  "roleNavigation": {
+    "label": "Workspace navigation",
+    "open": "Menu",
+    "close": "Close menu",
+    "comingSoon": "Coming soon",
+    "patient": {
+      "home": "Overview",
+      "profile": "My profile",
+      "intake": "Health information",
+      "medicalRecords": "Medical records",
+      "treatmentPlans": "Treatment plans",
+      "medications": "Medications",
+      "appointments": "Appointments",
+      "assistanceRequests": "Assistance requests",
+      "emergencyAlerts": "Emergency alerts",
+      "messages": "Messages",
+      "reminders": "Reminders",
+      "notifications": "Notifications"
+    },
+    "doctor": {
+      "home": "Overview",
+      "profile": "My profile",
+      "patients": "Assigned patients",
+      "medicalRecords": "Patient health information",
+      "notes": "Medical notes",
+      "diagnoses": "Diagnoses",
+      "treatmentPlans": "Treatment plans",
+      "medications": "Medications",
+      "appointments": "Appointments",
+      "emergencyAlerts": "Emergency alerts",
+      "assistanceRequests": "Assistance requests",
+      "messages": "Messages",
+      "notifications": "Notifications"
+    },
+    "ngo": {
+      "home": "Overview",
+      "profile": "Organization profile",
+      "assistanceRequests": "Assigned assistance requests",
+      "resources": "Resource allocations",
+      "notifications": "Notifications"
+    },
+    "admin": {
+      "home": "Overview",
+      "profile": "Admin profile",
+      "joinRequests": "Doctor and NGO applications",
+      "userManagement": "User and organization management",
+      "patientIntakes": "Patient cases and assignments",
+      "doctorWorkload": "Doctor availability and workload",
+      "emergencyAlerts": "Emergency alerts",
+      "assistanceRequests": "Assistance requests",
+      "support": "Technical support requests",
+      "reports": "Reports and statistics",
+      "activityLogs": "Activity log",
+      "settings": "System settings",
+      "notifications": "Notifications"
+    }
+  },
   "patientWorkspace": {
     "sections": "Patient workspace navigation",
     "profile": "My profile",
