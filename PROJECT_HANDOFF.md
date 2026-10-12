@@ -14,9 +14,24 @@ System. It communicates with the HCMS Backend through the shared Axios client.
 - Run `npm install`, then `npm run dev` to start the application.
 - Run `npm run lint` and `npm run build` for frontend verification.
 
+## Frontend Architecture
+
+The frontend follows inward dependency boundaries under `src/`: `app/` owns
+route composition and wires services, `application/` normalizes repository
+results and applies client-side domain checks, `domain/` holds framework-free
+concepts, `infrastructure/` contains the Axios client and repositories, and
+`presentation/` contains pages, features, layouts, UI, and localization. UI
+code consumes application services through `useApplicationServices`; it does
+not import API repositories directly. `@/` is the Vite alias for `src/`.
+Role route components compose the shared role layout with patient, doctor, and
+admin workspace features. Each feature separates its UI component from the
+matching hook that owns workspace state, application-service calls, and events.
+Large workspace sections are separate components in each feature's `components/`
+directory.
+
 ## Current Routes
 
-`src/App.jsx` defines public and role-restricted routes:
+`src/app/App.jsx` defines public and role-restricted routes:
 
 | URL | Access | Current behavior |
 | --- | --- | --- |
@@ -73,7 +88,8 @@ The patient-intake and care-coordination frontend is implemented on
   migrations before running the frontend workflow against it.
 - English and Arabic are available throughout patient, doctor, and admin
   workspaces, including the role-header language and light/dark theme toggles.
-- The NGO role remains a placeholder in this working tree.
+- Each role route now includes a dashboard summary backed by its documented
+  role-specific endpoint. NGO assistance features remain a coming-soon area.
 
 ## Sprint 8 Status
 
@@ -86,8 +102,8 @@ The patient-intake and care-coordination frontend is implemented on
 | 8.5 — Doctor and NGO registration | Complete |
 | 8.6 — Applicant approval-status visibility | Complete and merged into `develop` |
 | 8.7 — Protected and role-restricted routes | Complete |
-| 8.8 — Shared role layouts and navigation | Shared shell merged through PR #47; role-specific menus are being completed locally on `feature/8-8-role-navigation` |
-| 8.9 — Full role dashboards | Pending roadmap |
+| 8.8 — Shared role layouts and navigation | Complete and merged through PR #47 and PR #48; issue #16 closed |
+| 8.9 — Initial role dashboards | In progress on `feature/8-9-role-dashboards`; using documented dashboard endpoints for each role |
 
 ## Git Workflow
 

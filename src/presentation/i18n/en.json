@@ -1,0 +1,643 @@
+{
+  "common": {
+    "brand": "HCMS",
+    "brandSubtitle": "Healthcare Coordination",
+    "login": "Log in",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More"
+  },
+  "nav": {
+    "about": "About",
+    "features": "Features",
+    "whoWeServe": "Who We Serve",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "mobileNavigation": "Mobile navigation"
+  },
+  "landing": {
+    "badge": "Healthcare Conflict Management System",
+    "heroTitle": "Better coordination for",
+    "heroHighlight": "critical healthcare.",
+    "heroDescription": "A unified healthcare platform that helps patients, doctors, organizations, and administrators coordinate care and essential medical support during conflict.",
+    "connectedCare": "Connected Care",
+    "connectedCareDescription": "One coordinated healthcare system",
+    "patients": "Patients",
+    "patientDescription": "Care & follow-up",
+    "doctors": "Doctors",
+    "doctorDescription": "Medical coordination",
+    "organizations": "Organizations",
+    "organizationDescription": "Support & resources",
+    "admin": "Admin",
+    "adminDescription": "Coordination",
+    "care": "Care",
+    "treatment": "Treatment",
+    "resources": "Resources",
+    "liveEvents": {
+      "medicalRecordUpdated": "Medical record updated",
+      "emergencyAlert": "Emergency alert",
+      "resourceAllocated": "Resource allocated",
+      "treatmentFollowUpUpdated": "Treatment follow-up updated"
+    },
+    "about": {
+      "eyebrow": "About HCMS",
+      "heading": "Coordinating healthcare when every connection matters",
+      "description": "HCMS brings patients, doctors, healthcare organizations, and administrators into one coordinated system designed to support medical follow-up, communication, resource coordination, and continuity of care during conflict and emergency conditions.",
+      "values": {
+        "connectedCare": {
+          "title": "Connected Care",
+          "description": "Keep patients and healthcare providers connected throughout follow-up."
+        },
+        "coordinatedResources": {
+          "title": "Coordinated Resources",
+          "description": "Help healthcare organizations coordinate assistance and available resources."
+        },
+        "continuityOfCare": {
+          "title": "Continuity of Care",
+          "description": "Keep essential medical information and follow-up organized across the care journey."
+        }
+      }
+    },
+    "features": {
+      "eyebrow": "Platform Capabilities",
+      "heading": "Built for coordinated healthcare delivery",
+      "introduction": "Essential tools for managing care, communication, assistance, and critical events in one connected platform.",
+      "items": {
+        "medicalRecords": {
+          "title": "Medical Records",
+          "description": "Organize essential patient medical information and follow-up history."
+        },
+        "treatmentFollowUp": {
+          "title": "Treatment Follow-up",
+          "description": "Support treatment plans, medications, appointments, and medical notes."
+        },
+        "doctorPatientCoordination": {
+          "title": "Doctor–Patient Coordination",
+          "description": "Keep assigned doctors and patients connected throughout active care."
+        },
+        "assistanceResources": {
+          "title": "Assistance & Resources",
+          "description": "Coordinate assistance requests and resource allocation between patients and healthcare organizations."
+        },
+        "emergencyAlerts": {
+          "title": "Emergency Alerts",
+          "description": "Surface critical situations quickly so the appropriate teams can respond."
+        },
+        "secureCommunication": {
+          "title": "Secure Communication",
+          "description": "Support communication between patients and their assigned healthcare providers."
+        }
+      }
+    },
+    "whoWeServe": {
+      "eyebrow": "Who We Serve",
+      "heading": "Care coordination for every role",
+      "description": "HCMS connects patients, doctors, healthcare organizations, and administrators within one coordinated system that supports care across every role.",
+      "roles": {
+        "patients": {
+          "title": "Patients",
+          "description": "Stay informed and connected throughout the care journey.",
+          "capabilities": {
+            "medicalInformation": "Access essential medical information",
+            "treatmentTracking": "Follow treatment plans, medications, and appointments",
+            "doctorCommunication": "Communicate with the assigned doctor",
+            "assistanceAlerts": "Request assistance and send emergency alerts"
+          }
+        },
+        "doctors": {
+          "title": "Doctors",
+          "description": "Coordinate ongoing care for assigned patients.",
+          "capabilities": {
+            "assignedPatients": "Follow assigned patients",
+            "carePlanning": "Manage medical notes and treatment plans",
+            "medicationsAppointments": "Track medications and appointments",
+            "patientCommunication": "Communicate with patients during care"
+          }
+        },
+        "organizations": {
+          "title": "Healthcare Organizations",
+          "description": "Coordinate assistance and resources where they are needed.",
+          "capabilities": {
+            "assistanceRequests": "Manage assistance requests",
+            "resourceCoordination": "Coordinate and allocate available resources",
+            "careContinuity": "Support continuity of care during conflict and emergencies"
+          }
+        },
+        "administrators": {
+          "title": "Administrators",
+          "description": "Oversee users, activity, and essential system operations.",
+          "capabilities": {
+            "userManagement": "Manage users and joining requests",
+            "systemOversight": "Oversee the system and its activities",
+            "alertsOperations": "Monitor alerts and administrative operations"
+          }
+        }
+      }
+    },
+    "cta": {
+      "title": "Ready to coordinate care with HCMS?",
+      "description": "Choose your role and create your account to get started.",
+      "rolePickerTitle": "Choose your role",
+      "rolePickerDescription": "Select the account type you want to create.",
+      "closeRolePicker": "Close role selection",
+      "comingSoon": "Coming soon",
+      "roles": {
+        "patient": "Patient",
+        "doctor": "Doctor",
+        "organization": "Healthcare Organization"
+      }
+    },
+    "footer": {
+      "description": "Connecting patients, doctors, healthcare organizations, and administrators through coordinated care during conflict and emergencies.",
+      "navigationTitle": "Explore",
+      "navigationLabel": "Footer navigation",
+      "accountTitle": "Account",
+      "copyright": "© {{year}} HCMS. All rights reserved."
+    }
+  },
+  "login": {
+    "title": "Log in",
+    "description": "Log in to access the Healthcare Conflict Management System.",
+    "email": "Email address",
+    "emailPlaceholder": "name@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "submit": "Log in",
+    "submitting": "Logging in...",
+    "noAccount": "Don't have an account?",
+    "registerPatient": "Register as Patient",
+    "registerDoctor": "Register as Doctor",
+    "registerOrganization": "Register as Organization",
+    "errors": {
+      "required": "Please enter your email address and password.",
+      "emailRequired": "Please enter your email address.",
+      "passwordRequired": "Please enter your password.",
+      "invalidCredentials": "The email address or password is incorrect.",
+      "inactiveAccount": "This account is currently inactive. You cannot log in.",
+      "invalidRequest": "Please check your login information.",
+      "network": "Unable to connect to the server. Check your connection and try again.",
+      "server": "An error occurred while logging in. Please try again.",
+      "unknownRole": "Unable to determine the account type."
+    },
+    "applicationStatus": {
+      "title": "Application status",
+      "status": {
+        "PENDING": "Under review",
+        "REJECTED": "Not approved"
+      },
+      "message": {
+        "PENDING": "Your registration is awaiting administrator review. You cannot access the platform until it is approved. Check again here later using the same email and password.",
+        "REJECTED": "The administration reviewed your registration and did not approve it. Any recorded reason appears below."
+      },
+      "applicationType": "Application type",
+      "type": {
+        "DOCTOR": "Doctor",
+        "NGO": "Organization"
+      },
+      "submitted": "Submitted {{date}}",
+      "reviewed": "Reviewed {{date}}",
+      "rejectionReason": "Reason provided by the administration",
+      "noRejectionReason": "No rejection reason was included in the status response. Contact the administration for clarification."
+    }
+  },
+  "registerPatient": {
+    "title": "Create your patient account",
+    "description": "Enter your details to create an active HCMS patient account.",
+    "submit": "Create account",
+    "submitting": "Creating account...",
+    "haveAccount": "Already have an account?",
+    "login": "Log in",
+    "passwordHint": "Use at least 8 characters, including an uppercase letter, a lowercase letter, and a number.",
+    "fields": {
+      "full_name": "Full name",
+      "email": "Email address",
+      "phone": "Phone number (optional)",
+      "national_id": "National ID",
+      "date_of_birth": "Date of birth",
+      "gender": "Gender",
+      "genderPlaceholder": "Select gender",
+      "male": "Male",
+      "female": "Female",
+      "address": "Address (optional)",
+      "password": "Password",
+      "password_confirmation": "Confirm password"
+    },
+    "errors": {
+      "fullNameRequired": "Enter your full name.",
+      "fullNameTooLong": "Full name must be 150 characters or fewer.",
+      "emailInvalid": "Enter a valid email address.",
+      "emailTooLong": "Email address must be 255 characters or fewer.",
+      "phoneInvalid": "Enter a 10-digit phone number starting with 059 or 056.",
+      "nationalIdInvalid": "Enter a 9-digit National ID that does not start with 0.",
+      "dateInvalid": "Enter a valid date of birth.",
+      "dateFuture": "Date of birth cannot be in the future.",
+      "genderRequired": "Select your gender.",
+      "passwordPolicy": "Use at least 8 characters with an uppercase letter, a lowercase letter, and a number.",
+      "passwordTooLong": "Password must be 72 bytes or fewer.",
+      "confirmationRequired": "Confirm your password.",
+      "passwordMismatch": "The passwords do not match.",
+      "addressTooLong": "Address must be 255 characters or fewer.",
+      "validation": "Some details need attention. Review the fields below and try again.",
+      "conflict": "An account with this email address or National ID already exists. Check your details or log in.",
+      "network": "Unable to connect to the server. Check your connection and try again.",
+      "server": "The server could not create your account. Please try again.",
+      "generic": "We could not create your account. Check your details and try again.",
+      "serverFields": {
+        "full_name": "Enter a full name of 150 characters or fewer.",
+        "email": "Enter a valid email address of 255 characters or fewer.",
+        "phone": "Enter a 10-digit phone number starting with 059 or 056.",
+        "national_id": "Enter a unique 9-digit National ID that does not start with 0.",
+        "date_of_birth": "Enter a valid date of birth that is not in the future.",
+        "gender": "Select Male or Female.",
+        "address": "Address must be 255 characters or fewer.",
+        "password": "Use at least 8 characters with an uppercase letter, a lowercase letter, and a number.",
+        "password_confirmation": "Confirm that both passwords match."
+      }
+    },
+    "success": {
+      "title": "Your account is ready",
+      "description": "Your patient account is active. Log in to continue to HCMS.",
+      "login": "Go to log in"
+    }
+  },
+  "registerProfessional": {
+    "doctor": {
+      "title": "Register as a doctor"
+    },
+    "ngo": {
+      "title": "Register a healthcare organization"
+    },
+    "description": "Enter the approved details. Your account will be reviewed by an administrator before activation.",
+    "submit": "Submit registration",
+    "submitting": "Submitting registration...",
+    "haveAccount": "Already have an account?",
+    "login": "Log in",
+    "passwordHint": "Use at least 8 characters, including an uppercase letter, a lowercase letter, and a number.",
+    "fields": {
+      "full_name": "Full name",
+      "email": "Email address",
+      "phone": "Phone number (optional)",
+      "specialization": "Specialization",
+      "license_number": "Professional license number",
+      "organization_name": "Organization name",
+      "registration_number": "Organization registration number (optional)",
+      "address": "Address (optional)",
+      "password": "Password",
+      "password_confirmation": "Confirm password"
+    },
+    "errors": {
+      "fullNameRequired": "Enter your full name.",
+      "fullNameTooLong": "Full name must be 150 characters or fewer.",
+      "emailInvalid": "Enter a valid email address.",
+      "emailTooLong": "Email address must be 255 characters or fewer.",
+      "phoneInvalid": "Enter a 10-digit phone number starting with 059 or 056.",
+      "specializationRequired": "Enter your medical specialization.",
+      "specializationTooLong": "Specialization must be 100 characters or fewer.",
+      "license_numberRequired": "Enter your professional license number.",
+      "license_numberTooLong": "License number must be 100 characters or fewer.",
+      "organization_nameRequired": "Enter the organization name.",
+      "organization_nameTooLong": "Organization name must be 150 characters or fewer.",
+      "registration_numberTooLong": "Registration number must be 100 characters or fewer.",
+      "addressTooLong": "Address must be 255 characters or fewer.",
+      "passwordPolicy": "Use at least 8 characters with an uppercase letter, a lowercase letter, and a number.",
+      "passwordTooLong": "Password must be 72 bytes or fewer.",
+      "confirmationRequired": "Confirm your password.",
+      "passwordMismatch": "The passwords do not match.",
+      "validation": "Some details need attention. Review the fields below and try again.",
+      "doctorConflict": "This email address or professional license number is already registered.",
+      "ngoConflict": "This email address or organization registration number is already registered.",
+      "network": "Unable to connect to the server. Check your connection and try again.",
+      "server": "The server could not submit your registration. Please try again.",
+      "generic": "We could not submit your registration. Check your details and try again.",
+      "serverFields": {
+        "full_name": "Enter a full name of 150 characters or fewer.",
+        "email": "Enter a valid email address of 255 characters or fewer.",
+        "phone": "Enter a 10-digit phone number starting with 059 or 056.",
+        "specialization": "Enter a specialization of 100 characters or fewer.",
+        "license_number": "Enter a license number of 100 characters or fewer.",
+        "organization_name": "Enter an organization name of 150 characters or fewer.",
+        "registration_number": "Enter a registration number of 100 characters or fewer.",
+        "address": "Address must be 255 characters or fewer.",
+        "password": "Check the password requirements.",
+        "password_confirmation": "Confirm that both passwords match."
+      }
+    },
+    "success": {
+      "doctor": {
+        "title": "Doctor registration submitted"
+      },
+      "ngo": {
+        "title": "Organization registration submitted"
+      },
+      "description": "Your registration is pending administrator review. Your account is not active yet, and no login session has been created. To check its status later, return to log in and submit the same email and password. Once approved, you can log in normally.",
+      "login": "Go to log in"
+    }
+  },
+  "roleHome": {
+    "loading": "Checking your session...",
+    "logout": "Log out",
+    "accountFallback": "Account",
+    "accountMenuLabel": "Account menu for {{name}}, {{role}}",
+    "roles": {
+      "patient": {
+        "label": "Patient workspace",
+        "title": "Welcome to your patient area"
+      },
+      "doctor": {
+        "label": "Doctor workspace",
+        "title": "Welcome to your doctor area"
+      },
+      "ngo": {
+        "label": "Organization workspace",
+        "title": "Welcome to your organization area"
+      },
+      "admin": {
+        "label": "Administrator workspace",
+        "title": "Welcome to your administration area"
+      }
+    }
+  },
+  "roleDashboard": {
+    "eyebrow": "Workspace overview",
+    "greeting": "Welcome, {{name}}",
+    "summary": "Your current summary",
+    "nextActions": "Next actions",
+    "loading": "Loading your dashboard...",
+    "noActivity": "There is no activity to show yet.",
+    "retry": "Try again",
+    "comingSoon": "Coming soon",
+    "noAssignedPatients": "No assigned patients",
+    "errors": {
+      "loadFailed": "The dashboard could not be loaded. Check your connection and try again.",
+      "profileMissing": "Your role profile could not be found. Please contact the administration."
+    },
+    "descriptions": {
+      "patient": "A quick view of your care, reminders, assistance requests, and emergency alerts.",
+      "doctor": "A quick view of your assigned patients and the requests that need your attention.",
+      "ngo": "A quick view of assistance requests assigned to your organization and its resource allocations.",
+      "admin": "A current overview of registered users, pending requests, and active emergencies."
+    },
+    "actions": {
+      "intake": "Review health information",
+      "emergencyAlerts": "Open emergency alerts",
+      "profile": "View my profile",
+      "assignedPatients": "Open assigned patients",
+      "diagnoses": "Review diagnoses",
+      "medicalNotes": "Open medical notes",
+      "assistanceRequests": "Open assistance requests",
+      "patientIntakes": "Review patient cases",
+      "doctorWorkload": "Review doctor workload"
+    },
+    "metrics": {
+      "patient": {
+        "active_treatment_plans": "Active treatment plans",
+        "pending_reminders": "Pending reminders",
+        "active_emergency_alerts": "Active emergency alerts",
+        "pending_assistance_requests": "Pending assistance requests",
+        "unread_notifications": "Unread notifications"
+      },
+      "doctor": {
+        "active_patients": "Active assigned patients",
+        "assigned_emergency_alerts": "Assigned active emergency alerts",
+        "submitted_assistance_requests": "Assistance requests submitted"
+      },
+      "ngo": {
+        "assigned_assistance_requests": "Assigned assistance requests",
+        "resource_allocations": "Resource allocations"
+      },
+      "admin": {
+        "total_patients": "Active patients",
+        "total_doctors": "Active doctors",
+        "total_ngos": "Active organizations",
+        "pending_join_requests": "Pending join requests",
+        "active_emergency_alerts": "Active emergency alerts",
+        "pending_assistance_requests": "Pending assistance requests"
+      }
+    }
+  },
+  "roleNavigation": {
+    "label": "Workspace navigation",
+    "open": "Menu",
+    "close": "Close menu",
+    "comingSoon": "Coming soon",
+    "patient": {
+      "home": "Overview",
+      "profile": "My profile",
+      "intake": "Health information",
+      "medicalRecords": "Medical records",
+      "treatmentPlans": "Treatment plans",
+      "medications": "Medications",
+      "appointments": "Appointments",
+      "assistanceRequests": "Assistance requests",
+      "emergencyAlerts": "Emergency alerts",
+      "messages": "Messages",
+      "reminders": "Reminders",
+      "notifications": "Notifications"
+    },
+    "doctor": {
+      "home": "Overview",
+      "profile": "My profile",
+      "patients": "Assigned patients",
+      "medicalRecords": "Patient health information",
+      "notes": "Medical notes",
+      "diagnoses": "Diagnoses",
+      "treatmentPlans": "Treatment plans",
+      "medications": "Medications",
+      "appointments": "Appointments",
+      "emergencyAlerts": "Emergency alerts",
+      "assistanceRequests": "Assistance requests",
+      "messages": "Messages",
+      "notifications": "Notifications"
+    },
+    "ngo": {
+      "home": "Overview",
+      "profile": "Organization profile",
+      "assistanceRequests": "Assigned assistance requests",
+      "resources": "Resource allocations",
+      "notifications": "Notifications"
+    },
+    "admin": {
+      "home": "Overview",
+      "profile": "Admin profile",
+      "joinRequests": "Doctor and NGO applications",
+      "userManagement": "User and organization management",
+      "patientIntakes": "Patient cases and assignments",
+      "doctorWorkload": "Doctor availability and workload",
+      "emergencyAlerts": "Emergency alerts",
+      "assistanceRequests": "Assistance requests",
+      "support": "Technical support requests",
+      "reports": "Reports and statistics",
+      "activityLogs": "Activity log",
+      "settings": "System settings",
+      "notifications": "Notifications"
+    }
+  },
+  "patientWorkspace": {
+    "sections": "Patient workspace navigation",
+    "profile": "My profile",
+    "profileLoading": "Loading profile details...",
+    "profileName": "Name",
+    "profileEmail": "Email address",
+    "profilePhone": "Phone number",
+    "profileAddress": "Address",
+    "emergency": "Emergency alert",
+    "emergencyHint": "You can send an emergency alert at any time, even before completing the health form.",
+    "alertPhone": "Contact phone",
+    "alertLocation": "Location (optional)",
+    "alertDescription": "Short description (optional)",
+    "sendAlert": "Send emergency alert",
+    "alertSubmitted": "Emergency alert sent.",
+    "alertError": "Could not send the alert. Check the information and try again.",
+    "myAlerts": "My recent alerts",
+    "alertStatuses": {
+      "PENDING_ASSIGNMENT": "Pending assignment",
+      "ASSIGNED": "Doctor assigned",
+      "IN_PROGRESS": "In progress",
+      "RESOLVED": "Resolved",
+      "CANCELLED": "Cancelled"
+    },
+    "assignedDoctors": "Doctors assigned to your care",
+    "assignmentStatus": "Assignment status",
+    "active": "Active",
+    "assignmentNextStep": "You will be contacted about your follow-up care.",
+    "eyebrow": "Patient workspace",
+    "title": "Welcome",
+    "intro": "You can continue using your personal area. To let the administration review your situation and assign a doctor, complete this form once. Your description is not a medical diagnosis.",
+    "formTitle": "Health information",
+    "formHint": "After submission, you can review and edit your answers until the administration starts its review. Starting the review locks editing.",
+    "submittedHint": "Please review your answers for accuracy. You can edit this form until the administration starts reviewing it; after that it will be read-only.",
+    "lockedHint": "The administration has started reviewing this form, so it is now read-only. You can send a correction request directly to the administration.",
+    "correctionTitle": "Correction or addition request",
+    "correctionHint": "Your request goes directly to the administration. Sending it does not unlock the form.",
+    "sendCorrection": "Send request to administration",
+    "correctionSent": "Your request was sent to the administration.",
+    "correctionError": "Could not send the request. Try again.",
+    "correctionStatus": {
+      "OPEN": "Being handled by administration",
+      "RESOLVED": "Response received"
+    },
+    "adminResponse": "Administration response",
+    "loading": "Loading your health form...",
+    "currentProblem": "What current health problem would you like the doctor to know about?",
+    "symptoms": "What symptoms are you experiencing?",
+    "onset": "When did the symptoms start?",
+    "onsetPlaceholder": "Enter an approximate time or: I don't know",
+    "chronicConditions": "Do you have a chronic disease or previous health condition?",
+    "medications": "Are you currently taking medication?",
+    "allergies": "Do you have any known allergies?",
+    "additionalInformation": "Is there anything else you would like to add? (optional)",
+    "detailsPlaceholder": "Enter details",
+    "answers": {
+      "YES": "Yes",
+      "NO": "No",
+      "UNKNOWN": "I don't know"
+    },
+    "submit": "Submit form",
+    "saveChanges": "Save changes",
+    "saving": "Saving...",
+    "submitted": "Request submitted. You can edit your answers until the administration starts its review.",
+    "updated": "Your changes were saved.",
+    "loadError": "Could not load the health form. Try refreshing the page.",
+    "saveError": "Could not save the form. Check your connection and try again.",
+    "lockedError": "The administration has started reviewing this form, so it is read-only.",
+    "status": {
+      "NOT_SUBMITTED": "Form not submitted",
+      "SUBMITTED": "Request submitted",
+      "UNDER_REVIEW": "Under review",
+      "DOCTOR_ASSIGNED": "Doctor assigned"
+    },
+    "diagnosesTitle": "Doctors’ diagnoses",
+    "diagnosesDescription": "These diagnoses were documented by your assigned doctors. This section is read-only.",
+    "noDiagnoses": "Your doctors have not documented a diagnosis yet."
+  },
+  "adminIntakes": {
+    "eyebrow": "Case administration",
+    "title": "Review patient forms",
+    "description": "Review the patient's report. Opening the form does not lock it; it becomes locked only after you select Start review.",
+    "loading": "Loading patient cases...",
+    "empty": "There are no patient forms right now.",
+    "startReview": "Start review and lock editing",
+    "assignTitle": "Assign a doctor",
+    "doctor": "Doctor",
+    "selectDoctor": "Select a doctor",
+    "reason": "Internal assignment reason",
+    "multipleAssignments": "A patient may have more than one doctor for different needs. Enter what this doctor will follow.",
+    "workloadTitle": "Doctor availability and workload",
+    "workloadDescription": "Capacity is an administrative warning and never blocks assignment. Unavailability blocks routine assignment only; emergency assignment remains an administrative decision.",
+    "noDoctors": "There are no active doctors.",
+    "activeAssignments": "Active assignments",
+    "openEmergencies": "Open assigned emergency alerts",
+    "availability": "Availability",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "capacity": "Administrative capacity",
+    "notConfigured": "Not configured",
+    "capacityAlert": "At capacity — warning only",
+    "saveWorkload": "Save availability and capacity",
+    "workloadSaved": "Availability and capacity updated.",
+    "availabilityValues": {
+      "AVAILABLE": "Available",
+      "UNAVAILABLE": "Unavailable"
+    },
+    "assign": "Save assignment",
+    "working": "Working...",
+    "reviewStarted": "Review started. The form is now read-only to the patient.",
+    "correctionsTitle": "Patient form correction requests",
+    "correctionsDescription": "These requests go directly to the administration. Reviewing and responding does not automatically unlock form editing.",
+    "noCorrections": "There are no correction requests.",
+    "correctionStatus": {
+      "OPEN": "Open",
+      "RESOLVED": "Responded"
+    },
+    "adminResponse": "Administration response",
+    "responsePlaceholder": "Write a response to the patient (optional)",
+    "resolveCorrection": "Save response and close request",
+    "correctionResolved": "The response was saved and the correction request was closed.",
+    "assignmentSaved": "Doctor assignment saved.",
+    "assignmentRequired": "Select a doctor and enter an assignment reason.",
+    "loadError": "Could not load patient forms and doctors.",
+    "actionError": "Could not complete the action. Refresh the page and try again.",
+    "emergencyTitle": "Emergency alerts",
+    "emergencyDescription": "Assign pending alerts to an active doctor. Availability and capacity are shown as information; the administration may assign an unavailable or full doctor for an emergency.",
+    "noEmergencies": "No emergency alerts.",
+    "emergencyDoctor": "Emergency doctor",
+    "assignEmergency": "Assign emergency alert",
+    "emergencyDoctorRequired": "Choose a doctor for this emergency alert.",
+    "emergencyAssigned": "Emergency alert assigned."
+  },
+  "doctorWorkspace": {
+    "eyebrow": "Doctor workspace",
+    "title": "Assigned patients and care follow-up",
+    "loading": "Loading assigned patients...",
+    "loadingDetails": "Loading case information...",
+    "patients": "My patients",
+    "empty": "You do not have assigned patients right now.",
+    "loadError": "Could not load the patient list.",
+    "detailError": "Could not load the case details. Check that an active assignment exists.",
+    "noIntake": "This patient has no health-intake report.",
+    "patientReport": "Patient's health report (not a diagnosis)",
+    "documentCare": "Document clinical evaluation",
+    "privateNote": "Medical note (visible only to its authoring doctor)",
+    "save": "Save medical note",
+    "saving": "Saving...",
+    "saved": "The medical note was saved.",
+    "saveError": "Could not save the medical note. Try again.",
+    "diagnosesTitle": "Medical diagnoses",
+    "diagnosisLabel": "Diagnosis",
+    "saveDiagnosis": "Save diagnosis",
+    "diagnosisSaved": "Diagnosis saved.",
+    "noDiagnoses": "No diagnoses documented for this patient."
+  },
+  "language": {
+    "english": "English",
+    "arabic": "العربية"
+  },
+  "accessibility": {
+    "home": "HCMS home",
+    "logoAlt": "HCMS — Healthcare Conflict Management System",
+    "mainNavigation": "Main navigation",
+    "switchToEnglish": "Switch to English",
+    "switchToArabic": "Switch to Arabic",
+    "switchToLightTheme": "Switch to light theme",
+    "switchToDarkTheme": "Switch to dark theme"
+  }
+}

@@ -1,20 +1,24 @@
 import { StrictMode } from "react";
-import "./i18n";
+import "@/presentation/i18n";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import "./index.css";
-import App from "./App.jsx";
-import { AuthProvider } from "./context/AuthContext.jsx";
-import { ThemeProvider } from "./context/ThemeContext.jsx";
+import "@/presentation/styles/index.css";
+import App from "@/app/App.jsx";
+import { AuthProvider } from "@/presentation/context/AuthContext.jsx";
+import { ThemeProvider } from "@/presentation/context/ThemeContext.jsx";
+import { ApplicationServicesProvider } from "@/app/ApplicationServicesProvider";
+import applicationServices from "@/app/applicationServices";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ThemeProvider>
-      <BrowserRouter>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </BrowserRouter>
+      <ApplicationServicesProvider services={applicationServices}>
+        <BrowserRouter>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </BrowserRouter>
+      </ApplicationServicesProvider>
     </ThemeProvider>
   </StrictMode>,
 );
