@@ -324,7 +324,7 @@ No backend logout endpoint is used in the current release.
 | Authenticated-user state | Complete | 8.2 |
 | Approval-status views | Complete; shown after credential verification on login | 8.6 |
 | Shared role workspace layout and role navigation | Shared shell with localized role-specific menus; documented future modules are disabled until their pages exist | 8.9 |
-| Full role dashboards | Not implemented | 8.9 |
+| Initial role dashboards | Implemented locally on `feature/8-9-role-dashboards`; API-backed role summaries with loading, empty, and retryable error states | 8.9 |
 | Password recovery | Excluded from scope | Do not implement |
 
 ## Rules for Frontend Development

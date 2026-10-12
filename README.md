@@ -115,7 +115,7 @@ VITE_API_URL=http://localhost:3000
 The shared Axios configuration is located at:
 
 ```text
-src/services/api.js
+src/infrastructure/http/apiClient.js
 ```
 
 ## Brand Assets
@@ -194,14 +194,32 @@ role. The patient route includes the health-intake form, profile information,
 emergency-alert access, correction requests, and read-only doctor diagnoses.
 The administrator route includes intake review, doctor assignment, workload
 management, and emergency-alert assignment. The doctor route includes assigned
-patient intake, private medical notes, and separate diagnoses. The NGO route
-still displays a localized placeholder. All four role routes use the shared
-`src/layouts/RoleLayout.jsx` for the full logo, language and light/dark theme
+patient intake, private medical notes, and separate diagnoses. Each role route
+shows a dashboard summary from its approved role-specific backend endpoint,
+alongside the existing workspace features. NGO dashboard cards summarize its
+assigned assistance requests and resource-allocation count; its feature pages
+remain marked as coming soon. All four role routes use the shared
+`src/presentation/layouts/RoleLayout.jsx` for the full logo, language and light/dark theme
 controls, logout behavior, and the common page frame. The layout provides an
 Arabic/English role-specific navigation menu with active section state and a
 keyboard-accessible mobile toggle. Menu entries for documented modules whose
 pages are not implemented yet are shown as disabled “Coming soon” items.
 The role layout does not replace backend authorization.
+
+Dashboard summaries load from `GET /api/patient/dashboard`,
+`GET /api/doctor/dashboard`, `GET /api/ngo/dashboard`, or
+`GET /api/admin/dashboard`. The screens display loading, retryable error, and
+no-activity states; counts come from the backend rather than local estimates.
+The dashboard feature is grouped under `src/presentation/features/role-dashboard`: its role
+configuration, data-loading hook, and presentation components are kept
+together. Role pages compose this feature with the shared layout. Pages access
+application services through the app context; infrastructure repositories own
+HTTP requests and are wired in one composition root.
+Role route files are intentionally small: they apply the role layout and render
+the corresponding patient, doctor, or admin workspace feature. Each workspace
+feature keeps its UI in a `*WorkspaceFeature.jsx` file and its state, API calls,
+and event handlers in a matching `use*Workspace.js` hook. Large UI sections live
+in focused files under that feature's `components/` directory.
 
 ## Patient Health Intake
 
@@ -250,17 +268,13 @@ HCMS-Frontend/
 │
 ├── src/
 │   ├── assets/
-│   ├── components/
-│   ├── context/
-│   ├── hooks/
-│   ├── layouts/
-│   ├── pages/
-│   ├── services/
-│   │   └── api.js
-│   ├── utils/
-│   ├── App.jsx
-│   ├── index.css
-│   └── main.jsx
+│   ├── app/                 # Routes, dependency composition, application services context
+│   ├── application/         # Application-service boundary and domain checks
+│   ├── domain/              # Framework-independent domain concepts
+│   ├── infrastructure/      # Axios client and API/session repositories
+│   ├── presentation/        # Pages, features, layouts, UI, localization, styles
+│   ├── docs/
+│   └── main.jsx             # Browser entry and provider composition
 │
 ├── .env.example
 ├── .gitignore
@@ -270,3 +284,8 @@ HCMS-Frontend/
 ├── vite.config.js
 └── README.md
 ```
+
+Dependencies point inward: presentation calls application services, application
+depends on domain rules, and the app composition root connects application
+services to infrastructure repositories. UI components and pages do not import
+API repositories directly. The shared `@/` alias points to `src/`.
