@@ -14,7 +14,7 @@ function LanguageToggle() {
     <button
       type="button"
       onClick={toggleLanguage}
-      className="inline-flex h-10 items-center justify-center rounded-lg border border-border bg-surface px-3 text-sm font-semibold text-text-secondary transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      className="inline-flex min-h-11 items-center justify-center rounded-lg border border-border bg-surface px-3 text-sm font-semibold text-text-secondary transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       aria-label={
         isArabic
           ? t("accessibility.switchToEnglish")

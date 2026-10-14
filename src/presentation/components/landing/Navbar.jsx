@@ -105,20 +105,20 @@ function Navbar() {
 
           <Link
             to="/login"
-            className="hidden rounded-lg px-3 py-2.5 text-sm font-semibold text-text-primary transition hover:bg-background hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:inline-flex sm:px-4"
+            className="hidden min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-semibold text-text-primary transition hover:bg-background hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:inline-flex sm:px-4"
           >
             {t("common.login")}
           </Link>
 
           <RegistrationRolePicker
-            className="rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:px-5"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:px-5"
             onOpen={() => setIsMenuOpen(false)}
           />
 
           <button
             ref={menuButtonRef}
             type="button"
-            className="inline-flex size-10 items-center justify-center rounded-lg border border-border bg-surface text-text-primary transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary lg:hidden"
+            className="inline-flex size-11 items-center justify-center rounded-lg border border-border bg-surface text-text-primary transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary lg:hidden"
             aria-label={
               isMenuOpen ? t("nav.closeMenu") : t("nav.openMenu")
             }
@@ -164,7 +164,7 @@ function Navbar() {
               <a
                 key={id}
                 href={`#${id}`}
-                className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-background hover:text-primary ${
+                className={`flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-background hover:text-primary ${
                   isActive
                     ? "bg-primary/10 text-primary"
                     : "text-text-secondary"
@@ -179,7 +179,7 @@ function Navbar() {
 
           <Link
             to="/login"
-            className="rounded-lg px-3 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-background hover:text-primary sm:hidden"
+            className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-background hover:text-primary sm:hidden"
             onClick={() => setIsMenuOpen(false)}
           >
             {t("common.login")}

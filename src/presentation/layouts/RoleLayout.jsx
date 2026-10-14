@@ -66,7 +66,7 @@ function RoleLayout({ children, mainClassName, role }) {
             aria-expanded={isNavigationOpen}
             aria-controls="role-navigation"
             onClick={() => setIsNavigationOpen((isOpen) => !isOpen)}
-            className="rounded-lg border border-border px-3 py-2 text-xs font-semibold text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary md:hidden"
+            className="min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-semibold text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary md:hidden"
           >
             {t(isNavigationOpen ? "roleNavigation.close" : "roleNavigation.open")}
           </button>
@@ -102,7 +102,7 @@ function RoleLayout({ children, mainClassName, role }) {
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="mt-2 w-full rounded-lg px-3 py-2 text-start text-sm font-semibold text-danger transition hover:bg-danger/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-danger"
+                    className="mt-2 min-h-11 w-full rounded-lg px-3 py-2 text-start text-sm font-semibold text-danger transition hover:bg-danger/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-danger"
                   >
                     {t("roleHome.logout")}
                   </button>
@@ -135,7 +135,7 @@ function RoleLayout({ children, mainClassName, role }) {
                         to={item.href}
                         aria-current={isActive ? "page" : undefined}
                         onClick={() => setIsNavigationOpen(false)}
-                        className={`block rounded-lg px-3 py-2 text-start text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+                        className={`flex min-h-11 items-center rounded-lg px-3 py-2 text-start text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                           isActive
                             ? "bg-primary text-white"
                             : "text-text-secondary hover:bg-background hover:text-text-primary"
@@ -146,7 +146,7 @@ function RoleLayout({ children, mainClassName, role }) {
                     ) : (
                       <span
                         aria-disabled="true"
-                        className="flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm text-text-secondary/70"
+                        className="flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm text-text-secondary/70"
                       >
                         <span>{label}</span>
                         <span className="shrink-0 rounded-full bg-background px-2 py-1 text-xs">

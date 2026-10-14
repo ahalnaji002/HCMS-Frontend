@@ -12,7 +12,7 @@ function ThemeToggle({ className = "" }) {
   return (
     <button
       type="button"
-      className={`inline-flex size-10 items-center justify-center rounded-full border border-border bg-surface text-text-secondary transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${className}`}
+      className={`inline-flex size-11 items-center justify-center rounded-full border border-border bg-surface text-text-secondary transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${className}`}
       onClick={toggleTheme}
       aria-label={label}
       title={label}
