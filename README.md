@@ -130,6 +130,8 @@ src/infrastructure/http/apiClient.js
   results and explicit test limitations.
 - `src/docs/sprint-8-final-review.md` summarizes the delivered Sprint 8 scope,
   API boundaries, and follow-up work.
+- `src/docs/sprint-8-closure-checklist.md` records the final Sprint 8 closure
+  review and links remaining product work to open issues.
 
 ## Brand Assets
 

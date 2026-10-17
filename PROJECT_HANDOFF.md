@@ -113,8 +113,8 @@ The patient-intake and care-coordination frontend is implemented on
 | 8.9 — Initial role dashboards | Complete and merged through PR #49 |
 | 8.10 — Responsive authentication and layout baseline | Complete and merged into `develop` |
 | 8.11 — Sprint 8 integration testing | Complete and merged into `develop` |
-| 8.12 — Documentation and final review | In progress on `feature/8-12-documentation-final-review` |
-| 8.13 — Sprint 8 final commit and closure | Not started |
+| 8.12 — Documentation and final review | Complete and merged into `develop` |
+| 8.13 — Sprint 8 final commit and closure | Complete after this closure branch is merged into `develop` |
 
 ## Git Workflow
 
@@ -132,3 +132,5 @@ The patient-intake and care-coordination frontend is implemented on
   and known verification limitations.
 - `src/docs/sprint-8-final-review.md` — Sprint 8 delivery summary, boundaries,
   and follow-up work.
+- `src/docs/sprint-8-closure-checklist.md` — final Issue, verification, and
+  remaining-work traceability for Sprint 8 closure.
