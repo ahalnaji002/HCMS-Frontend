@@ -23,8 +23,8 @@ concepts, `infrastructure/` contains the Axios client and repositories, and
 `presentation/` contains pages, features, layouts, UI, and localization. UI
 code consumes application services through `useApplicationServices`; it does
 not import API repositories directly. `@/` is the Vite alias for `src/`.
-Role route components compose the shared role layout with patient, doctor, and
-admin workspace features. Each feature separates its UI component from the
+Role route components compose the shared role layout with patient, doctor,
+NGO, and admin workspace features. Each feature separates its UI component from the
 matching hook that owns workspace state, application-service calls, and events.
 Large workspace sections are separate components in each feature's `components/`
 directory.
@@ -42,7 +42,7 @@ directory.
 | `/register/ngo` | Public | NGO registration |
 | `/patient` | Authenticated PATIENT | Patient workspace |
 | `/doctor` | Authenticated DOCTOR | Doctor workspace |
-| `/ngo` | Authenticated NGO | Localized placeholder |
+| `/ngo` | Authenticated NGO | NGO dashboard summary; feature pages remain unavailable |
 | `/admin` | Authenticated ADMIN | Administrator workspace |
 
 Role routes are guarded by `RequireRole`; backend authorization remains the
@@ -60,6 +60,13 @@ session is created. Wrong credentials never reveal application status.
 There is no separate status-lookup endpoint, re-application flow, or email
 notification in this release. Issue 8.6 was merged into `develop` in commit
 `1deb743`.
+
+The access token is held in `localStorage` under `hcms_access_token` and is
+sent as a Bearer token by the shared Axios client. On application startup,
+`AuthProvider` calls `GET /api/auth/me` to restore the authenticated user. The
+current release has no backend logout endpoint; logout removes the local token
+and user state. The route guard improves navigation only; the backend remains
+the authorization boundary.
 
 ## Patient Intake and Care Coordination
 
@@ -103,10 +110,25 @@ The patient-intake and care-coordination frontend is implemented on
 | 8.6 — Applicant approval-status visibility | Complete and merged into `develop` |
 | 8.7 — Protected and role-restricted routes | Complete |
 | 8.8 — Shared role layouts and navigation | Complete and merged through PR #47 and PR #48; issue #16 closed |
-| 8.9 — Initial role dashboards | In progress on `feature/8-9-role-dashboards`; using documented dashboard endpoints for each role |
+| 8.9 — Initial role dashboards | Complete and merged through PR #49 |
+| 8.10 — Responsive authentication and layout baseline | Complete and merged into `develop` |
+| 8.11 — Sprint 8 integration testing | Complete and merged into `develop` |
+| 8.12 — Documentation and final review | In progress on `feature/8-12-documentation-final-review` |
+| 8.13 — Sprint 8 final commit and closure | Not started |
 
 ## Git Workflow
 
 - `main` is the stable branch; `develop` is the integration branch.
 - Focused work belongs on `feature/...` branches.
 - Before committing, review `git status` and `git diff`.
+
+## Key Documentation
+
+- `src/docs/auth-contract.md` — frontend reference derived from the approved
+  backend authentication documentation.
+- `src/docs/sprint-8-responsive-verification.md` — responsive and accessibility
+  verification record.
+- `src/docs/sprint-8-integration-verification.md` — live integration evidence
+  and known verification limitations.
+- `src/docs/sprint-8-final-review.md` — Sprint 8 delivery summary, boundaries,
+  and follow-up work.
