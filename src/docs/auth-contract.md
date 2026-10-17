@@ -293,11 +293,13 @@ Authenticated requests must send:
 Authorization: Bearer <token>
 ```
 
-If the backend returns `401 Unauthorized`, the frontend must:
-
-1. Remove the saved token.
-2. Clear authenticated-user state.
-3. Redirect to `/login`.
+If a request receives `401 Unauthorized`, the shared Axios interceptor removes
+the saved token. During application-start session restoration, `AuthProvider`
+also clears its authenticated-user state after a `401`; `RequireRole` then
+redirects an unauthenticated visitor to `/login`. The current interceptor does
+not itself navigate or synchronously reset React context for every in-session
+request, so the backend remains the authority for rejecting expired or invalid
+tokens.
 
 ## Logout
 
@@ -323,8 +325,10 @@ No backend logout endpoint is used in the current release.
 | Shared API client | Complete | 8.2 |
 | Authenticated-user state | Complete | 8.2 |
 | Approval-status views | Complete; shown after credential verification on login | 8.6 |
-| Shared role workspace layout and role navigation | Shared shell with localized role-specific menus; documented future modules are disabled until their pages exist | 8.9 |
-| Initial role dashboards | Implemented locally on `feature/8-9-role-dashboards`; API-backed role summaries with loading, empty, and retryable error states | 8.9 |
+| Shared role workspace layout and role navigation | Complete; localized role-specific menus show unavailable modules as disabled | 8.8 |
+| Initial role dashboards | Complete; API-backed role summaries include loading, empty, and retryable error states | 8.9 |
+| Responsive authentication and layout baseline | Complete; evidence is in `sprint-8-responsive-verification.md` | 8.10 |
+| Sprint 8 integration verification | Complete; evidence and known limits are in `sprint-8-integration-verification.md` | 8.11 |
 | Password recovery | Excluded from scope | Do not implement |
 
 ## Rules for Frontend Development

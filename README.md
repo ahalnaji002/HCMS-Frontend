@@ -118,6 +118,19 @@ The shared Axios configuration is located at:
 src/infrastructure/http/apiClient.js
 ```
 
+## Sprint 8 Documentation
+
+- `src/docs/auth-contract.md` explains the approved frontend authentication
+  contract, token handling, public and protected routes, and the distinction
+  between User Account and Join Request statuses.
+- `src/docs/sprint-8-responsive-verification.md` records responsive and
+  accessibility checks for public authentication screens and shared role
+  layouts.
+- `src/docs/sprint-8-integration-verification.md` records live API integration
+  results and explicit test limitations.
+- `src/docs/sprint-8-final-review.md` summarizes the delivered Sprint 8 scope,
+  API boundaries, and follow-up work.
+
 ## Brand Assets
 
 Use the shared `Logo` component with the full wordmark or icon-only variant:
