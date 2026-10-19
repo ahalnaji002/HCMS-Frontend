@@ -1,5 +1,10 @@
 # Sprint 8.11 Integration Verification
 
+> Historical live verification from 2026-10-17. The 2026-10-19 follow-up adds
+> automated browser coverage, offline recovery, and synthetic HTTP 500 tests:
+> [Automated browser verification](./sprint-8-automated-verification.md).
+> The limitations below describe the original run.
+
 ## Scope and environment
 
 This record covers the implemented Sprint 8 authentication and role-layout
