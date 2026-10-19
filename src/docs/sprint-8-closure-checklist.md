@@ -1,5 +1,9 @@
 # Sprint 8 Closure Checklist
 
+> This is the original closure record. For the later Playwright test suite,
+> network failures, and HTTP 500 coverage, see the
+> [2026-10-19 automated verification](./sprint-8-automated-verification.md).
+
 ## Review point
 
 This checklist records the final Sprint 8 closure review on

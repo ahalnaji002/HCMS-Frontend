@@ -82,7 +82,9 @@ and the account `ACTIVE`.
   rejection results, and `400`, `401`, `403`, and `409` responses.
 - The integration record does not claim live coverage for a deliberately
   induced network failure or `500` response, and records that no automated
-  test runner is currently configured.
+  test runner was configured at the original review point. The subsequent
+  [2026-10-19 automated verification](./sprint-8-automated-verification.md)
+  adds Playwright browser tests, offline recovery, and synthetic HTTP 500 coverage.
 
 See `sprint-8-responsive-verification.md` and
 `sprint-8-integration-verification.md` for the detailed evidence and limits.

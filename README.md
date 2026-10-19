@@ -39,6 +39,7 @@ Frontend application for the **Healthcare Conflict Management System (HCMS)**.
 * React Router
 * Axios
 * ESLint
+* Playwright Test (development dependency for browser regression tests)
 * Tailwind CSS
 * Fontsource packages for Inter and IBM Plex Sans Arabic
 
@@ -101,6 +102,46 @@ The frontend runs by default at:
 ```text
 http://localhost:5173
 ```
+
+## Automated Browser Tests
+
+Install the test browser once after installing dependencies:
+
+```bash
+npx playwright install chromium --no-shell
+npm test
+```
+
+`npm test` starts an isolated Vite server on port 4178 and runs Chromium at
+desktop and mobile sizes. Keep that port free. Use `npm run test:headed` to
+watch the browser, or `npx playwright show-report` to view the HTML report.
+Failure traces and screenshots are saved in ignored test output directories.
+
+If bundled Chromium cannot start on Windows, use installed Google Chrome:
+
+```powershell
+$env:PLAYWRIGHT_CHANNEL = 'chrome'
+npm test
+```
+
+The suite covers authentication, session restoration, logout, role guards,
+registration, and recovery from aborted network requests and HTTP 500 responses.
+API responses are synthetic contract fixtures intercepted in the browser;
+unmatched API calls are blocked. No real backend, account, or database is used.
+These tests verify frontend behavior, not backend authorization or live API
+integration. See `src/docs/sprint-8-automated-verification.md` for scope and results.
+
+For an end-to-end check against a running local backend, first start the API in
+test mode with `NODE_ENV=test` and a migrated, isolated `hcms_test_db`, then run:
+
+```powershell
+$env:PLAYWRIGHT_CHANNEL = 'chrome'
+npm run test:integration
+```
+
+This flow creates uniquely named Patient, Doctor, and NGO test accounts in the
+test database. Do not point it at a development or production database. HTTP
+500 and network loss are simulated in the browser without stopping the API.
 
 ## Backend Connection
 
