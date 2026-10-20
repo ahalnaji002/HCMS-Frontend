@@ -25,7 +25,7 @@ codebase and are closed as completed:
 | 8.11 | `sprint-8-integration-verification.md` records live registration, login, `/api/auth/me`, RBAC, approval, rejection, and error-status checks. |
 | 8.12 | `sprint-8-final-review.md` aligns the final code, routes, API boundary, limitations, and verification evidence. |
 
-Issue 8.13 is the final Sprint 8 closure issue. Its branch, pull request, and
+Issue 8.13 was the final Sprint 8 closure issue. Its branch, pull request, and
 merged commit provide the final delivery traceability.
 
 ## Final scope review
@@ -54,21 +54,25 @@ git status --short
 git diff
 ```
 
-The project has no configured automated test runner or `test` script. This is
-an existing limitation recorded in the Sprint 8.11 integration evidence, not
-a claim that automated tests passed.
+At this original review point, the project had no configured automated test
+runner or `test` script. Playwright coverage was added in the 2026-10-19
+follow-up; see [automated verification](./sprint-8-automated-verification.md)
+for its results and limits.
 
 ## Remaining work
 
-No Sprint 8 implementation Issue remains open other than this closure Issue.
-Future frontend work remains explicitly tracked in open GitHub Issues rather
-than silently included in Sprint 8. The next planned scope is Sprint 9,
-beginning with Issue #28, **Sprint 9 Requirements & API Contract**. Sprint 10
-work is also tracked separately in its own open Issues.
+At the original review point, no Sprint 8 implementation Issue remained open
+other than this closure Issue. Issue 8.13 was subsequently merged into
+`develop` at commit `2c56185`. Future frontend work remains tracked in GitHub
+Issues rather than silently included in Sprint 8. The next planned scope is
+Sprint 9, beginning with Issue #28, **Sprint 9 Requirements & API Contract**.
+Sprint 10 work is also tracked separately in its own Issues.
 
 ## Pull request and closure record
 
-The closure workflow is:
+The following steps record the original closure workflow; the closure was
+subsequently merged into `develop` at commit `2c56185`, and its feature branch
+was removed:
 
 1. Review the final diff and working tree for intended files only.
 2. Commit the verified documentation with a clear message.

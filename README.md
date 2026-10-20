@@ -140,8 +140,13 @@ npm run test:integration
 ```
 
 This flow creates uniquely named Patient, Doctor, and NGO test accounts in the
-test database. Do not point it at a development or production database. HTTP
-500 and network loss are simulated in the browser without stopping the API.
+test database, removes leftover accounts from earlier integration runs at
+startup, and removes this run's accounts after it finishes, including failures.
+Cleanup uses the backend repository's test-only script and refuses to run unless
+`NODE_ENV=test` and `TEST_DB_NAME=hcms_test_db`. Keep the backend repository next
+to the frontend repository in the project workspace. Do not point the test at a
+development or production database. HTTP 500 and network loss are simulated in
+the browser without stopping the API.
 
 ## Backend Connection
 
@@ -169,6 +174,8 @@ src/infrastructure/http/apiClient.js
   layouts.
 - `src/docs/sprint-8-integration-verification.md` records live API integration
   results and explicit test limitations.
+- `src/docs/sprint-8-automated-verification.md` records automated browser test
+  coverage, results, and environment limitations.
 - `src/docs/sprint-8-final-review.md` summarizes the delivered Sprint 8 scope,
   API boundaries, and follow-up work.
 - `src/docs/sprint-8-closure-checklist.md` records the final Sprint 8 closure
