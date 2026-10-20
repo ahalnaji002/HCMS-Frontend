@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import { createRequire } from 'node:module';
+import path from 'node:path';
 import process from 'node:process';
 
 const stamp = `${Date.now()}`;
@@ -33,6 +35,39 @@ const ngo = {
   organization_name: `Integration Organization ${stamp}`,
   registration_number: `INT-NGO-${stamp}`,
 };
+
+const cleanupScript = path.resolve(
+  process.cwd(),
+  '..',
+  '..',
+  '3.1 Backend',
+  'HCMS-Backend',
+  'scripts',
+  'cleanupIntegrationTestAccounts.js',
+);
+const requireBackendModule = createRequire(cleanupScript);
+const cleanupIntegrationTestAccounts = requireBackendModule(cleanupScript);
+
+async function cleanupTestAccounts(options) {
+  const previousNodeEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = 'test';
+  try {
+    return await cleanupIntegrationTestAccounts(options);
+  } finally {
+    if (previousNodeEnv === undefined) delete process.env.NODE_ENV;
+    else process.env.NODE_ENV = previousNodeEnv;
+  }
+}
+
+test.beforeAll(async () => {
+  const removed = await cleanupTestAccounts({ stale: true });
+  console.log(`Removed ${removed} stale integration test account(s)`);
+});
+
+test.afterEach(async () => {
+  const removed = await cleanupTestAccounts({ emails: [patient.email, doctor.email, ngo.email] });
+  console.log(`Removed ${removed} test account(s) created by this run`);
+});
 
 async function fillForm(page, values) {
   for (const [name, value] of Object.entries(values)) {

@@ -55,8 +55,18 @@ Real-backend browser integration against the isolated MySQL database also
 passed in 20.2 seconds. It verified live Patient/Doctor/NGO registration,
 Patient login and current-user lookup, backend `403` role authorization, `401`
 invalid credentials, pending professional application responses, and client
-recovery from simulated network/`500` failures. The three synthetic accounts
-were removed from `hcms_test_db` after the run.
+recovery from simulated network/`500` failures. The 2026-10-19 record stated
+that the three synthetic accounts had been removed; a later audit found three
+integration accounts still present, so that cleanup claim was incorrect.
+
+On 2026-10-20, the integration test gained guarded cleanup: it removes prior
+accounts in the reserved integration-test namespace at startup and removes the
+current run's accounts after each test. The backend cleanup script is restricted
+to `NODE_ENV=test` and `TEST_DB_NAME=hcms_test_db`. A live integration run then
+passed (1 test, 21.8 seconds); it removed three accounts left by the earlier run
+and removed all three accounts created by the verification run. A follow-up
+cleanup query found no remaining reserved integration accounts in
+`hcms_test_db`.
 
 ```powershell
 $env:PLAYWRIGHT_CHANNEL = 'chrome'
