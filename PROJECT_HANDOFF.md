@@ -126,6 +126,10 @@ The patient-intake and care-coordination frontend is implemented on
 
 - `src/docs/auth-contract.md` — frontend reference derived from the approved
   backend authentication documentation.
+- [`src/docs/sprint-9-1-api-contract.md`](src/docs/sprint-9-1-api-contract.md) —
+  Sprint 9 screen-to-API contract, role and assignment rules, supported
+  actions, date/time semantics, known implementation risks, and the Issue #28
+  acceptance checklist.
 - `src/docs/sprint-8-responsive-verification.md` — responsive and accessibility
   verification record.
 - `src/docs/sprint-8-integration-verification.md` — live integration evidence
