@@ -52,6 +52,8 @@ export function createApplicationServices(repositories) {
       updateDoctorWorkload: execute(admin.updateDoctorWorkload),
       startPatientIntakeReview: execute(admin.startPatientIntakeReview),
       assignDoctorToPatient: execute(admin.assignDoctorToPatient),
+      listDoctorPatientAssignments: execute(admin.listDoctorPatientAssignments),
+      updateDoctorPatientAssignmentStatus: execute(admin.updateDoctorPatientAssignmentStatus),
       listIntakeCorrectionRequests: execute(admin.listIntakeCorrectionRequests),
       resolveIntakeCorrectionRequest: execute(admin.resolveIntakeCorrectionRequest),
     },
