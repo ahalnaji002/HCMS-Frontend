@@ -2,6 +2,16 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
 
+function messageForRequestError(error, t, fallbackKey) {
+  const status = error.response?.status;
+
+  if (status === 403) return t("doctorWorkspace.accessDenied");
+  if (status >= 500) return t("doctorWorkspace.serverError");
+  if (!error.response) return t("doctorWorkspace.networkError");
+
+  return t(fallbackKey);
+}
+
 export default function useDoctorWorkspace() {
   const { t } = useTranslation();
   const { doctorWorkspace } = useApplicationServices();
@@ -13,10 +23,18 @@ export default function useDoctorWorkspace() {
   const [diagnosisText, setDiagnosisText] = useState("");
   const [noteForm, setNoteForm] = useState({ note: "" });
   const [loading, setLoading] = useState(true);
-  const [detailLoading, setDetailLoading] = useState(true);
+  const [detailLoading, setDetailLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+
+  const clearPatientData = useCallback(() => {
+    setIntake(null);
+    setNotes([]);
+    setDiagnoses([]);
+    setDiagnosisText("");
+    setNoteForm({ note: "" });
+  }, []);
 
   const refreshPatientData = useCallback(async (patientId) => {
     const [intakeResponse, noteResponse, diagnosisResponse] = await Promise.all([
@@ -31,23 +49,39 @@ export default function useDoctorWorkspace() {
 
   useEffect(() => {
     let active = true;
+
     doctorWorkspace.listAssignedPatients()
       .then((response) => {
         if (!active) return;
+
         const assignedPatients = response.data.patients;
         setPatients(assignedPatients);
+        clearPatientData();
         setSelectedPatientId(assignedPatients[0] ? String(assignedPatients[0].id) : "");
+        setDetailLoading(Boolean(assignedPatients[0]));
       })
-      .catch(() => active && setError(t("doctorWorkspace.loadError")))
-      .finally(() => active && setLoading(false));
-    return () => { active = false; };
-  }, [doctorWorkspace, t]);
+      .catch((requestError) => {
+        if (!active) return;
+
+        clearPatientData();
+        setPatients([]);
+        setSelectedPatientId("");
+        setError(messageForRequestError(requestError, t, "doctorWorkspace.loadError"));
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [clearPatientData, doctorWorkspace, t]);
 
   useEffect(() => {
-    if (!selectedPatientId) {
-      return undefined;
-    }
+    if (!selectedPatientId) return undefined;
+
     let active = true;
+
     Promise.all([
       doctorWorkspace.getAssignedPatientIntake(selectedPatientId),
       doctorWorkspace.listOwnPatientNotes(selectedPatientId),
@@ -55,14 +89,43 @@ export default function useDoctorWorkspace() {
     ])
       .then(([intakeResponse, noteResponse, diagnosisResponse]) => {
         if (!active) return;
+
         setIntake(intakeResponse.data.intake);
         setNotes(noteResponse.data.medical_notes);
         setDiagnoses(diagnosisResponse.data.diagnoses);
       })
-      .catch(() => active && setError(t("doctorWorkspace.detailError")))
-      .finally(() => active && setDetailLoading(false));
-    return () => { active = false; };
-  }, [doctorWorkspace, selectedPatientId, t]);
+      .catch((requestError) => {
+        if (!active) return;
+
+        clearPatientData();
+        setSelectedPatientId("");
+        setError(messageForRequestError(requestError, t, "doctorWorkspace.detailError"));
+      })
+      .finally(() => {
+        if (active) setDetailLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [clearPatientData, doctorWorkspace, selectedPatientId, t]);
+
+  function selectPatient(patientId) {
+    if (String(patientId) === String(selectedPatientId)) return;
+
+    clearPatientData();
+    setError("");
+    setNotice("");
+    setDetailLoading(true);
+    setSelectedPatientId(String(patientId));
+  }
+
+  function handlePatientAccessLoss(requestError) {
+    if (requestError.response?.status !== 403) return;
+
+    clearPatientData();
+    setSelectedPatientId("");
+  }
 
   async function handleNoteSubmit(event) {
     event.preventDefault();
@@ -70,6 +133,7 @@ export default function useDoctorWorkspace() {
     setSaving(true);
     setError("");
     setNotice("");
+
     try {
       try {
         await doctorWorkspace.getPatientMedicalRecord(selectedPatientId);
@@ -84,7 +148,8 @@ export default function useDoctorWorkspace() {
       setNoteForm({ note: "" });
       setNotice(t("doctorWorkspace.saved"));
     } catch (requestError) {
-      setError(requestError.response?.data?.message || t("doctorWorkspace.saveError"));
+      handlePatientAccessLoss(requestError);
+      setError(messageForRequestError(requestError, t, "doctorWorkspace.saveError"));
     } finally {
       setSaving(false);
     }
@@ -96,13 +161,15 @@ export default function useDoctorWorkspace() {
     setSaving(true);
     setError("");
     setNotice("");
+
     try {
       await doctorWorkspace.createPatientDiagnosis(selectedPatientId, diagnosisText.trim());
       await refreshPatientData(selectedPatientId);
       setDiagnosisText("");
       setNotice(t("doctorWorkspace.diagnosisSaved"));
     } catch (requestError) {
-      setError(requestError.response?.data?.message || t("doctorWorkspace.saveError"));
+      handlePatientAccessLoss(requestError);
+      setError(messageForRequestError(requestError, t, "doctorWorkspace.saveError"));
     } finally {
       setSaving(false);
     }
@@ -110,11 +177,10 @@ export default function useDoctorWorkspace() {
 
   const currentPatient = patients.find((patient) => String(patient.id) === String(selectedPatientId));
 
-
   return {
-    t, patients, selectedPatientId, setSelectedPatientId, intake, notes, diagnoses,
+    t, patients, selectedPatientId, selectPatient, intake, notes, diagnoses,
     diagnosisText, setDiagnosisText, noteForm, setNoteForm, loading, detailLoading,
-    setDetailLoading, saving, error, setError, notice, currentPatient,
+    saving, error, setError, notice, currentPatient,
     handleNoteSubmit, handleDiagnosisSubmit,
   };
 }
