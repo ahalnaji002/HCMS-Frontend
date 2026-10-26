@@ -1,4 +1,4 @@
-function PatientCareSummary({ t, assignments, diagnoses, intake, profile }) {
+function PatientCareSummary({ t, assignments, diagnoses, intake, profile, profileError }) {
   return (
     <>
       {assignments.length > 0 && <section className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
@@ -12,7 +12,7 @@ function PatientCareSummary({ t, assignments, diagnoses, intake, profile }) {
       </section>}
       <section id="patient-profile" className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
         <h2 className="text-xl font-bold">{t("patientWorkspace.profile")}</h2>
-        {profile ? <div className="mt-5 grid gap-4 sm:grid-cols-2"><ReadOnlyField label={t("patientWorkspace.profileName")} value={profile.full_name} /><ReadOnlyField label={t("patientWorkspace.profileEmail")} value={profile.email} /><ReadOnlyField label={t("patientWorkspace.profilePhone")} value={profile.phone} /><ReadOnlyField label={t("patientWorkspace.profileAddress")} value={profile.address} /></div> : <p className="mt-4 text-sm text-text-secondary">{t("patientWorkspace.profileLoading")}</p>}
+        {profile ? <div className="mt-5 grid gap-4 sm:grid-cols-2"><ReadOnlyField label={t("patientWorkspace.profileName")} value={profile.full_name} /><ReadOnlyField label={t("patientWorkspace.profileEmail")} value={profile.email} /><ReadOnlyField label={t("patientWorkspace.profilePhone")} value={profile.phone} /><ReadOnlyField label={t("patientWorkspace.profileAddress")} value={profile.address} /></div> : <p role={profileError ? "alert" : undefined} className="mt-4 text-sm text-text-secondary">{profileError || t("patientWorkspace.profileLoading")}</p>}
       </section>
     </>
   );
