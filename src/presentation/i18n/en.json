@@ -548,6 +548,7 @@
     "diagnosesTitle": "Doctors’ diagnoses",
     "diagnosesDescription": "These diagnoses were documented by your assigned doctors. This section is read-only.",
     "noDiagnoses": "Your doctors have not documented a diagnosis yet."
+    ,"profileError": "Could not load your profile.", "alertLoadError": "Could not load emergency alerts.", "assignmentsError": "Could not load your doctor assignments.", "diagnosesError": "Could not load your diagnoses."
   },
   "adminIntakes": {
     "eyebrow": "Case administration",

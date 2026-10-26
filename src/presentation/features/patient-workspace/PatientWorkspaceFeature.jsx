@@ -6,7 +6,7 @@ import usePatientWorkspace from "@/presentation/features/patient-workspace/usePa
 
 function PatientWorkspaceFeature() {
   const {
-    t, intake, form, isLoading, isSaving, error, notice, profile, alerts,
+    t, intake, form, isLoading, isSaving, error, notice, profile, profileError, alerts, alertsError,
     assignments, diagnoses, alertForm, setAlertForm, alertNotice, alertError,
     isAlertSubmitting, correctionRequests, correctionMessage, setCorrectionMessage,
     correctionNotice, correctionError, isCorrectionSubmitting, canEdit, statusLabel,
@@ -42,13 +42,13 @@ function PatientWorkspaceFeature() {
         onCorrectionChange={setCorrectionMessage}
         onCorrectionSubmit={handleCorrectionSubmit}
       />
-      <PatientCareSummary t={t} assignments={assignments} diagnoses={diagnoses} intake={intake} profile={profile} />
+      <PatientCareSummary t={t} assignments={assignments} diagnoses={diagnoses} intake={intake} profile={profile} profileError={profileError} />
       <PatientEmergencyAlertsSection
         t={t}
         alerts={alerts}
         form={alertForm}
         setForm={setAlertForm}
-        error={alertError}
+        error={alertError || alertsError}
         notice={alertNotice}
         isSubmitting={isAlertSubmitting}
         onSubmit={handleAlertSubmit}

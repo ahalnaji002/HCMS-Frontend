@@ -549,6 +549,7 @@
     "diagnosesTitle": "تشخيصات الأطباء",
     "diagnosesDescription": "هذه التشخيصات وثقها الأطباء المعيّنون لمتابعتك. هذا القسم للقراءة فقط.",
     "noDiagnoses": "لم يوثق أطباؤك تشخيصًا بعد."
+    ,"profileError": "تعذر تحميل ملفك الشخصي.", "alertLoadError": "تعذر تحميل التنبيهات الطارئة.", "assignmentsError": "تعذر تحميل تعيينات الأطباء.", "diagnosesError": "تعذر تحميل تشخيصاتك."
   },
   "adminIntakes": {
     "eyebrow": "إدارة الحالات",

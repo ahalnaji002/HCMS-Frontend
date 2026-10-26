@@ -31,7 +31,9 @@ export default function usePatientWorkspace() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [profile, setProfile] = useState(null);
+  const [profileError, setProfileError] = useState("");
   const [alerts, setAlerts] = useState([]);
+  const [alertsError, setAlertsError] = useState("");
   const [assignments, setAssignments] = useState([]);
   const [diagnoses, setDiagnoses] = useState([]);
   const [alertForm, setAlertForm] = useState({ phone: "", location: "", description: "" });
@@ -62,10 +64,10 @@ export default function usePatientWorkspace() {
         if (savedIntake.status === "DOCTOR_ASSIGNED") {
           patientWorkspace.getPatientAssignments()
             .then((response) => active && setAssignments(response.data.assignments))
-            .catch(() => {});
+            .catch(() => { if (active) { setAssignments([]); setError(t("patientWorkspace.assignmentsError")); } });
           patientWorkspace.listOwnDiagnoses()
             .then((response) => active && setDiagnoses(response.data.diagnoses))
-            .catch(() => {});
+            .catch(() => { if (active) { setDiagnoses([]); setError(t("patientWorkspace.diagnosesError")); } });
         }
       })
       .catch(() => {
@@ -79,8 +81,8 @@ export default function usePatientWorkspace() {
 
   useEffect(() => {
     let active = true;
-    patientWorkspace.getOwnProfile().then((response) => active && setProfile(response.data.profile)).catch(() => {});
-    patientWorkspace.getPatientAlerts().then((response) => active && setAlerts(response.data.emergency_alerts)).catch(() => {});
+    patientWorkspace.getOwnProfile().then((response) => active && setProfile(response.data.profile)).catch(() => { if (active) { setProfile(null); setProfileError(t("patientWorkspace.profileError")); } });
+    patientWorkspace.getPatientAlerts().then((response) => active && setAlerts(response.data.emergency_alerts)).catch(() => { if (active) { setAlerts([]); setAlertsError(t("patientWorkspace.alertLoadError")); } });
     return () => { active = false; };
   }, [patientWorkspace]);
 
@@ -151,7 +153,7 @@ export default function usePatientWorkspace() {
     : t("patientWorkspace.status.NOT_SUBMITTED");
 
   return {
-    t, intake, form, isLoading, isSaving, error, notice, profile, alerts,
+    t, intake, form, isLoading, isSaving, error, notice, profile, profileError, alerts, alertsError,
     assignments, diagnoses, alertForm, setAlertForm, alertNotice, alertError,
     isAlertSubmitting, correctionRequests, correctionMessage, setCorrectionMessage,
     correctionNotice, correctionError, isCorrectionSubmitting, canEdit, statusLabel,
