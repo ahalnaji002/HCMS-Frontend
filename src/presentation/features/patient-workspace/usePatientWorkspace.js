@@ -84,7 +84,7 @@ export default function usePatientWorkspace() {
     patientWorkspace.getOwnProfile().then((response) => active && setProfile(response.data.profile)).catch(() => { if (active) { setProfile(null); setProfileError(t("patientWorkspace.profileError")); } });
     patientWorkspace.getPatientAlerts().then((response) => active && setAlerts(response.data.emergency_alerts)).catch(() => { if (active) { setAlerts([]); setAlertsError(t("patientWorkspace.alertLoadError")); } });
     return () => { active = false; };
-  }, [patientWorkspace]);
+  }, [patientWorkspace, t]);
 
   function updateField(event) {
     const { name, value } = event.target;
