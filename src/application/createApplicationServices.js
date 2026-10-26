@@ -38,6 +38,7 @@ export function createApplicationServices(repositories) {
       createPatientDiagnosis: execute(doctorWorkspace.createPatientDiagnosis),
       getPatientMedicalRecord: execute(doctorWorkspace.getPatientMedicalRecord),
       createPatientMedicalRecord: execute(doctorWorkspace.createPatientMedicalRecord),
+      updatePatientMedicalRecord: execute(doctorWorkspace.updatePatientMedicalRecord),
       createPatientMedicalNote: execute(doctorWorkspace.createPatientMedicalNote),
     },
     admin: {

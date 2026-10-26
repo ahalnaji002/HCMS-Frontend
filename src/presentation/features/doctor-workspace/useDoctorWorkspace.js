@@ -27,6 +27,7 @@ export default function useDoctorWorkspace() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [medicalRecord, setMedicalRecord] = useState(null);
 
   const clearPatientData = useCallback(() => {
     setIntake(null);
@@ -34,6 +35,7 @@ export default function useDoctorWorkspace() {
     setDiagnoses([]);
     setDiagnosisText("");
     setNoteForm({ note: "" });
+    setMedicalRecord(null);
   }, []);
 
   const refreshPatientData = useCallback(async (patientId) => {
@@ -93,6 +95,9 @@ export default function useDoctorWorkspace() {
         setIntake(intakeResponse.data.intake);
         setNotes(noteResponse.data.medical_notes);
         setDiagnoses(diagnosisResponse.data.diagnoses);
+        doctorWorkspace.getPatientMedicalRecord(selectedPatientId)
+          .then((response) => active && setMedicalRecord(response.data.medical_record))
+          .catch(() => {});
       })
       .catch((requestError) => {
         if (!active) return;
@@ -155,6 +160,26 @@ export default function useDoctorWorkspace() {
     }
   }
 
+  async function saveMedicalRecord(payload) {
+    if (!selectedPatientId) return;
+    setSaving(true); setError(""); setNotice("");
+    try {
+      let record;
+      try {
+        record = await doctorWorkspace.getPatientMedicalRecord(selectedPatientId);
+      } catch (requestError) {
+        if (requestError.response?.status !== 404) throw requestError;
+        record = await doctorWorkspace.createPatientMedicalRecord(selectedPatientId);
+      }
+      const response = await doctorWorkspace.updatePatientMedicalRecord(selectedPatientId, payload);
+      setMedicalRecord(response.data.medical_record || record.data.medical_record);
+      setNotice(t("doctorWorkspace.recordSaved"));
+    } catch (requestError) {
+      handlePatientAccessLoss(requestError);
+      setError(messageForRequestError(requestError, t, "doctorWorkspace.saveError"));
+    } finally { setSaving(false); }
+  }
+
   async function handleDiagnosisSubmit(event) {
     event.preventDefault();
     if (!selectedPatientId || !diagnosisText.trim()) return;
@@ -178,9 +203,9 @@ export default function useDoctorWorkspace() {
   const currentPatient = patients.find((patient) => String(patient.id) === String(selectedPatientId));
 
   return {
-    t, patients, selectedPatientId, selectPatient, intake, notes, diagnoses,
+    t, patients, selectedPatientId, selectPatient, intake, notes, diagnoses, medicalRecord,
     diagnosisText, setDiagnosisText, noteForm, setNoteForm, loading, detailLoading,
     saving, error, setError, notice, currentPatient,
-    handleNoteSubmit, handleDiagnosisSubmit,
+    handleNoteSubmit, handleDiagnosisSubmit, saveMedicalRecord,
   };
 }

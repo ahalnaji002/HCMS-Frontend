@@ -28,6 +28,10 @@ export async function createPatientMedicalRecord(patientId) {
   return api.post(`/api/doctor/patients/${patientId}/medical-record`, {});
 }
 
+export async function updatePatientMedicalRecord(patientId, payload) {
+  return api.patch(`/api/doctor/patients/${patientId}/medical-record`, payload);
+}
+
 export async function createPatientMedicalNote(patientId, payload) {
   return api.post(`/api/doctor/patients/${patientId}/medical-notes`, payload);
 }
