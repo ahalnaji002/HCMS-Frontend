@@ -650,6 +650,20 @@
       "unknown": "Could not complete the request. Try again."
     }
   },
+  "adminAssignments": {
+    "eyebrow": "Care assignments",
+    "title": "Doctor-patient assignment history",
+    "description": "Review assignment history and update its active status. Only administrators can change assignment status.",
+    "loading": "Loading assignments...",
+    "empty": "There are no doctor-patient assignments.",
+    "status": "Status",
+    "statuses": { "ACTIVE": "Active", "INACTIVE": "Inactive" },
+    "activate": "Activate assignment",
+    "deactivate": "Deactivate assignment",
+    "working": "Saving...",
+    "saved": "Assignment status updated.",
+    "errors": { "validation": "Check the assignment status and try again.", "forbidden": "You do not have permission to change assignment status.", "notFound": "This assignment no longer exists.", "conflict": "The assignment status changed. Refresh and try again.", "server": "Could not update the assignment. Try again." }
+  },
   "doctorWorkspace": {
     "eyebrow": "Doctor workspace",
     "title": "Assigned patients and care follow-up",

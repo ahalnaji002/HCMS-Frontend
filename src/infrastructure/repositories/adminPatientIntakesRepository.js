@@ -46,6 +46,14 @@ export async function assignDoctorToPatient(payload) {
   return api.post("/api/admin/doctor-patient-assignments", payload);
 }
 
+export async function listDoctorPatientAssignments() {
+  return api.get("/api/admin/doctor-patient-assignments");
+}
+
+export async function updateDoctorPatientAssignmentStatus(assignmentId, status) {
+  return api.patch(`/api/admin/doctor-patient-assignments/${assignmentId}/status`, { status });
+}
+
 export async function listIntakeCorrectionRequests() {
   return api.get("/api/admin/intake-correction-requests");
 }

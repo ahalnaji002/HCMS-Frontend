@@ -3,6 +3,7 @@ import CorrectionRequestsSection from "@/presentation/features/admin-workspace/c
 import DoctorWorkloadSection from "@/presentation/features/admin-workspace/components/DoctorWorkloadSection";
 import EmergencyAlertsSection from "@/presentation/features/admin-workspace/components/EmergencyAlertsSection";
 import JoinRequestsSection from "@/presentation/features/admin-workspace/components/JoinRequestsSection";
+import DoctorPatientAssignmentsSection from "@/presentation/features/admin-workspace/components/DoctorPatientAssignmentsSection";
 import PatientIntakeQueue from "@/presentation/features/admin-workspace/components/PatientIntakeQueue";
 import useAdminWorkspace from "@/presentation/features/admin-workspace/useAdminWorkspace";
 
@@ -25,6 +26,7 @@ function AdminWorkspaceFeature() {
       {notice && <p role="status" className="mt-6 rounded-xl bg-primary/10 p-4 text-sm text-primary">{notice}</p>}
 
       <JoinRequestsSection />
+      <DoctorPatientAssignmentsSection />
       <EmergencyAlertsSection
         t={t}
         alerts={emergencyAlerts}
