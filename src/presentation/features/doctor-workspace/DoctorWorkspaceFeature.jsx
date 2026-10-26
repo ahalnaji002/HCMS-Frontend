@@ -7,9 +7,9 @@ import useDoctorWorkspace from "@/presentation/features/doctor-workspace/useDoct
 
 function DoctorWorkspaceFeature() {
   const {
-    t, patients, selectedPatientId, setSelectedPatientId, intake, notes, diagnoses,
+    t, patients, selectedPatientId, selectPatient, intake, notes, diagnoses,
     diagnosisText, setDiagnosisText, noteForm, setNoteForm, loading, detailLoading,
-    setDetailLoading, saving, error, setError, notice, currentPatient,
+    saving, error, notice, currentPatient,
     handleNoteSubmit, handleDiagnosisSubmit,
   } = useDoctorWorkspace();
 
@@ -28,9 +28,7 @@ function DoctorWorkspaceFeature() {
             t={t}
             patients={patients}
             selectedPatientId={selectedPatientId}
-            onSelect={setSelectedPatientId}
-            onClearError={() => setError("")}
-            onStartLoading={() => setDetailLoading(true)}
+            onSelect={selectPatient}
           />
           <div className="space-y-6">
             {detailLoading ? <p className="py-12 text-center text-text-secondary">{t("doctorWorkspace.loadingDetails")}</p> : currentPatient && <>
