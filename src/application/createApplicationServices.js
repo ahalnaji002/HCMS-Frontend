@@ -41,6 +41,10 @@ export function createApplicationServices(repositories) {
       createPatientMedicalNote: execute(doctorWorkspace.createPatientMedicalNote),
     },
     admin: {
+      listJoinRequests: execute(admin.listJoinRequests),
+      getJoinRequest: execute(admin.getJoinRequest),
+      approveJoinRequest: execute(admin.approveJoinRequest),
+      rejectJoinRequest: execute(admin.rejectJoinRequest),
       listPatientIntakes: execute(admin.listPatientIntakes),
       listActiveDoctors: execute(admin.listActiveDoctors),
       listAdminEmergencyAlerts: execute(admin.listAdminEmergencyAlerts),

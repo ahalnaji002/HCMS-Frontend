@@ -38,7 +38,7 @@ const roleNavigation = {
   ADMIN: [
     { label: "roleNavigation.admin.home", href: "/admin", available: true },
     { label: "roleNavigation.admin.profile" },
-    { label: "roleNavigation.admin.joinRequests" },
+    { label: "roleNavigation.admin.joinRequests", href: "#admin-join-requests", available: true },
     { label: "roleNavigation.admin.userManagement" },
     { label: "roleNavigation.admin.patientIntakes", href: "#admin-intakes", available: true },
     { label: "roleNavigation.admin.doctorWorkload", href: "#admin-workload", available: true },

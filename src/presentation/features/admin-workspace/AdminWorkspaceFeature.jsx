@@ -2,6 +2,7 @@ import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard"
 import CorrectionRequestsSection from "@/presentation/features/admin-workspace/components/CorrectionRequestsSection";
 import DoctorWorkloadSection from "@/presentation/features/admin-workspace/components/DoctorWorkloadSection";
 import EmergencyAlertsSection from "@/presentation/features/admin-workspace/components/EmergencyAlertsSection";
+import JoinRequestsSection from "@/presentation/features/admin-workspace/components/JoinRequestsSection";
 import PatientIntakeQueue from "@/presentation/features/admin-workspace/components/PatientIntakeQueue";
 import useAdminWorkspace from "@/presentation/features/admin-workspace/useAdminWorkspace";
 
@@ -23,6 +24,7 @@ function AdminWorkspaceFeature() {
       {error && <p role="alert" className="mt-6 rounded-xl bg-danger/10 p-4 text-sm text-danger">{error}</p>}
       {notice && <p role="status" className="mt-6 rounded-xl bg-primary/10 p-4 text-sm text-primary">{notice}</p>}
 
+      <JoinRequestsSection />
       <EmergencyAlertsSection
         t={t}
         alerts={emergencyAlerts}
