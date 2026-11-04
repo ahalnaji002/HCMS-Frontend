@@ -475,6 +475,47 @@
     "sections": "Patient workspace navigation",
     "profile": "My profile",
     "profileLoading": "Loading profile details...",
+    "profileHelp": "Review your profile and update the approved personal details below.",
+    "editProfile": "Edit profile",
+    "saveProfile": "Save profile",
+    "profileSaved": "Your profile was updated.",
+    "profileSaveError": "Could not save your profile. Check the fields and try again.",
+    "cancel": "Cancel",
+    "retry": "Try again",
+    "alertsLoading": "Loading your alerts...",
+    "noAlerts": "You have no emergency alerts yet.",
+    "assignmentsLoading": "Loading your assigned doctors...",
+    "noAssignments": "No active doctors are currently assigned to you.",
+    "diagnosesLoading": "Loading your diagnoses...",
+    "profileFields": {
+      "full_name": "Full name",
+      "email": "Email address",
+      "emailReadOnly": "Email address (cannot be changed here)",
+      "phone": "Phone number",
+      "national_id": "National ID",
+      "nationalIdReadOnly": "National ID (read-only)",
+      "date_of_birth": "Date of birth",
+      "gender": "Gender",
+      "genderPlaceholder": "Select gender",
+      "address": "Address"
+    },
+    "genderValues": { "MALE": "Male", "FEMALE": "Female" },
+    "profileValidation": {
+      "summary": "Review the highlighted fields before saving.",
+      "serverField": "This field was rejected by the server. Review it and try again.",
+      "nameRequired": "Enter your full name.",
+      "nameTooLong": "Full name must be 150 characters or fewer.",
+      "phone": "Enter a 10-digit phone number starting with 059 or 056, or leave it blank.",
+      "date": "Enter a valid date of birth.",
+      "futureDate": "Date of birth cannot be in the future.",
+      "gender": "Select Male or Female.",
+      "address": "Address must be 255 characters or fewer."
+    },
+    "errors": {
+      "forbidden": "You no longer have access to this information.",
+      "server": "The server could not load this information. Try again.",
+      "network": "Unable to connect to the server. Check your connection and try again."
+    },
     "profileName": "Name",
     "profileEmail": "Email address",
     "profilePhone": "Phone number",
@@ -547,8 +588,11 @@
     },
     "diagnosesTitle": "Doctors’ diagnoses",
     "diagnosesDescription": "These diagnoses were documented by your assigned doctors. This section is read-only.",
-    "noDiagnoses": "Your doctors have not documented a diagnosis yet."
-    ,"profileError": "Could not load your profile.", "alertLoadError": "Could not load emergency alerts.", "assignmentsError": "Could not load your doctor assignments.", "diagnosesError": "Could not load your diagnoses."
+    "noDiagnoses": "Your doctors have not documented a diagnosis yet.",
+    "profileError": "Could not load your profile.",
+    "alertLoadError": "Could not load emergency alerts.",
+    "assignmentsError": "Could not load your doctor assignments.",
+    "diagnosesError": "Could not load your diagnoses."
   },
   "adminIntakes": {
     "eyebrow": "Case administration",

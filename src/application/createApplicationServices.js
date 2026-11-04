@@ -23,6 +23,7 @@ export function createApplicationServices(repositories) {
     },
     patientWorkspace: {
       getOwnProfile: execute(patientWorkspace.getOwnProfile),
+      updateOwnProfile: execute(patientWorkspace.updateOwnProfile),
       getPatientAlerts: execute(patientWorkspace.getPatientAlerts),
       createPatientAlert: execute(patientWorkspace.createPatientAlert),
       getPatientAssignments: execute(patientWorkspace.getPatientAssignments),
