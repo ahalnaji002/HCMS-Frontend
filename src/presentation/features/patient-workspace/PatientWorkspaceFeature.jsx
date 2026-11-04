@@ -2,15 +2,21 @@ import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard"
 import PatientCareSummary from "@/presentation/features/patient-workspace/components/PatientCareSummary";
 import PatientEmergencyAlertsSection from "@/presentation/features/patient-workspace/components/PatientEmergencyAlertsSection";
 import PatientIntakeSection from "@/presentation/features/patient-workspace/components/PatientIntakeSection";
+import PatientProfileSection from "@/presentation/features/patient-workspace/components/PatientProfileSection";
 import usePatientWorkspace from "@/presentation/features/patient-workspace/usePatientWorkspace";
 
 function PatientWorkspaceFeature() {
   const {
-    t, intake, form, isLoading, isSaving, error, notice, profile, profileError, alerts, alertsError,
+    t, intake, form, isLoading, isSaving, error, notice,
+    profile, profileLoading, profileError, profileNotice, profileForm, profileFieldErrors,
+    profileEditing, profileSaving, alerts, alertsLoading, alertsError,
+    assignmentsLoading, assignmentsError, diagnosesLoading, diagnosesError,
     assignments, diagnoses, alertForm, setAlertForm, alertNotice, alertError,
     isAlertSubmitting, correctionRequests, correctionMessage, setCorrectionMessage,
     correctionNotice, correctionError, isCorrectionSubmitting, canEdit, statusLabel,
     updateField, handleSubmit, handleAlertSubmit, handleCorrectionSubmit,
+    retryProfile, retryAlerts, retryAssignments, retryDiagnoses,
+    updateProfileField, cancelProfileEdit, handleProfileSubmit, setProfileEditing,
   } = usePatientWorkspace();
 
   return (
@@ -42,13 +48,43 @@ function PatientWorkspaceFeature() {
         onCorrectionChange={setCorrectionMessage}
         onCorrectionSubmit={handleCorrectionSubmit}
       />
-      <PatientCareSummary t={t} assignments={assignments} diagnoses={diagnoses} intake={intake} profile={profile} profileError={profileError} />
+      <PatientCareSummary
+        t={t}
+        assignments={assignments}
+        assignmentsLoading={assignmentsLoading}
+        assignmentsError={assignmentsError}
+        onRetryAssignments={retryAssignments}
+        diagnoses={diagnoses}
+        diagnosesLoading={diagnosesLoading}
+        diagnosesError={diagnosesError}
+        onRetryDiagnoses={retryDiagnoses}
+        intake={intake}
+      />
+      <PatientProfileSection
+        t={t}
+        profile={profile}
+        loading={profileLoading}
+        error={profileError}
+        notice={profileNotice}
+        form={profileForm}
+        fieldErrors={profileFieldErrors}
+        editing={profileEditing}
+        saving={profileSaving}
+        onRetry={retryProfile}
+        onEdit={() => setProfileEditing(true)}
+        onCancel={cancelProfileEdit}
+        onFieldChange={updateProfileField}
+        onSubmit={handleProfileSubmit}
+      />
       <PatientEmergencyAlertsSection
         t={t}
         alerts={alerts}
+        alertsLoading={alertsLoading}
+        alertsError={alertsError}
+        onRetryAlerts={retryAlerts}
         form={alertForm}
         setForm={setAlertForm}
-        error={alertError || alertsError}
+        error={alertError}
         notice={alertNotice}
         isSubmitting={isAlertSubmitting}
         onSubmit={handleAlertSubmit}

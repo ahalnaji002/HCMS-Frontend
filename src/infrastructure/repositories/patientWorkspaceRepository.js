@@ -4,6 +4,10 @@ export async function getOwnProfile() {
   return api.get("/api/profile");
 }
 
+export async function updateOwnProfile(payload) {
+  return api.patch("/api/profile", payload);
+}
+
 export async function getPatientAlerts() {
   return api.get("/api/patient/emergency-alerts");
 }
