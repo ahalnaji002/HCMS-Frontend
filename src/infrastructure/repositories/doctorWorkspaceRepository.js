@@ -35,3 +35,19 @@ export async function updatePatientMedicalRecord(patientId, payload) {
 export async function createPatientMedicalNote(patientId, payload) {
   return api.post(`/api/doctor/patients/${patientId}/medical-notes`, payload);
 }
+
+export async function listPatientTreatmentPlans(patientId) {
+  return api.get(`/api/doctor/patients/${patientId}/treatment-plans`);
+}
+
+export async function getPatientTreatmentPlan(patientId, planId) {
+  return api.get(`/api/doctor/patients/${patientId}/treatment-plans/${planId}`);
+}
+
+export async function createPatientTreatmentPlan(patientId, payload) {
+  return api.post(`/api/doctor/patients/${patientId}/treatment-plans`, payload);
+}
+
+export async function updatePatientTreatmentPlan(patientId, planId, payload) {
+  return api.patch(`/api/doctor/patients/${patientId}/treatment-plans/${planId}`, payload);
+}

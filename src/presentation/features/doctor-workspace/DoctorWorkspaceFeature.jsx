@@ -4,6 +4,7 @@ import PatientDiagnosesSection from "@/presentation/features/doctor-workspace/co
 import PatientIntakeSummary from "@/presentation/features/doctor-workspace/components/PatientIntakeSummary";
 import PatientMedicalNotesSection from "@/presentation/features/doctor-workspace/components/PatientMedicalNotesSection";
 import PatientMedicalRecordSection from "@/presentation/features/doctor-workspace/components/PatientMedicalRecordSection";
+import DoctorTreatmentPlansSection from "@/presentation/features/doctor-workspace/components/DoctorTreatmentPlansSection";
 import useDoctorWorkspace from "@/presentation/features/doctor-workspace/useDoctorWorkspace";
 
 function DoctorWorkspaceFeature() {
@@ -35,6 +36,7 @@ function DoctorWorkspaceFeature() {
             {detailLoading ? <p className="py-12 text-center text-text-secondary">{t("doctorWorkspace.loadingDetails")}</p> : currentPatient && <>
               <PatientIntakeSummary t={t} patient={currentPatient} intake={intake} />
               <PatientMedicalRecordSection key={`${selectedPatientId}-${medicalRecord?.id || "new"}`} t={t} record={medicalRecord} isSaving={saving} onSave={saveMedicalRecord} />
+              <DoctorTreatmentPlansSection key={`plans-${selectedPatientId}`} patientId={selectedPatientId} />
               <PatientDiagnosesSection
                 t={t}
                 diagnoses={diagnoses}

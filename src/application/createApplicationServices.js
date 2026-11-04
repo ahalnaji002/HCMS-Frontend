@@ -40,6 +40,10 @@ export function createApplicationServices(repositories) {
       createPatientMedicalRecord: execute(doctorWorkspace.createPatientMedicalRecord),
       updatePatientMedicalRecord: execute(doctorWorkspace.updatePatientMedicalRecord),
       createPatientMedicalNote: execute(doctorWorkspace.createPatientMedicalNote),
+      listPatientTreatmentPlans: execute(doctorWorkspace.listPatientTreatmentPlans),
+      getPatientTreatmentPlan: execute(doctorWorkspace.getPatientTreatmentPlan),
+      createPatientTreatmentPlan: execute(doctorWorkspace.createPatientTreatmentPlan),
+      updatePatientTreatmentPlan: execute(doctorWorkspace.updatePatientTreatmentPlan),
     },
     admin: {
       listJoinRequests: execute(admin.listJoinRequests),

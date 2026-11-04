@@ -696,6 +696,39 @@
     "diagnosisSaved": "Diagnosis saved.",
     "noDiagnoses": "No diagnoses documented for this patient."
   },
+  "doctorTreatmentPlans": {
+    "eyebrow": "Care planning",
+    "title": "Treatment plans",
+    "description": "Create and manage treatment plans for the selected assigned patient.",
+    "listTitle": "Plans for this patient",
+    "loading": "Loading treatment plans...",
+    "loadingDetails": "Loading plan details...",
+    "empty": "This patient has no treatment plans yet.",
+    "selectPlan": "Select a plan to review or update, or create a new treatment plan.",
+    "create": "Create treatment plan",
+    "createTitle": "New treatment plan",
+    "editTitle": "Treatment plan details",
+    "saveChanges": "Save changes",
+    "saving": "Saving...",
+    "created": "Treatment plan created.",
+    "updated": "Treatment plan updated.",
+    "status": "Status",
+    "statuses": { "ACTIVE": "Active", "COMPLETED": "Completed", "CANCELLED": "Cancelled" },
+    "noEndDate": "No end date",
+    "noEndDateHelp": "Leave blank if the plan has no end date.",
+    "fields": { "title": "Plan title", "startDate": "Start date", "endDate": "End date", "instructions": "General instructions" },
+    "errors": {
+      "validation": "Check the plan fields and try again.",
+      "unauthorized": "Your session has expired. Sign in again.",
+      "forbidden": "You no longer have access to this patient's treatment plans.",
+      "notFound": "This treatment plan could not be found.",
+      "conflict": "The plan could not be updated because its current state or dates conflict with related appointments. Review the dates and existing appointments, then try again.",
+      "dateRange": "The end date cannot be earlier than the start date.",
+      "server": "The server could not save the treatment plan. Try again.",
+      "network": "Unable to connect to the server. Check your connection and try again.",
+      "unknown": "Could not complete the treatment plan request. Try again."
+    }
+  },
   "language": {
     "english": "English",
     "arabic": "العربية"
