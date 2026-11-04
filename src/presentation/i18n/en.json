@@ -482,6 +482,25 @@
     "profileSaveError": "Could not save your profile. Check the fields and try again.",
     "cancel": "Cancel",
     "retry": "Try again",
+    "medicalRecord": {
+      "title": "My medical record",
+      "description": "Review the medical information recorded for your care. This section is read-only.",
+      "loading": "Loading your medical record...",
+      "absent": "No medical record is available yet.",
+      "reload": "Check again",
+      "refresh": "Refresh record",
+      "notProvided": "Not provided",
+      "errors": {
+        "generic": "Could not load your medical record. Try again."
+      },
+      "fields": {
+        "blood_type": "Blood type",
+        "allergies": "Allergies",
+        "chronic_diseases": "Chronic diseases",
+        "medical_history": "Medical history",
+        "previous_surgeries": "Previous surgeries"
+      }
+    },
     "alertsLoading": "Loading your alerts...",
     "noAlerts": "You have no emergency alerts yet.",
     "assignmentsLoading": "Loading your assigned doctors...",

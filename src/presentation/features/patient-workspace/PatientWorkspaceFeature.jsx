@@ -2,6 +2,7 @@ import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard"
 import PatientCareSummary from "@/presentation/features/patient-workspace/components/PatientCareSummary";
 import PatientEmergencyAlertsSection from "@/presentation/features/patient-workspace/components/PatientEmergencyAlertsSection";
 import PatientIntakeSection from "@/presentation/features/patient-workspace/components/PatientIntakeSection";
+import PatientMedicalRecordSection from "@/presentation/features/patient-workspace/components/PatientMedicalRecordSection";
 import PatientProfileSection from "@/presentation/features/patient-workspace/components/PatientProfileSection";
 import usePatientWorkspace from "@/presentation/features/patient-workspace/usePatientWorkspace";
 
@@ -10,12 +11,13 @@ function PatientWorkspaceFeature() {
     t, intake, form, isLoading, isSaving, error, notice,
     profile, profileLoading, profileError, profileNotice, profileForm, profileFieldErrors,
     profileEditing, profileSaving, alerts, alertsLoading, alertsError,
+    medicalRecord, medicalRecordLoading, medicalRecordAbsent, medicalRecordError,
     assignmentsLoading, assignmentsError, diagnosesLoading, diagnosesError,
     assignments, diagnoses, alertForm, setAlertForm, alertNotice, alertError,
     isAlertSubmitting, correctionRequests, correctionMessage, setCorrectionMessage,
     correctionNotice, correctionError, isCorrectionSubmitting, canEdit, statusLabel,
     updateField, handleSubmit, handleAlertSubmit, handleCorrectionSubmit,
-    retryProfile, retryAlerts, retryAssignments, retryDiagnoses,
+    retryProfile, retryAlerts, retryAssignments, retryDiagnoses, retryMedicalRecord,
     updateProfileField, cancelProfileEdit, handleProfileSubmit, setProfileEditing,
   } = usePatientWorkspace();
 
@@ -59,6 +61,14 @@ function PatientWorkspaceFeature() {
         diagnosesError={diagnosesError}
         onRetryDiagnoses={retryDiagnoses}
         intake={intake}
+      />
+      <PatientMedicalRecordSection
+        t={t}
+        record={medicalRecord}
+        loading={medicalRecordLoading}
+        absent={medicalRecordAbsent}
+        error={medicalRecordError}
+        onRetry={retryMedicalRecord}
       />
       <PatientProfileSection
         t={t}
