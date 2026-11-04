@@ -12,6 +12,10 @@ export async function getPatientAlerts() {
   return api.get("/api/patient/emergency-alerts");
 }
 
+export async function getOwnMedicalRecord() {
+  return api.get("/api/patient/medical-record");
+}
+
 export async function createPatientAlert(payload) {
   return api.post("/api/patient/emergency-alerts", payload);
 }

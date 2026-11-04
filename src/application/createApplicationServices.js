@@ -24,6 +24,7 @@ export function createApplicationServices(repositories) {
     patientWorkspace: {
       getOwnProfile: execute(patientWorkspace.getOwnProfile),
       updateOwnProfile: execute(patientWorkspace.updateOwnProfile),
+      getOwnMedicalRecord: execute(patientWorkspace.getOwnMedicalRecord),
       getPatientAlerts: execute(patientWorkspace.getPatientAlerts),
       createPatientAlert: execute(patientWorkspace.createPatientAlert),
       getPatientAssignments: execute(patientWorkspace.getPatientAssignments),

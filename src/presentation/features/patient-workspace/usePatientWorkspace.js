@@ -96,6 +96,10 @@ export default function usePatientWorkspace() {
   const [profileFieldErrors, setProfileFieldErrors] = useState({});
   const [profileEditing, setProfileEditing] = useState(false);
   const [profileSaving, setProfileSaving] = useState(false);
+  const [medicalRecord, setMedicalRecord] = useState(null);
+  const [medicalRecordLoading, setMedicalRecordLoading] = useState(true);
+  const [medicalRecordAbsent, setMedicalRecordAbsent] = useState(false);
+  const [medicalRecordError, setMedicalRecordError] = useState("");
   const [alerts, setAlerts] = useState([]);
   const [alertsLoading, setAlertsLoading] = useState(true);
   const [alertsError, setAlertsError] = useState("");
@@ -128,6 +132,26 @@ export default function usePatientWorkspace() {
       setProfileError(requestErrorMessage(requestError, t, "patientWorkspace.profileError"));
     } finally {
       setProfileLoading(false);
+    }
+  }, [patientWorkspace, t]);
+
+  const loadMedicalRecord = useCallback(async () => {
+    try {
+      const response = await patientWorkspace.getOwnMedicalRecord();
+      setMedicalRecord(response.data.medical_record);
+      setMedicalRecordAbsent(false);
+      setMedicalRecordError("");
+    } catch (requestError) {
+      setMedicalRecord(null);
+      if (requestError.response?.status === 404) {
+        setMedicalRecordAbsent(true);
+        setMedicalRecordError("");
+      } else {
+        setMedicalRecordAbsent(false);
+        setMedicalRecordError(requestErrorMessage(requestError, t, "patientWorkspace.medicalRecord.errors.generic"));
+      }
+    } finally {
+      setMedicalRecordLoading(false);
     }
   }, [patientWorkspace, t]);
 
@@ -202,9 +226,10 @@ export default function usePatientWorkspace() {
       if (!active) return;
       loadProfile();
       loadAlerts();
+      loadMedicalRecord();
     });
     return () => { active = false; };
-  }, [loadAlerts, loadProfile]);
+  }, [loadAlerts, loadMedicalRecord, loadProfile]);
 
   function updateProfileField(event) {
     const { name, value } = event.target;
@@ -228,6 +253,13 @@ export default function usePatientWorkspace() {
     setAlertsLoading(true);
     setAlertsError("");
     loadAlerts();
+  }
+
+  function retryMedicalRecord() {
+    setMedicalRecordLoading(true);
+    setMedicalRecordAbsent(false);
+    setMedicalRecordError("");
+    loadMedicalRecord();
   }
 
   function retryAssignments() {
@@ -356,12 +388,13 @@ export default function usePatientWorkspace() {
     t, intake, form, isLoading, isSaving, error, notice,
     profile, profileLoading, profileError, profileNotice, profileForm, profileFieldErrors,
     profileEditing, profileSaving, alerts, alertsLoading, alertsError,
+    medicalRecord, medicalRecordLoading, medicalRecordAbsent, medicalRecordError,
     assignments, assignmentsLoading, assignmentsError, diagnoses, diagnosesLoading, diagnosesError,
     alertForm, setAlertForm, alertNotice, alertError,
     isAlertSubmitting, correctionRequests, correctionMessage, setCorrectionMessage,
     correctionNotice, correctionError, isCorrectionSubmitting, canEdit, statusLabel,
     updateField, handleSubmit, handleAlertSubmit, handleCorrectionSubmit,
-    retryProfile, retryAlerts, retryAssignments, retryDiagnoses,
+    retryProfile, retryAlerts, retryAssignments, retryDiagnoses, retryMedicalRecord,
     updateProfileField, cancelProfileEdit, handleProfileSubmit, setProfileEditing,
   };
 }
