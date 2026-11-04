@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import TreatmentPlanResourcesSection from "./TreatmentPlanResourcesSection";
 
 function errorMessage(error, t) {
   const status = error.response?.status;
@@ -188,7 +189,10 @@ function DoctorTreatmentPlansSection({ patientId }) {
         <div className="rounded-xl border border-border bg-background p-5">
           {mode === "none" && <p className="text-sm text-text-secondary">{t("doctorTreatmentPlans.selectPlan")}</p>}
           {mode === "detail" && detailLoading && <p className="text-sm text-text-secondary">{t("doctorTreatmentPlans.loadingDetails")}</p>}
-          {mode === "detail" && !detailLoading && selectedPlan && <PlanEditor key={`${selectedPlan.id}-${selectedPlan.updated_at || selectedPlan.status}`} plan={selectedPlan} t={t} busy={busy} onSave={savePlan} />}
+          {mode === "detail" && !detailLoading && selectedPlan && <>
+            <PlanEditor key={`${selectedPlan.id}-${selectedPlan.updated_at || selectedPlan.status}`} plan={selectedPlan} t={t} busy={busy} onSave={savePlan} />
+            <TreatmentPlanResourcesSection key={`resources-${selectedPlan.id}`} plan={selectedPlan} />
+          </>}
           {mode === "create" && <PlanEditor key="new-treatment-plan" plan={null} t={t} busy={busy} onSave={savePlan} />}
         </div>
       </div>
