@@ -729,6 +729,59 @@
       "unknown": "Could not complete the treatment plan request. Try again."
     }
   },
+  "doctorPlanResources": {
+    "title": "Plan medications and appointments",
+    "planName": "Treatment plan",
+    "saving": "Saving...",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "fieldInvalid": "Check this field and try again.",
+    "errors": {
+      "validation": "Check the highlighted fields and try again.",
+      "unauthorized": "Your session has expired. Sign in again.",
+      "forbidden": "You no longer have permission to manage this plan's resources.",
+      "notFound": "This resource or treatment plan could not be found.",
+      "conflict": "The change conflicts with the current resource state.",
+      "appointmentConflict": "The appointment conflicts with the plan dates or current appointment state.",
+      "appointmentDateRange": "The appointment date must be within the treatment plan dates.",
+      "server": "The server could not complete this request. Try again.",
+      "network": "Unable to connect to the server. Check your connection and try again.",
+      "unknown": "Could not complete this request. Try again."
+    },
+    "medication": {
+      "title": "Medications",
+      "loading": "Loading medications...",
+      "empty": "No medications have been added to this plan.",
+      "create": "Add medication",
+      "createTitle": "Add medication",
+      "editTitle": "Edit medication",
+      "save": "Save medication",
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirmDelete": "Delete this medication? This cannot be undone.",
+      "fields": { "name": "Medication name", "dosage": "Dosage", "frequency": "Frequency", "duration": "Duration", "instructions": "Instructions" }
+    },
+    "medicationCreated": "Medication added.",
+    "medicationUpdated": "Medication updated.",
+    "medicationDeleted": "Medication deleted.",
+    "appointment": {
+      "title": "Appointments",
+      "loading": "Loading appointments...",
+      "empty": "No appointments have been added to this plan.",
+      "create": "Add appointment",
+      "createTitle": "Add appointment",
+      "editTitle": "Edit appointment",
+      "save": "Save appointment",
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirmDelete": "Delete this appointment? This cannot be undone.",
+      "fields": { "date": "Date and time (Palestine local time)", "purpose": "Purpose", "location": "Location", "status": "Status", "notes": "Notes" },
+      "statusValues": { "SCHEDULED": "Scheduled", "COMPLETED": "Completed", "CANCELLED": "Cancelled" }
+    },
+    "appointmentCreated": "Appointment added.",
+    "appointmentUpdated": "Appointment updated.",
+    "appointmentDeleted": "Appointment deleted."
+  },
   "language": {
     "english": "English",
     "arabic": "العربية"
