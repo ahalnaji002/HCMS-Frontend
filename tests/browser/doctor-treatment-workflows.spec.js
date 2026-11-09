@@ -95,6 +95,7 @@ test("assigned Doctor creates a treatment plan, medication, and appointment and 
   });
 
   await page.goto("/doctor");
+  await expect(page.locator('a[href="/doctor#doctor-treatment-plans"]')).toHaveCount(3);
   const plans = page.locator("#doctor-treatment-plans");
   await expect(plans.getByText("This patient has no treatment plans yet.")).toBeVisible();
   await plans.getByRole("button", { name: "Create treatment plan" }).click();
