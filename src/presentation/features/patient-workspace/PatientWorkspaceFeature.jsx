@@ -4,6 +4,7 @@ import PatientEmergencyAlertsSection from "@/presentation/features/patient-works
 import PatientIntakeSection from "@/presentation/features/patient-workspace/components/PatientIntakeSection";
 import PatientMedicalRecordSection from "@/presentation/features/patient-workspace/components/PatientMedicalRecordSection";
 import PatientProfileSection from "@/presentation/features/patient-workspace/components/PatientProfileSection";
+import PatientTreatmentPlansSection from "@/presentation/features/patient-workspace/components/PatientTreatmentPlansSection";
 import usePatientWorkspace from "@/presentation/features/patient-workspace/usePatientWorkspace";
 
 function PatientWorkspaceFeature() {
@@ -70,6 +71,7 @@ function PatientWorkspaceFeature() {
         error={medicalRecordError}
         onRetry={retryMedicalRecord}
       />
+      <PatientTreatmentPlansSection />
       <PatientProfileSection
         t={t}
         profile={profile}
