@@ -646,6 +646,29 @@
       "generic": "Could not load this treatment information. Try again."
     }
   },
+  "patientTreatmentResources": {
+    "eyebrow": "Your treatment",
+    "title": "Medications and appointments",
+    "description": "Review medication instructions and appointments linked to your treatment plans.",
+    "loading": "Loading your medications and appointments...",
+    "medications": "Medications",
+    "appointments": "Appointments",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "appointmentStatuses": { "SCHEDULED": "Scheduled", "COMPLETED": "Completed", "CANCELLED": "Cancelled" },
+    "emptyMedications": "No medications are linked to your treatment plans yet.",
+    "emptyUpcoming": "You have no upcoming appointments.",
+    "emptyPast": "You have no past appointments.",
+    "retry": "Try again",
+    "errors": {
+      "unauthorized": "Your session has expired. Sign in again.",
+      "forbidden": "You no longer have access to this treatment information.",
+      "notFound": "A treatment plan or its related information could not be found.",
+      "server": "The server could not load your treatment information. Try again.",
+      "network": "Unable to connect to the server. Check your connection and try again.",
+      "generic": "Could not load your treatment information. Try again."
+    }
+  },
   "adminIntakes": {
     "eyebrow": "Case administration",
     "title": "Review patient forms",

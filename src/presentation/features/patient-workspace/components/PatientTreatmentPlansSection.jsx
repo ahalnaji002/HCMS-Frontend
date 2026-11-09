@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import PatientTreatmentResourceList from "@/presentation/features/patient-workspace/components/PatientTreatmentResourceList";
 
 function apiError(error, t) {
   const status = error.response?.status;
@@ -211,20 +212,7 @@ function RelatedItems({ t, type, items, loading, error, onRetry }) {
   if (error) return <div role="alert" className="mt-4 rounded-xl bg-danger/10 p-4 text-sm text-danger"><p>{error}</p><button type="button" onClick={onRetry} className="mt-3 min-h-10 rounded-lg border border-danger px-3 py-2 font-semibold">{t("patientTreatmentPlans.retry")}</button></div>;
   if (items.length === 0) return <p className="mt-4 rounded-xl border border-border bg-surface p-4 text-sm text-text-secondary">{t("patientTreatmentPlans.relatedEmpty", { resource: title })}</p>;
 
-  return <ul className="mt-4 space-y-3">{items.map((item) => (
-    <li key={item.id} className="rounded-xl border border-border bg-surface p-4">
-      {type === "medications" ? <>
-        <p className="font-semibold">{item.medication_name}</p>
-        <p className="mt-2 text-sm text-text-secondary">{item.dosage} · {item.frequency}{item.duration ? ` · ${item.duration}` : ""}</p>
-        {item.instructions && <p className="mt-2 whitespace-pre-wrap text-sm leading-6">{item.instructions}</p>}
-      </> : <>
-        <p className="font-semibold">{item.purpose}</p>
-        <p className="mt-2 text-sm text-text-secondary">{item.appointment_date}</p>
-        {item.location && <p className="mt-2 text-sm">{item.location}</p>}
-        {item.notes && <p className="mt-2 whitespace-pre-wrap text-sm leading-6">{item.notes}</p>}
-      </>}
-    </li>
-  ))}</ul>;
+  return <PatientTreatmentResourceList items={items} type={type} t={t} />;
 }
 
 export default PatientTreatmentPlansSection;
