@@ -4,7 +4,7 @@ const roleNavigation = {
     { label: "roleNavigation.patient.profile", href: "#patient-profile", available: true },
     { label: "roleNavigation.patient.intake", href: "#patient-intake", available: true },
     { label: "roleNavigation.patient.medicalRecords", href: "#patient-medical-record", available: true },
-    { label: "roleNavigation.patient.treatmentPlans" },
+    { label: "roleNavigation.patient.treatmentPlans", href: "#patient-treatment-plans", available: true },
     { label: "roleNavigation.patient.medications" },
     { label: "roleNavigation.patient.appointments" },
     { label: "roleNavigation.patient.assistanceRequests" },
