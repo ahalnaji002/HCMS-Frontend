@@ -64,11 +64,11 @@ test("administrator reviews pending Doctor and NGO applications", async ({ page 
   await page.route("**/api/admin/emergency-alerts", (route) => reply(route, { emergency_alerts: [] }));
   await page.route("**/api/admin/join-requests", (route) => reply(route, { join_requests: pendingRequests }));
   await page.route("**/api/admin/join-requests/*", async (route) => {
-    const { method, url } = route.request();
-    const id = Number(url.split("/").at(-1));
-    const request = pendingRequests.find((item) => item.id === id);
-    expect(method).toBe("GET");
-    await reply(route, { join_request: request });
+    const apiRequest = route.request();
+    const id = Number(new URL(apiRequest.url()).pathname.split("/").at(-1));
+    const joinRequest = pendingRequests.find((item) => item.id === id);
+    expect(route.request().method()).toBe("GET");
+    await reply(route, { join_request: joinRequest });
   });
   await page.route("**/api/admin/join-requests/101/approve", async (route) => {
     expect(route.request().method()).toBe("PATCH");
