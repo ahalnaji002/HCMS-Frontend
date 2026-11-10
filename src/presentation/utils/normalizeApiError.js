@@ -47,6 +47,15 @@ export function normalizeApiError(error) {
     };
   }
 
+  if (status === 429) {
+    return {
+      type: "rateLimited",
+      status,
+      message: data?.message || "Too many requests. Please try again later.",
+      fieldErrors: {},
+    };
+  }
+
   if (status >= 500) {
     return {
       type: "server",

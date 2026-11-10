@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import { translateServerMessage } from "@/presentation/utils/serverMessages";
 
 export default function useAdminWorkspace() {
   const { t } = useTranslation();
@@ -12,8 +13,8 @@ export default function useAdminWorkspace() {
   const [workloadDrafts, setWorkloadDrafts] = useState({});
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState(null);
-  const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
+  const [error, setError] = useState(null);
+  const [notice, setNotice] = useState(null);
   const [correctionRequests, setCorrectionRequests] = useState([]);
   const [correctionResponses, setCorrectionResponses] = useState({});
   const [emergencyAlerts, setEmergencyAlerts] = useState([]);
@@ -53,7 +54,7 @@ export default function useAdminWorkspace() {
         }])));
       })
       .catch(() => {
-        if (active) setError(t("adminIntakes.loadError"));
+        if (active) setError({ key: "adminIntakes.loadError" });
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -63,14 +64,14 @@ export default function useAdminWorkspace() {
 
   async function handleStartReview(intakeId) {
     setBusyId(intakeId);
-    setError("");
-    setNotice("");
+    setError(null);
+    setNotice(null);
     try {
       await admin.startPatientIntakeReview(intakeId);
       await refresh();
-      setNotice(t("adminIntakes.reviewStarted"));
+      setNotice({ key: "adminIntakes.reviewStarted" });
     } catch (requestError) {
-      setError(requestError.response?.data?.message || t("adminIntakes.actionError"));
+      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
@@ -80,12 +81,12 @@ export default function useAdminWorkspace() {
     const doctorId = selectedDoctors[intake.id];
     const assignmentReason = reasons[intake.id]?.trim();
     if (!doctorId || !assignmentReason) {
-      setError(t("adminIntakes.assignmentRequired"));
+      setError({ key: "adminIntakes.assignmentRequired" });
       return;
     }
     setBusyId(intake.id);
-    setError("");
-    setNotice("");
+    setError(null);
+    setNotice(null);
     try {
       await admin.assignDoctorToPatient({
         doctor_id: doctorId,
@@ -94,9 +95,9 @@ export default function useAdminWorkspace() {
       });
       setReasons((current) => ({ ...current, [intake.id]: "" }));
       await refresh();
-      setNotice(t("adminIntakes.assignmentSaved"));
+      setNotice({ key: "adminIntakes.assignmentSaved" });
     } catch (requestError) {
-      setError(requestError.response?.data?.message || t("adminIntakes.actionError"));
+      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
@@ -105,18 +106,18 @@ export default function useAdminWorkspace() {
   async function handleEmergencyAssign(alert) {
     const doctorId = emergencyDoctors[alert.id];
     if (!doctorId) {
-      setError(t("adminIntakes.emergencyDoctorRequired"));
+      setError({ key: "adminIntakes.emergencyDoctorRequired" });
       return;
     }
     setBusyId(`emergency-${alert.id}`);
-    setError("");
-    setNotice("");
+    setError(null);
+    setNotice(null);
     try {
       await admin.assignDoctorToEmergencyAlert(alert.id, doctorId);
       await refresh();
-      setNotice(t("adminIntakes.emergencyAssigned"));
+      setNotice({ key: "adminIntakes.emergencyAssigned" });
     } catch (requestError) {
-      setError(requestError.response?.data?.message || t("adminIntakes.actionError"));
+      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
@@ -126,17 +127,17 @@ export default function useAdminWorkspace() {
     const draft = workloadDrafts[doctor.id];
     if (!draft) return;
     setBusyId(`doctor-${doctor.id}`);
-    setError("");
-    setNotice("");
+    setError(null);
+    setNotice(null);
     try {
       await admin.updateDoctorWorkload(doctor.id, {
         availability: draft.availability,
         capacity_limit: draft.capacity_limit === "" ? null : Number(draft.capacity_limit),
       });
       await refresh();
-      setNotice(t("adminIntakes.workloadSaved"));
+      setNotice({ key: "adminIntakes.workloadSaved" });
     } catch (requestError) {
-      setError(requestError.response?.data?.message || t("adminIntakes.actionError"));
+      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
@@ -144,23 +145,36 @@ export default function useAdminWorkspace() {
 
   async function handleResolveCorrection(request) {
     setBusyId(`correction-${request.id}`);
-    setError("");
-    setNotice("");
+    setError(null);
+    setNotice(null);
     try {
       await admin.resolveIntakeCorrectionRequest(request.id, correctionResponses[request.id] || "");
       await refresh();
-      setNotice(t("adminIntakes.correctionResolved"));
+      setNotice({ key: "adminIntakes.correctionResolved" });
     } catch (requestError) {
-      setError(requestError.response?.data?.message || t("adminIntakes.actionError"));
+      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
   }
 
 
+  // Messages are kept as translation keys (or server text) and translated on
+  // render, so they follow language changes.
+  const translate = (message) => {
+    if (!message) return "";
+    if (message.server) return translateServerMessage(t, message.server, message.key);
+    return message.key ? t(message.key) : message.text;
+  };
+  const clearMessages = useCallback(() => {
+    setError(null);
+    setNotice(null);
+  }, []);
+
   return {
     t, intakes, doctors, reasons, setReasons, selectedDoctors, setSelectedDoctors,
-    workloadDrafts, setWorkloadDrafts, loading, busyId, error, notice,
+    workloadDrafts, setWorkloadDrafts, loading, busyId,
+    error: translate(error), notice: translate(notice), clearMessages,
     correctionRequests, correctionResponses, setCorrectionResponses, emergencyAlerts,
     emergencyDoctors, setEmergencyDoctors, handleStartReview, handleAssign,
     handleEmergencyAssign, handleSaveWorkload, handleResolveCorrection,

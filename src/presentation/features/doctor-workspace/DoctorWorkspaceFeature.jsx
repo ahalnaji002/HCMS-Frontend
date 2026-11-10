@@ -1,23 +1,47 @@
+import { Navigate, Route, Routes } from "react-router-dom";
 import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard";
 import AssignedPatientsList from "@/presentation/features/doctor-workspace/components/AssignedPatientsList";
 import PatientDiagnosesSection from "@/presentation/features/doctor-workspace/components/PatientDiagnosesSection";
 import PatientIntakeSummary from "@/presentation/features/doctor-workspace/components/PatientIntakeSummary";
 import PatientMedicalNotesSection from "@/presentation/features/doctor-workspace/components/PatientMedicalNotesSection";
+import PatientMedicalRecordSection from "@/presentation/features/doctor-workspace/components/PatientMedicalRecordSection";
+import DoctorTreatmentPlansSection from "@/presentation/features/doctor-workspace/components/DoctorTreatmentPlansSection";
 import useDoctorWorkspace from "@/presentation/features/doctor-workspace/useDoctorWorkspace";
 
 function DoctorWorkspaceFeature() {
   const {
-    t, patients, selectedPatientId, setSelectedPatientId, intake, notes, diagnoses,
+    t, patients, selectedPatientId, selectPatient, intake, notes, diagnoses, medicalRecord,
     diagnosisText, setDiagnosisText, noteForm, setNoteForm, loading, detailLoading,
-    setDetailLoading, saving, error, setError, notice, currentPatient,
-    handleNoteSubmit, handleDiagnosisSubmit,
+    saving, error, notice, currentPatient,
+    handleNoteSubmit, handleDiagnosisSubmit, saveMedicalRecord,
   } = useDoctorWorkspace();
 
-  return (
+  const doctorAttention = (dashboard) => [
+    ...(dashboard ? [{ id: "emergencies", tone: "danger", count: dashboard.assigned_emergency_alerts, title: t("attention.doctor.emergencies"), description: t("attention.doctor.emergenciesHint") }] : []),
+    ...patients.slice(0, 4).map((patient) => ({
+      id: `patient-${patient.id}`,
+      tone: "info",
+      title: patient.full_name,
+      description: t("attention.doctor.patientHint"),
+      href: "/doctor/patients",
+      onAction: () => selectPatient(String(patient.id)),
+      actionLabel: t("attention.doctor.openFile"),
+    })),
+  ];
+
+  const overview = (
     <>
-      <p className="text-sm font-semibold text-primary">{t("doctorWorkspace.eyebrow")}</p>
-      <h1 id="doctor-patients" className="mt-2 text-3xl font-bold">{t("doctorWorkspace.title")}</h1>
-      <RoleDashboard role="DOCTOR" />
+      <div className="mb-8">
+        <p className="text-sm font-semibold text-primary">{t("doctorWorkspace.eyebrow")}</p>
+        <h1 className="mt-2 text-3xl font-bold">{t("doctorWorkspace.title")}</h1>
+      </div>
+      <RoleDashboard role="DOCTOR" attention={doctorAttention} />
+    </>
+  );
+
+  const patientsPage = (
+    <>
+      <h1 id="doctor-patients" className="mb-8 text-3xl font-bold">{t("roleNavigation.doctor.patients")}</h1>
       {error && <p role="alert" className="mt-6 rounded-xl bg-danger/10 p-4 text-sm text-danger">{error}</p>}
       {notice && <p role="status" className="mt-6 rounded-xl bg-primary/10 p-4 text-sm text-primary">{notice}</p>}
       {loading ? <p className="py-12 text-center text-text-secondary">{t("doctorWorkspace.loading")}</p> : patients.length === 0 ? (
@@ -28,13 +52,13 @@ function DoctorWorkspaceFeature() {
             t={t}
             patients={patients}
             selectedPatientId={selectedPatientId}
-            onSelect={setSelectedPatientId}
-            onClearError={() => setError("")}
-            onStartLoading={() => setDetailLoading(true)}
+            onSelect={selectPatient}
           />
           <div className="space-y-6">
             {detailLoading ? <p className="py-12 text-center text-text-secondary">{t("doctorWorkspace.loadingDetails")}</p> : currentPatient && <>
               <PatientIntakeSummary t={t} patient={currentPatient} intake={intake} />
+              <PatientMedicalRecordSection key={`${selectedPatientId}-${medicalRecord?.id || "new"}`} t={t} record={medicalRecord} isSaving={saving} onSave={saveMedicalRecord} />
+              <DoctorTreatmentPlansSection key={`plans-${selectedPatientId}`} patientId={selectedPatientId} />
               <PatientDiagnosesSection
                 t={t}
                 diagnoses={diagnoses}
@@ -56,6 +80,15 @@ function DoctorWorkspaceFeature() {
         </div>
       )}
     </>
+  );
+
+  // Patient data is loaded once here and shared by the doctor pages.
+  return (
+    <Routes>
+      <Route index element={overview} />
+      <Route path="patients" element={patientsPage} />
+      <Route path="*" element={<Navigate to="/doctor" replace />} />
+    </Routes>
   );
 }
 

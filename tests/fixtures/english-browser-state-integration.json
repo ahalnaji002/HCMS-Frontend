@@ -1,0 +1,14 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://127.0.0.1:4179",
+      "localStorage": [
+        {
+          "name": "hcms-language",
+          "value": "en"
+        }
+      ]
+    }
+  ]
+}

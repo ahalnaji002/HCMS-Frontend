@@ -1,8 +1,10 @@
 # Healthcare Conflict Management System — Frontend
 
+[![Frontend CI](https://github.com/ahalnaji002/HCMS-Frontend/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/ahalnaji002/HCMS-Frontend/actions/workflows/ci.yml)
+
 The web interface for the **Healthcare Conflict Management System (HCMS)**, a healthcare coordination platform for patients, doctors, non-governmental organizations (NGOs), and administrators.
 
-Built with **React, Vite, Tailwind CSS, and React Router**, the application supports Arabic and English, responsive layouts, role-specific workspaces, and API integration with the separate HCMS backend.
+Built with **React, Vite, Tailwind CSS, and React Router**, the application supports Arabic (default) and English, responsive layouts, role-specific workspaces with one page per section, and API integration with the separate HCMS backend.
 
 ## Table of Contents
 
@@ -22,22 +24,23 @@ HCMS provides role-specific experiences for:
 
 | Role | Frontend experience |
 | --- | --- |
-| Patient | Registration, profile, health intake, emergency alerts, care updates, and authorized diagnosis views |
-| Doctor | Registration and application status, assigned-patient intake, medical notes, and individual diagnoses |
-| NGO | Organization registration, application status, and role-specific workspace |
-| Admin | Patient-intake review, doctor assignments, doctor availability and workload, emergency coordination, and correction requests |
+| Patient | Registration, profile, health intake, medical record, treatment plans, medications and appointments, diagnoses, and an always-visible emergency button with GPS location |
+| Doctor | Registration and application status, assigned-patient file (intake, medical record, treatment plans, medications, appointments, diagnoses, notes) |
+| NGO | Organization registration, application status, and dashboard summary (feature pages planned for Sprint 10) |
+| Admin | Emergency alerts with call and map links, patient-intake review, doctor assignments, availability and workload, join-request review, and correction requests |
 
 The interface uses protected routes and role-aware navigation. The backend remains responsible for enforcing authorization and data access.
 
 ## Features
 
-- **Bilingual experience:** English and Arabic localization, LTR/RTL support, language-aware typography using Inter and IBM Plex Sans Arabic.
+- **Bilingual experience:** Arabic (default for first-time visitors) and English localization, LTR/RTL support, language-aware typography using Inter and IBM Plex Sans Arabic.
 - **Responsive design:** Shared HCMS branding, light/dark themes, mobile-friendly layouts, and role-specific workspaces.
+- **Navigation:** One routed page per section (for example `/patient/treatment-plans`, `/admin/emergency-alerts`), a sidebar that highlights the current page and lists only built screens, and a "Needs your attention" panel on each overview.
 - **Public entry flows:** Landing page, login, patient registration, and Doctor/NGO registration with application-status feedback.
-- **Authentication UX:** Role-based redirects, protected routes, session restoration, logout, and user-friendly handling of API and network failures.
-- **Patient workflows:** Self-reported health-intake submission and editing before review lock, emergency access, correction requests, and read-only diagnosis views.
-- **Doctor workflows:** Assigned-patient intake review, private medical notes, and separately authored patient diagnoses.
-- **Administrative workflows:** Explicit intake review and edit lock, multiple doctor assignments with internal reasons, doctor availability/capacity and workload indicators, emergency doctor assignment, and correction-request responses.
+- **Authentication UX:** Role-based redirects, protected routes, session restoration, logout, rate-limit (429) messages, and user-friendly handling of API and network failures. Server error messages are translated; unknown server text is never shown raw.
+- **Patient workflows:** Self-reported health-intake submission and editing before review lock, read-only medical record, treatment plans, medications and appointments, correction requests, diagnosis views, and an emergency dialog with the profile phone pre-filled and GPS location.
+- **Doctor workflows:** Assigned-patient intake review, medical record management, treatment plans with medications and appointments, private medical notes, and separately authored patient diagnoses.
+- **Administrative workflows:** Join-request review, explicit intake review and edit lock, multiple doctor assignments with internal reasons, doctor availability/capacity and workload indicators, emergency doctor assignment with call and map links, correction-request responses, and action feedback that stays visible while scrolling.
 
 These features describe the documented frontend implementation on `develop`; they do not imply that every backend capability has a corresponding completed UI.
 
@@ -54,6 +57,7 @@ These features describe the documented frontend implementation on `develop`; the
 | Fonts | Fontsource: Inter and IBM Plex Sans Arabic |
 | Browser testing | Playwright |
 | Code quality | ESLint |
+| Continuous integration | GitHub Actions (lint, build, Playwright) |
 
 ## System Architecture
 
@@ -67,6 +71,8 @@ src/
 ├── infrastructure/   External integration and implementations
 └── presentation/     UI, styles, localization, and context
 ```
+
+`application/` is a deliberately thin service boundary: it unwraps HTTP responses into plain payloads and guards role-dependent calls, while business rules stay in the backend. Each role is mounted at `/<role>/*`, and its `*WorkspaceFeature.jsx` declares the sub-routes and shares workspace data between pages (see `PROJECT_HANDOFF.md` for the route table).
 
 The entry point is `src/main.jsx`, which initializes localization and mounts the application with the router and application providers. `src/app/App.jsx` defines the main application component.
 
@@ -147,6 +153,8 @@ npm test
 
 The default configuration uses `tests/browser/`, starts an isolated Vite server at `http://127.0.0.1:4178`, and runs desktop and mobile Chromium projects.
 
+Tests start in English through `tests/fixtures/english-browser-state.json`; the application itself defaults to Arabic, which `default-language.spec.js` verifies.
+
 The browser suite exercises the React application, routes, forms, session handling, and UI recovery behavior with **synthetic API contract fixtures**. Unmatched API calls are blocked. It does **not** test live backend authorization, database operations, or production deployment.
 
 Useful commands:
@@ -171,14 +179,19 @@ Before running these tests, start the backend locally in `NODE_ENV=test` with an
 
 ```powershell
 $env:PLAYWRIGHT_CHANNEL = 'chrome'
+$env:HCMS_ALLOW_INTEGRATION_ACCOUNT_CLEANUP = 'I_CONFIRM_LOCAL_HCMS_TEST_DB_CLEANUP'
 npm run test:integration
 ```
 
-These tests use a live local backend and create uniquely named test accounts. The cleanup workflow uses a backend test-only script and refuses to run unless `NODE_ENV=test` and `TEST_DB_NAME=hcms_test_db` are configured.
+These tests use a live local backend and create uniquely named test accounts. The cleanup workflow uses a backend test-only script and refuses to run unless `NODE_ENV=test`, `TEST_DB_NAME=hcms_test_db`, and the explicit `HCMS_ALLOW_INTEGRATION_ACCOUNT_CLEANUP` confirmation shown above are configured.
 
 **Database safety:** Never point integration tests at development, shared, or production databases. Check all backend `DB_*` and `TEST_DB_*` settings before running them.
 
-For test coverage, limitations, and recorded verification, see [Sprint 8 Automated Browser Verification](src/docs/sprint-8-automated-verification.md).
+### Continuous integration
+
+Every push and pull request to `develop` or `main` runs lint, the production build, and the full Playwright suite on desktop and mobile Chromium (`.github/workflows/ci.yml`). The report and traces are uploaded when a test fails.
+
+For test coverage, limitations, and recorded verification, see [Sprint 8 Automated Browser Verification](src/docs/sprint-8-automated-verification.md). Sprint 10 developers should start with [`src/docs/ux-review-handoff.md`](src/docs/ux-review-handoff.md) and [`PROJECT_HANDOFF.md`](PROJECT_HANDOFF.md).
 
 ## Project Structure
 
@@ -186,6 +199,8 @@ The following is a concise map of verified directories and entry points, not an 
 
 ```text
 HCMS-Frontend/
+├── .github/
+│   └── workflows/ci.yml
 ├── public/
 ├── src/
 │   ├── app/
@@ -196,11 +211,14 @@ HCMS-Frontend/
 │   ├── infrastructure/
 │   ├── presentation/
 │   ├── docs/
-│   │   └── sprint-8-automated-verification.md
+│   │   ├── sprint-8-automated-verification.md
+│   │   └── ux-review-handoff.md
 │   └── main.jsx
 ├── tests/
 │   ├── browser/
+│   ├── fixtures/
 │   └── integration/
+├── PROJECT_HANDOFF.md
 ├── .env.example
 ├── package.json
 ├── playwright.config.js

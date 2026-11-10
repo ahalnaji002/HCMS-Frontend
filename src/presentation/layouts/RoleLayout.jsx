@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/presentation/context/useAuth";
@@ -17,10 +17,16 @@ function RoleLayout({ children, mainClassName, role }) {
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const accountMenuRef = useRef(null);
-  const navigationItems = roleNavigation[role] ?? [];
-  const firstAvailableItem = navigationItems.find((item) => item.available);
+  // Only built screens appear in the sidebar; planned entries stay in
+  // roleNavigation.js until they are marked available.
+  const navigationItems = (roleNavigation[role] ?? []).filter((item) => item.available);
   const accountName = user?.full_name || t("roleHome.accountFallback");
   const accountRole = t(`roleHome.roles.${role.toLowerCase()}.label`);
+
+  // Each sidebar entry is its own page: start new pages at the top.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (!isAccountMenuOpen) return undefined;
@@ -122,38 +128,21 @@ function RoleLayout({ children, mainClassName, role }) {
             <ul className="space-y-1 rounded-xl border border-border bg-surface p-3 md:space-y-1 md:rounded-none md:border-0 md:bg-transparent md:px-3 md:py-5">
               {navigationItems.map((item) => {
                 const label = t(item.label);
-                const isCurrentHash = item.href?.startsWith("#") && location.hash === item.href;
-                const isCurrentPath = item.href?.startsWith("/") && location.pathname === item.href;
-                const isDefaultItem =
-                  !location.hash && item === firstAvailableItem && isCurrentPath;
-                const isActive = isCurrentHash || isDefaultItem;
 
                 return (
                   <li key={item.label}>
-                    {item.available ? (
-                      <Link
-                        to={item.href}
-                        aria-current={isActive ? "page" : undefined}
-                        onClick={() => setIsNavigationOpen(false)}
-                        className={`flex min-h-11 items-center rounded-lg px-3 py-2 text-start text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
-                          isActive
-                            ? "bg-primary text-white"
-                            : "text-text-secondary hover:bg-background hover:text-text-primary"
-                        }`}
-                      >
-                        {label}
-                      </Link>
-                    ) : (
-                      <span
-                        aria-disabled="true"
-                        className="flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm text-text-secondary/70"
-                      >
-                        <span>{label}</span>
-                        <span className="shrink-0 rounded-full bg-background px-2 py-1 text-xs">
-                          {t("roleNavigation.comingSoon")}
-                        </span>
-                      </span>
-                    )}
+                    <NavLink
+                      to={item.href}
+                      end
+                      onClick={() => setIsNavigationOpen(false)}
+                      className={({ isActive }) => `flex min-h-11 items-center rounded-lg px-3 py-2 text-start text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+                        isActive
+                          ? "bg-primary text-white"
+                          : "text-text-secondary hover:bg-background hover:text-text-primary"
+                      }`}
+                    >
+                      {label}
+                    </NavLink>
                   </li>
                 );
               })}
