@@ -9,7 +9,7 @@ Frontend application for the **Healthcare Conflict Management System (HCMS)**.
 ## Features
 
 * Responsive React user interface
-* English and Arabic localization with LTR and RTL support
+* Arabic (default for first-time visitors) and English localization with RTL and LTR support
 * Shared HCMS light and dark design tokens
 * Language-aware typography using Inter and IBM Plex Sans Arabic
 * Reusable HCMS logo and icon component with light and dark presentations
@@ -257,20 +257,19 @@ re-application flow in this release. The response contract is documented in
 After login, patients, doctors, healthcare organizations (NGO), and administrators
 are redirected to `/patient`, `/doctor`, `/ngo`, and `/admin`, respectively.
 These routes require an authenticated user with the matching backend-confirmed
-role. The patient route includes the health-intake form, profile information,
-emergency-alert access, correction requests, and read-only doctor diagnoses.
-The administrator route includes intake review, doctor assignment, workload
-management, and emergency-alert assignment. The doctor route includes assigned
-patient intake, private medical notes, and separate diagnoses. Each role route
-shows a dashboard summary from its approved role-specific backend endpoint,
-alongside the existing workspace features. NGO dashboard cards summarize its
-assigned assistance requests and resource-allocation count; its feature pages
-remain marked as coming soon. All four role routes use the shared
+role. Each role has an overview page plus one page per section, for example
+`/patient/treatment-plans`, `/doctor/patients`, and `/admin/emergency-alerts`
+(the full route table is in `PROJECT_HANDOFF.md`). Each overview starts with a
+"Needs your attention" panel that links to the page where the action happens,
+followed by a dashboard summary from the role-specific backend endpoint. The
+patient workspace shows a floating Emergency button on every page. NGO
+dashboard cards summarize assigned assistance requests and resource-allocation
+count; NGO feature pages are not built yet. All four role routes use the shared
 `src/presentation/layouts/RoleLayout.jsx` for the full logo, language and light/dark theme
 controls, logout behavior, and the common page frame. The layout provides an
-Arabic/English role-specific navigation menu with active section state and a
-keyboard-accessible mobile toggle. Menu entries for documented modules whose
-pages are not implemented yet are shown as disabled “Coming soon” items.
+Arabic/English role-specific navigation menu that highlights the current page
+and has a keyboard-accessible mobile toggle. Only built screens are listed;
+planned entries are kept in `roleNavigation.js` until they are marked available.
 The role layout does not replace backend authorization.
 
 Dashboard summaries load from `GET /api/patient/dashboard`,
