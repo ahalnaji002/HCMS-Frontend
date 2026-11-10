@@ -66,3 +66,30 @@ test("feedback can be dismissed", async ({ page }) => {
   await page.getByRole("button", { name: "Dismiss message" }).click();
   await expect(page.getByRole("alert")).toHaveCount(0);
 });
+
+test("server errors are shown in the interface language, and unknown ones as a general message", async ({ page }) => {
+  await page.route("**/api/admin/active-doctors", (route) => reply(route, { doctors: [
+    { id: 5, full_name: "Dr. Test", specialization: "General Medicine", availability: "AVAILABLE", active_assignment_count: 0, capacity_limit: null },
+  ] }));
+  let serverMessage = "Unavailable doctors cannot receive routine assignments";
+  await page.route("**/api/admin/doctor-patient-assignments", (route) => route.fulfill({
+    status: 409, json: { success: false, message: serverMessage },
+  }));
+  await page.goto("/admin/patient-intakes");
+  const card = page.locator("article").first();
+  await card.getByRole("combobox").selectOption("5");
+  await card.getByRole("textbox").fill("Follow-up");
+  await card.getByRole("button", { name: "Save assignment" }).click();
+
+  await expect(page.getByRole("alert")).toHaveText("This doctor is marked unavailable and cannot receive routine assignments.");
+  await page.getByRole("button", { name: "Switch to Arabic" }).click();
+  await expect(page.getByRole("alert")).toHaveText("هذا الطبيب غير متاح ولا يمكن تعيينه لحالات روتينية.");
+  await page.getByRole("button", { name: "التبديل إلى الإنجليزية" }).click();
+
+  // Unknown server text is never shown raw.
+  serverMessage = "SQLSTATE[23000] internal detail";
+  await page.getByRole("button", { name: "Dismiss message" }).click();
+  await card.getByRole("button", { name: "Save assignment" }).click();
+  await expect(page.getByRole("alert")).toBeVisible();
+  await expect(page.getByRole("alert")).not.toContainText("SQLSTATE");
+});

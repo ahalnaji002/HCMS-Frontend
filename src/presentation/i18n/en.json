@@ -578,8 +578,8 @@
     "active": "Active",
     "assignmentNextStep": "You will be contacted about your follow-up care.",
     "eyebrow": "Patient workspace",
-    "title": "Welcome",
-    "intro": "You can continue using your personal area. To let the administration review your situation and assign a doctor, complete this form once. Your description is not a medical diagnosis.",
+    "title": "My care",
+    "intro": "Your care in one place: what needs your attention, your care team, and the red Emergency button available on every page.",
     "formTitle": "Health information",
     "formHint": "After submission, you can review and edit your answers until the administration starts its review. Starting the review locks editing.",
     "submittedHint": "Please review your answers for accuracy. You can edit this form until the administration starts reviewing it; after that it will be read-only.",
@@ -975,5 +975,26 @@
       "activePlans": "Active treatment plans",
       "viewAction": "View"
     }
+  },
+  "serverMessages": {
+    "doctorUnavailable": "This doctor is marked unavailable and cannot receive routine assignments.",
+    "activeAssignmentExists": "This doctor is already actively assigned to this patient.",
+    "assignmentReasonRequired": "An internal assignment reason is required.",
+    "doctorInactive": "This doctor's account is not active.",
+    "patientInactive": "This patient's account is not active.",
+    "doctorNotFound": "The selected doctor was not found or is not active.",
+    "patientNotFound": "The patient was not found.",
+    "assignmentNotFound": "The assignment was not found.",
+    "intakeReviewRequired": "Start reviewing the health form before assigning a doctor.",
+    "intakeNotSubmitted": "Only a newly submitted health form can enter review.",
+    "doctorNotEligibleForEmergency": "This doctor's specialization cannot take emergency alerts.",
+    "emergencyNoLongerPending": "This emergency alert is no longer waiting for a doctor. Refresh the page.",
+    "emergencyNotFound": "The emergency alert was not found.",
+    "correctionNotFound": "The correction request was not found.",
+    "correctionAlreadyResolved": "This correction request was already answered.",
+    "correctionBeforeReview": "You can request corrections after the administration starts reviewing your form.",
+    "correctionWithoutIntake": "Submit your health form before requesting a correction.",
+    "validationFailed": "Check the entered information and try again.",
+    "assignmentStatusUnchanged": "The assignment already has this status."
   }
 }

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import { translateServerMessage } from "@/presentation/utils/serverMessages";
 
 export default function useAdminWorkspace() {
   const { t } = useTranslation();
@@ -70,7 +71,7 @@ export default function useAdminWorkspace() {
       await refresh();
       setNotice({ key: "adminIntakes.reviewStarted" });
     } catch (requestError) {
-      setError(requestError.response?.data?.message ? { text: requestError.response.data.message } : { key: "adminIntakes.actionError" });
+      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
@@ -96,7 +97,7 @@ export default function useAdminWorkspace() {
       await refresh();
       setNotice({ key: "adminIntakes.assignmentSaved" });
     } catch (requestError) {
-      setError(requestError.response?.data?.message ? { text: requestError.response.data.message } : { key: "adminIntakes.actionError" });
+      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
@@ -116,7 +117,7 @@ export default function useAdminWorkspace() {
       await refresh();
       setNotice({ key: "adminIntakes.emergencyAssigned" });
     } catch (requestError) {
-      setError(requestError.response?.data?.message ? { text: requestError.response.data.message } : { key: "adminIntakes.actionError" });
+      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
@@ -136,7 +137,7 @@ export default function useAdminWorkspace() {
       await refresh();
       setNotice({ key: "adminIntakes.workloadSaved" });
     } catch (requestError) {
-      setError(requestError.response?.data?.message ? { text: requestError.response.data.message } : { key: "adminIntakes.actionError" });
+      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
@@ -151,7 +152,7 @@ export default function useAdminWorkspace() {
       await refresh();
       setNotice({ key: "adminIntakes.correctionResolved" });
     } catch (requestError) {
-      setError(requestError.response?.data?.message ? { text: requestError.response.data.message } : { key: "adminIntakes.actionError" });
+      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
@@ -160,7 +161,11 @@ export default function useAdminWorkspace() {
 
   // Messages are kept as translation keys (or server text) and translated on
   // render, so they follow language changes.
-  const translate = (message) => (message ? (message.key ? t(message.key) : message.text) : "");
+  const translate = (message) => {
+    if (!message) return "";
+    if (message.server) return translateServerMessage(t, message.server, message.key);
+    return message.key ? t(message.key) : message.text;
+  };
   const clearMessages = useCallback(() => {
     setError(null);
     setNotice(null);
