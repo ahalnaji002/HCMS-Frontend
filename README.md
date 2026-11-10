@@ -1,140 +1,181 @@
-# HCMS Frontend
+# Healthcare Conflict Management System — Frontend
 
 [![Frontend CI](https://github.com/ahalnaji002/HCMS-Frontend/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/ahalnaji002/HCMS-Frontend/actions/workflows/ci.yml)
 
-## Project Overview
+The web interface for the **Healthcare Conflict Management System (HCMS)**, a healthcare coordination platform for patients, doctors, non-governmental organizations (NGOs), and administrators.
 
-Frontend application for the **Healthcare Conflict Management System (HCMS)**.
+Built with **React, Vite, Tailwind CSS, and React Router**, the application supports Arabic (default) and English, responsive layouts, role-specific workspaces with one page per section, and API integration with the separate HCMS backend.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [System Architecture](#system-architecture)
+- [API Integration](#api-integration)
+- [Getting Started](#getting-started)
+- [Testing & Quality](#testing--quality)
+- [Project Structure](#project-structure)
+- [Related Repository](#related-repository)
+
+## Overview
+
+HCMS provides role-specific experiences for:
+
+| Role | Frontend experience |
+| --- | --- |
+| Patient | Registration, profile, health intake, medical record, treatment plans, medications and appointments, diagnoses, and an always-visible emergency button with GPS location |
+| Doctor | Registration and application status, assigned-patient file (intake, medical record, treatment plans, medications, appointments, diagnoses, notes) |
+| NGO | Organization registration, application status, and dashboard summary (feature pages planned for Sprint 10) |
+| Admin | Emergency alerts with call and map links, patient-intake review, doctor assignments, availability and workload, join-request review, and correction requests |
+
+The interface uses protected routes and role-aware navigation. The backend remains responsible for enforcing authorization and data access.
 
 ## Features
 
-* Responsive React user interface
-* Arabic (default for first-time visitors) and English localization with RTL and LTR support
-* Shared HCMS light and dark design tokens
-* Language-aware typography using Inter and IBM Plex Sans Arabic
-* Reusable HCMS logo and icon component with light and dark presentations
-* Persistent light and dark theme foundation with operating-system fallback
-* Landing page integrated with the shared brand, language, and theme controls
-* Landing About and Platform Capabilities sections with localized content
-* Role-based Who We Serve section for patients, doctors, organizations, and administrators
-* Smooth Landing section navigation with active-section tracking
-* Final Landing CTA with a shared public registration-role entry flow
-* Responsive localized Landing footer with section navigation and account entry actions
-* Login redirects each authenticated role to its own protected role home route
-* Patient registration validates approved fields and integrates with the backend API
-* Doctor and healthcare organization registrations submit approved fields and clearly show administrator approval status
-* Doctor and NGO applicants can check pending or rejected application status, including the recorded rejection reason, from the login page
-* Patient workspace for submitting and updating a self-reported health-intake form before administration begins review
-* Administrator workspace for reviewing patient intake, locking edits explicitly, and assigning one or more doctors with an internal reason
-* Administrator controls for doctor availability and capacity with separate active-assignment and open-emergency workload counts
-* Patient access to profile information and emergency alerts before health-intake submission
-* Doctor workspace for assigned-patient intake review, private medical notes, and separate patient diagnoses
-* Patient read-only view of diagnoses recorded by assigned doctors
-* Administrator workflow for assigning emergency alerts to eligible active doctors, including unavailable doctors
-* Patient correction requests sent directly to the administration after intake review locks editing, with request status and administrative responses
-* Shared role workspace layout with the full logo, language and light/dark theme controls, logout behavior, and role-specific content widths
+- **Bilingual experience:** Arabic (default for first-time visitors) and English localization, LTR/RTL support, language-aware typography using Inter and IBM Plex Sans Arabic.
+- **Responsive design:** Shared HCMS branding, light/dark themes, mobile-friendly layouts, and role-specific workspaces.
+- **Navigation:** One routed page per section (for example `/patient/treatment-plans`, `/admin/emergency-alerts`), a sidebar that highlights the current page and lists only built screens, and a "Needs your attention" panel on each overview.
+- **Public entry flows:** Landing page, login, patient registration, and Doctor/NGO registration with application-status feedback.
+- **Authentication UX:** Role-based redirects, protected routes, session restoration, logout, rate-limit (429) messages, and user-friendly handling of API and network failures. Server error messages are translated; unknown server text is never shown raw.
+- **Patient workflows:** Self-reported health-intake submission and editing before review lock, read-only medical record, treatment plans, medications and appointments, correction requests, diagnosis views, and an emergency dialog with the profile phone pre-filled and GPS location.
+- **Doctor workflows:** Assigned-patient intake review, medical record management, treatment plans with medications and appointments, private medical notes, and separately authored patient diagnoses.
+- **Administrative workflows:** Join-request review, explicit intake review and edit lock, multiple doctor assignments with internal reasons, doctor availability/capacity and workload indicators, emergency doctor assignment with call and map links, correction-request responses, and action feedback that stays visible while scrolling.
 
-## Dependencies
+These features describe the documented frontend implementation on `develop`; they do not imply that every backend capability has a corresponding completed UI.
 
-* React
-* Vite
-* React Router
-* Axios
-* ESLint
-* Playwright Test (development dependency for browser regression tests)
-* Tailwind CSS
-* Fontsource packages for Inter and IBM Plex Sans Arabic
+## Tech Stack
 
-## Requirements
+| Area | Technology |
+| --- | --- |
+| UI | React 19 |
+| Build and development | Vite 8 |
+| Styling | Tailwind CSS 4 |
+| Routing | React Router 7 |
+| HTTP requests | Axios |
+| Internationalization | i18next, react-i18next |
+| Fonts | Fontsource: Inter and IBM Plex Sans Arabic |
+| Browser testing | Playwright |
+| Code quality | ESLint |
+| Continuous integration | GitHub Actions (lint, build, Playwright) |
 
-Make sure the following are installed:
+## System Architecture
 
-* Node.js
-* npm
-* Git
+The frontend separates application setup, use-case coordination, domain concepts, infrastructure integration, and presentation.
 
-## Setup
+```text
+src/
+├── app/              Application composition and routing
+├── application/      Application-level workflows
+├── domain/           Domain-level concepts
+├── infrastructure/   External integration and implementations
+└── presentation/     UI, styles, localization, and context
+```
 
-Clone the repository:
+`application/` is a deliberately thin service boundary: it unwraps HTTP responses into plain payloads and guards role-dependent calls, while business rules stay in the backend. Each role is mounted at `/<role>/*`, and its `*WorkspaceFeature.jsx` declares the sub-routes and shares workspace data between pages (see `PROJECT_HANDOFF.md` for the route table).
+
+The entry point is `src/main.jsx`, which initializes localization and mounts the application with the router and application providers. `src/app/App.jsx` defines the main application component.
+
+This directory map describes the repository's organization; it is not a claim that every user interaction follows an identical dependency path.
+
+## API Integration
+
+The frontend communicates with the separately maintained HCMS backend through an API base URL configured in `VITE_API_URL`.
+
+Example local environment:
+
+```dotenv
+VITE_API_URL=http://localhost:3000
+```
+
+See the [backend API documentation](https://github.com/ahalnaji002/HCMS-Backend/blob/develop/docs/api/README.md) and [frontend integration guide](https://github.com/ahalnaji002/HCMS-Backend/blob/develop/FRONTEND_INTEGRATION.md) for request contracts, endpoints, and backend access rules.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js and npm
+- Git
+- A running HCMS backend for live API-driven workflows
+
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/ahalnaji002/HCMS-Frontend.git
-```
-
-Enter the project directory:
-
-```bash
 cd HCMS-Frontend
-```
-
-Switch to the development branch:
-
-```bash
 git checkout develop
 ```
 
-Install dependencies:
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-## Environment Variables
+### 3. Configure the API URL
 
-Create a `.env` file in the project root.
+Create a local `.env` file using [`.env.example`](.env.example) as a reference:
 
-Use `.env.example` as a reference:
-
-```env
+```dotenv
 VITE_API_URL=http://localhost:3000
 ```
 
-> Do not commit the `.env` file to GitHub.
+Do not commit local environment files or secrets. Values exposed through Vite's `VITE_*` prefix are available to browser code and must not contain private credentials.
 
-## Run the Frontend
-
-Start the development server:
+### 4. Start the development server
 
 ```bash
 npm run dev
 ```
 
-The frontend runs by default at:
+The default local development URL is `http://localhost:5173`.
 
-```text
-http://localhost:5173
+### Other commands
+
+```bash
+npm run build
+npm run lint
+npm run preview
 ```
 
-## Automated Browser Tests
+## Testing & Quality
 
-Install the test browser once after installing dependencies:
+The repository includes two distinct Playwright test modes. **They provide different evidence and must not be treated as interchangeable.**
+
+### Browser regression tests (mocked API)
+
+Install the browser once, then run:
 
 ```bash
 npx playwright install chromium --no-shell
 npm test
 ```
 
-`npm test` starts an isolated Vite server on port 4178 and runs Chromium at
-desktop and mobile sizes. Keep that port free. Use `npm run test:headed` to
-watch the browser, or `npx playwright show-report` to view the HTML report.
-Failure traces and screenshots are saved in ignored test output directories.
+The default configuration uses `tests/browser/`, starts an isolated Vite server at `http://127.0.0.1:4178`, and runs desktop and mobile Chromium projects.
 
-If bundled Chromium cannot start on Windows, use installed Google Chrome:
+Tests start in English through `tests/fixtures/english-browser-state.json`; the application itself defaults to Arabic, which `default-language.spec.js` verifies.
+
+The browser suite exercises the React application, routes, forms, session handling, and UI recovery behavior with **synthetic API contract fixtures**. Unmatched API calls are blocked. It does **not** test live backend authorization, database operations, or production deployment.
+
+Useful commands:
+
+```bash
+npm run test:headed
+npx playwright show-report
+```
+
+On Windows, if bundled Chromium cannot start, use installed Chrome in PowerShell:
 
 ```powershell
 $env:PLAYWRIGHT_CHANNEL = 'chrome'
 npm test
 ```
 
-The suite covers authentication, session restoration, logout, role guards,
-registration, and recovery from aborted network requests and HTTP 500 responses.
-API responses are synthetic contract fixtures intercepted in the browser;
-unmatched API calls are blocked. No real backend, account, or database is used.
-These tests verify frontend behavior, not backend authorization or live API
-integration. See `src/docs/sprint-8-automated-verification.md` for scope and results.
+### Local backend integration tests
 
-For an end-to-end check against a running local backend, first start the API in
-test mode with `NODE_ENV=test` and a migrated, isolated `hcms_test_db`, then run:
+The integration configuration uses `tests/integration/` and a separate Vite server on port **4179**.
+
+Before running these tests, start the backend locally in `NODE_ENV=test` with an isolated, migrated test database. Keep the backend repository alongside the frontend repository in the project workspace.
 
 ```powershell
 $env:PLAYWRIGHT_CHANNEL = 'chrome'
@@ -142,216 +183,54 @@ $env:HCMS_ALLOW_INTEGRATION_ACCOUNT_CLEANUP = 'I_CONFIRM_LOCAL_HCMS_TEST_DB_CLEA
 npm run test:integration
 ```
 
-This flow creates uniquely named Patient, Doctor, and NGO test accounts in the
-test database, removes leftover accounts from earlier integration runs at
-startup, and removes this run's accounts after it finishes, including failures.
-Cleanup uses the backend repository's test-only script and refuses to run unless
-`NODE_ENV=test`, `TEST_DB_NAME=hcms_test_db`, and the explicit confirmation
-`HCMS_ALLOW_INTEGRATION_ACCOUNT_CLEANUP` shown above are set. Keep the backend repository next
-to the frontend repository in the project workspace. Do not point the test at a
-development or production database. HTTP 500 and network loss are simulated in
-the browser without stopping the API.
+These tests use a live local backend and create uniquely named test accounts. The cleanup workflow uses a backend test-only script and refuses to run unless `NODE_ENV=test`, `TEST_DB_NAME=hcms_test_db`, and the explicit `HCMS_ALLOW_INTEGRATION_ACCOUNT_CLEANUP` confirmation shown above are configured.
 
-## Backend Connection
+**Database safety:** Never point integration tests at development, shared, or production databases. Check all backend `DB_*` and `TEST_DB_*` settings before running them.
 
-The frontend communicates with the HCMS Backend API using Axios.
+### Continuous integration
 
-The API base URL is configured through:
+Every push and pull request to `develop` or `main` runs lint, the production build, and the full Playwright suite on desktop and mobile Chromium (`.github/workflows/ci.yml`). The report and traces are uploaded when a test fails.
 
-```env
-VITE_API_URL=http://localhost:3000
-```
-
-The shared Axios configuration is located at:
-
-```text
-src/infrastructure/http/apiClient.js
-```
-
-## Sprint 8 Documentation
-
-- `src/docs/auth-contract.md` explains the approved frontend authentication
-  contract, token handling, public and protected routes, and the distinction
-  between User Account and Join Request statuses.
-- `src/docs/sprint-8-responsive-verification.md` records responsive and
-  accessibility checks for public authentication screens and shared role
-  layouts.
-- `src/docs/sprint-8-integration-verification.md` records live API integration
-  results and explicit test limitations.
-- `src/docs/sprint-8-automated-verification.md` records automated browser test
-  coverage, results, and environment limitations.
-- `src/docs/sprint-8-final-review.md` summarizes the delivered Sprint 8 scope,
-  API boundaries, and follow-up work.
-- `src/docs/sprint-8-closure-checklist.md` records the final Sprint 8 closure
-  review and links remaining product work to open issues.
-
-## Brand Assets
-
-Use the shared `Logo` component with the full wordmark or icon-only variant:
-
-```jsx
-import Logo from "./components/common/Logo";
-
-<Logo variant="logo" appearance="light" className="h-12 w-auto" />
-<Logo variant="mark" appearance="dark" className="size-10" />
-```
-
-The `appearance="dark"` option selects artwork intended for dark backgrounds.
-
-## Theme
-
-`ThemeProvider` initializes the interface from the saved `hcms-theme` value or
-the operating-system color preference. Components can read or update the theme
-with `useTheme`:
-
-```jsx
-const { theme, setTheme, toggleTheme } = useTheme();
-```
-
-`ThemeToggle` is mounted in the Landing navigation and remains available as a
-reusable control for future approved pages.
-
-## Registration Entry
-
-The Navbar, Hero, final Landing CTA, and Footer share the same role picker. Patient,
-doctor, and healthcare organization options open `/register/patient`,
-`/register/doctor`, and `/register/ngo`. Administrator registration is intentionally
-excluded from this public entry flow.
-
-The Landing Page supports English/Arabic, LTR/RTL, light/dark themes, and mobile
-layouts. A previously observed Firefox-only decorative-corner artifact is not
-treated as a layout defect unless it can be reproduced as an actual CSS issue.
-
-## Patient Registration
-
-The public `/register/patient` route submits the approved patient fields to
-`POST /api/auth/register/patient`. It validates the National ID, optional phone,
-date of birth, gender, password policy, and confirmation before sending. The
-form preserves entries after validation, conflict, network, or server errors.
-On a `201` response, it confirms that the Patient account is active and offers
-a link to log in; registration does not start a session or return a token.
-
-## Doctor and Organization Registration
-
-The public `/register/doctor` and `/register/ngo` routes submit the approved
-role-specific fields to `POST /api/auth/register/doctor` and
-`POST /api/auth/register/ngo`. Both forms validate shared contact and password
-fields; the doctor form collects specialization and license number, while the
-organization form collects its name and optional registration number and address.
-Neither form includes patient-only fields. Validation, duplicate, server, and
-network errors preserve entered values. Successful requests show that the account
-is pending administrator approval and do not create an authenticated session.
-
-## Doctor and NGO Application Status
-
-After submitting a professional registration, return to `/login` and enter the
-same email and password to check the latest application status. The login page
-shows whether the request is pending or rejected, along with the recorded
-rejection reason when available. Checking status does not create a session;
-approved applicants can log in normally. There is no separate status lookup or
-re-application flow in this release. The response contract is documented in
-`src/docs/auth-contract.md`.
-
-## Role Home Routes and Layout
-
-After login, patients, doctors, healthcare organizations (NGO), and administrators
-are redirected to `/patient`, `/doctor`, `/ngo`, and `/admin`, respectively.
-These routes require an authenticated user with the matching backend-confirmed
-role. Each role has an overview page plus one page per section, for example
-`/patient/treatment-plans`, `/doctor/patients`, and `/admin/emergency-alerts`
-(the full route table is in `PROJECT_HANDOFF.md`). Each overview starts with a
-"Needs your attention" panel that links to the page where the action happens,
-followed by a dashboard summary from the role-specific backend endpoint. The
-patient workspace shows a floating Emergency button on every page. NGO
-dashboard cards summarize assigned assistance requests and resource-allocation
-count; NGO feature pages are not built yet. All four role routes use the shared
-`src/presentation/layouts/RoleLayout.jsx` for the full logo, language and light/dark theme
-controls, logout behavior, and the common page frame. The layout provides an
-Arabic/English role-specific navigation menu that highlights the current page
-and has a keyboard-accessible mobile toggle. Only built screens are listed;
-planned entries are kept in `roleNavigation.js` until they are marked available.
-The role layout does not replace backend authorization.
-
-Dashboard summaries load from `GET /api/patient/dashboard`,
-`GET /api/doctor/dashboard`, `GET /api/ngo/dashboard`, or
-`GET /api/admin/dashboard`. The screens display loading, retryable error, and
-no-activity states; counts come from the backend rather than local estimates.
-The dashboard feature is grouped under `src/presentation/features/role-dashboard`: its role
-configuration, data-loading hook, and presentation components are kept
-together. Role pages compose this feature with the shared layout. Pages access
-application services through the app context; infrastructure repositories own
-HTTP requests and are wired in one composition root.
-Role route files are intentionally small: they apply the role layout and render
-the corresponding patient, doctor, or admin workspace feature. Each workspace
-feature keeps its UI in a `*WorkspaceFeature.jsx` file and its state, API calls,
-and event handlers in a matching `use*Workspace.js` hook. Large UI sections live
-in focused files under that feature's `components/` directory.
-
-## Patient Health Intake
-
-The matching backend APIs and migrations are implemented and merged into the
-backend `develop` branch through PR #95. Apply the backend development
-migrations before running these workflows end to end.
-
-After login, patients can submit one self-reported health-intake form from
-`/patient`. The form does not ask the patient to provide a diagnosis. Patients
-can edit the submission until an administrator explicitly starts review; after
-that it is read-only. The patient workspace shows the current workflow status
-and lets the patient send correction requests directly to the administration.
-Sending or resolving a request does not unlock the form. The backend enforces
-these workflow rules and access permissions.
-
-## Administrator Intake Review
-
-The `/admin` workspace lists patient submissions. Opening a form does not lock
-it. An administrator starts review explicitly, then may assign one or more
-active doctors, each with a required internal follow-up reason. Routine
-assignment prevents selecting unavailable doctors, while capacity remains an
-administrative warning only. Emergency alerts can be assigned to eligible
-active doctors regardless of availability or capacity. The backend enforces
-these rules and assignment authorization.
-
-## Branching
-
-* `main` — stable version
-* `develop` — development integration branch
-* `feature/...` — individual feature branches
-
-New development work should not be committed directly to `main`.
-
-Typical workflow:
-
-```text
-develop → feature/... → develop → main
-```
+For test coverage, limitations, and recorded verification, see [Sprint 8 Automated Browser Verification](src/docs/sprint-8-automated-verification.md). Sprint 10 developers should start with [`src/docs/ux-review-handoff.md`](src/docs/ux-review-handoff.md) and [`PROJECT_HANDOFF.md`](PROJECT_HANDOFF.md).
 
 ## Project Structure
 
+The following is a concise map of verified directories and entry points, not an exhaustive file tree:
+
 ```text
 HCMS-Frontend/
-│
+├── .github/
+│   └── workflows/ci.yml
 ├── public/
-│
 ├── src/
-│   ├── assets/
-│   ├── app/                 # Routes, dependency composition, application services context
-│   ├── application/         # Thin service boundary: unwraps API payloads, guards role-based calls
-│   ├── domain/              # Framework-independent domain concepts
-│   ├── infrastructure/      # Axios client and API/session repositories
-│   ├── presentation/        # Pages, features, layouts, UI, localization, styles
+│   ├── app/
+│   │   ├── App.jsx
+│   │   └── applicationServices.js
+│   ├── application/
+│   ├── domain/
+│   ├── infrastructure/
+│   ├── presentation/
 │   ├── docs/
-│   └── main.jsx             # Browser entry and provider composition
-│
+│   │   ├── sprint-8-automated-verification.md
+│   │   └── ux-review-handoff.md
+│   └── main.jsx
+├── tests/
+│   ├── browser/
+│   ├── fixtures/
+│   └── integration/
+├── PROJECT_HANDOFF.md
 ├── .env.example
-├── .gitignore
-├── eslint.config.js
-├── index.html
 ├── package.json
+├── playwright.config.js
+├── playwright.integration.config.js
 ├── vite.config.js
 └── README.md
 ```
 
-Dependencies point inward: presentation calls application services, application
-depends on domain rules, and the app composition root connects application
-services to infrastructure repositories. UI components and pages do not import
-API repositories directly. The shared `@/` alias points to `src/`.
+## Related Repository
+
+**[HCMS Backend](https://github.com/ahalnaji002/HCMS-Backend)** — Node.js/Express REST API, database migrations, and backend documentation.
+
+---
+
+Developed collaboratively as a Computer Engineering graduation project.
