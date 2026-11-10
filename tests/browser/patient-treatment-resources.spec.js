@@ -85,10 +85,10 @@ test("patient sees medication details and appointments grouped without shifting 
   await page.route(`**/api/patient/treatment-plans/${plan.id}/appointments`, (route) => reply(route, { appointments }));
   await page.route(`**/api/patient/treatment-plans/${secondPlan.id}/medications`, (route) => reply(route, { medications: [secondMedication] }));
   await page.route(`**/api/patient/treatment-plans/${secondPlan.id}/appointments`, (route) => reply(route, { appointments: [] }));
-  await page.goto("/patient");
+  await page.goto("/patient/medications-appointments");
 
   const section = page.locator("#patient-medications-appointments");
-  await expect(page.locator('a[href="/patient#patient-medications-appointments"]')).toHaveCount(2);
+  await expect(page.locator('a[href="/patient/medications-appointments"][aria-current="page"]')).toHaveCount(1);
   await expect(section.getByRole("heading", { name: "Medications and appointments" })).toBeVisible();
   await expect(section.getByText("Vitamin D")).toBeVisible();
   await expect(section.getByText("Take after breakfast.")).toBeVisible();
@@ -106,7 +106,7 @@ test("patient sees medication details and appointments grouped without shifting 
 
 test("patient sees empty states when no plans or related resources exist", async ({ page }) => {
   await setupPatient(page, (route) => reply(route, { treatment_plans: [] }));
-  await page.goto("/patient");
+  await page.goto("/patient/medications-appointments");
   const section = page.locator("#patient-medications-appointments");
   await expect(section.getByText("No medications are linked to your treatment plans yet.")).toBeVisible();
   await expect(section.getByText("You have no upcoming appointments.")).toBeVisible();
@@ -128,7 +128,7 @@ test("patient receives a loading state and can retry an API error", async ({ pag
     return reply(route, { medications });
   });
   await page.route(`**/api/patient/treatment-plans/${plan.id}/appointments`, (route) => reply(route, { appointments }));
-  await page.goto("/patient");
+  await page.goto("/patient/medications-appointments");
   const section = page.locator("#patient-medications-appointments");
   await expect(section.getByRole("status")).toContainText("Loading your medications and appointments");
   releaseFirstResponse();

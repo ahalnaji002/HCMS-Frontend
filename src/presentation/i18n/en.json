@@ -337,6 +337,7 @@
   },
   "roleHome": {
     "loading": "Checking your session...",
+    "dismissMessage": "Dismiss message",
     "logout": "Log out",
     "accountFallback": "Account",
     "accountMenuLabel": "Account menu for {{name}}, {{role}}",
@@ -423,6 +424,7 @@
     "close": "Close menu",
     "comingSoon": "Coming soon",
     "patient": {
+      "medicationsAppointments": "Medications & appointments",
       "home": "Overview",
       "profile": "My profile",
       "intake": "Health information",
@@ -459,6 +461,7 @@
       "notifications": "Notifications"
     },
     "admin": {
+      "assignments": "Doctor assignments",
       "home": "Overview",
       "profile": "Admin profile",
       "joinRequests": "Doctor and NGO applications",
