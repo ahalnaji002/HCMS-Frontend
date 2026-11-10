@@ -17,9 +17,11 @@ System. It communicates with the HCMS Backend through the shared Axios client.
 ## Frontend Architecture
 
 The frontend follows inward dependency boundaries under `src/`: `app/` owns
-route composition and wires services, `application/` normalizes repository
-results and applies client-side domain checks, `domain/` holds framework-free
-concepts, `infrastructure/` contains the Axios client and repositories, and
+route composition and wires services, `application/` is a deliberately thin
+service boundary that unwraps HTTP responses into plain payloads (so UI code
+never handles Axios responses) and guards role-dependent calls with
+`domain/auth/roles`; business rules stay in the backend. `domain/` holds
+framework-free concepts, `infrastructure/` contains the Axios client and repositories, and
 `presentation/` contains pages, features, layouts, UI, and localization. UI
 code consumes application services through `useApplicationServices`; it does
 not import API repositories directly. `@/` is the Vite alias for `src/`.

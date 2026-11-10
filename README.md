@@ -136,6 +136,7 @@ test mode with `NODE_ENV=test` and a migrated, isolated `hcms_test_db`, then run
 
 ```powershell
 $env:PLAYWRIGHT_CHANNEL = 'chrome'
+$env:HCMS_ALLOW_INTEGRATION_ACCOUNT_CLEANUP = 'I_CONFIRM_LOCAL_HCMS_TEST_DB_CLEANUP'
 npm run test:integration
 ```
 
@@ -143,7 +144,8 @@ This flow creates uniquely named Patient, Doctor, and NGO test accounts in the
 test database, removes leftover accounts from earlier integration runs at
 startup, and removes this run's accounts after it finishes, including failures.
 Cleanup uses the backend repository's test-only script and refuses to run unless
-`NODE_ENV=test` and `TEST_DB_NAME=hcms_test_db`. Keep the backend repository next
+`NODE_ENV=test`, `TEST_DB_NAME=hcms_test_db`, and the explicit confirmation
+`HCMS_ALLOW_INTEGRATION_ACCOUNT_CLEANUP` shown above are set. Keep the backend repository next
 to the frontend repository in the project workspace. Do not point the test at a
 development or production database. HTTP 500 and network loss are simulated in
 the browser without stopping the API.
@@ -332,7 +334,7 @@ HCMS-Frontend/
 ├── src/
 │   ├── assets/
 │   ├── app/                 # Routes, dependency composition, application services context
-│   ├── application/         # Application-service boundary and domain checks
+│   ├── application/         # Thin service boundary: unwraps API payloads, guards role-based calls
 │   ├── domain/              # Framework-independent domain concepts
 │   ├── infrastructure/      # Axios client and API/session repositories
 │   ├── presentation/        # Pages, features, layouts, UI, localization, styles

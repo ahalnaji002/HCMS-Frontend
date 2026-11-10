@@ -81,6 +81,8 @@ function Login() {
         } else {
           setError(t("login.errors.inactiveAccount"));
         }
+      } else if (type === "rateLimited") {
+        setError(t("login.errors.rateLimited"));
       } else if (type === "network") {
         setError(t("login.errors.network"));
       } else {
