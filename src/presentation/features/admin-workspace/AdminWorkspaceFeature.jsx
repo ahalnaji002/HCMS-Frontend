@@ -20,6 +20,16 @@ function AdminWorkspaceFeature() {
   } = useAdminWorkspace();
   const { pathname } = useLocation();
 
+  const count = (list, predicate) => list.filter(predicate).length;
+  const adminAttention = (dashboard) => (loading ? [] : [
+    { id: "emergencies", tone: "danger", count: count(emergencyAlerts, (alert) => alert.status === "PENDING_ASSIGNMENT"), title: t("attention.admin.emergencies"), description: t("attention.admin.emergenciesHint"), href: "/admin/emergency-alerts", actionLabel: t("attention.admin.emergenciesAction") },
+    { id: "newIntakes", tone: "warning", count: count(intakes, (intake) => intake.status === "SUBMITTED"), title: t("attention.admin.newIntakes"), description: t("attention.admin.newIntakesHint"), href: "/admin/patient-intakes", actionLabel: t("attention.admin.reviewAction") },
+    { id: "awaitingDoctor", tone: "warning", count: count(intakes, (intake) => intake.status === "UNDER_REVIEW"), title: t("attention.admin.awaitingDoctor"), description: t("attention.admin.awaitingDoctorHint"), href: "/admin/patient-intakes", actionLabel: t("attention.admin.assignAction") },
+    ...(dashboard ? [{ id: "joinRequests", tone: "info", count: dashboard.pending_join_requests, title: t("attention.admin.joinRequests"), description: t("attention.admin.joinRequestsHint"), href: "/admin/join-requests", actionLabel: t("attention.admin.reviewAction") }] : []),
+    { id: "corrections", tone: "info", count: count(correctionRequests, (request) => request.status === "OPEN"), title: t("attention.admin.corrections"), description: t("attention.admin.correctionsHint"), href: "/admin/support", actionLabel: t("attention.admin.respondAction") },
+    { id: "doctors", tone: "info", count: count(doctors, (doctor) => doctor.availability === "UNAVAILABLE" || doctor.capacity_warning), title: t("attention.admin.doctors"), description: t("attention.admin.doctorsHint"), href: "/admin/doctor-workload", actionLabel: t("attention.admin.viewAction") },
+  ]);
+
   // A message belongs to the page where the action happened.
   useEffect(() => {
     clearMessages();
@@ -35,11 +45,11 @@ function AdminWorkspaceFeature() {
           element={(
             <>
               <div className="mb-8">
-                <p className="text-sm font-semibold text-primary">{t("adminIntakes.eyebrow")}</p>
-                <h1 className="mt-2 text-3xl font-bold">{t("adminIntakes.title")}</h1>
-                <p className="mt-3 max-w-3xl leading-7 text-text-secondary">{t("adminIntakes.description")}</p>
+                <p className="text-sm font-semibold text-primary">{t("attention.admin.overviewEyebrow")}</p>
+                <h1 className="mt-2 text-3xl font-bold">{t("attention.admin.overviewTitle")}</h1>
+                <p className="mt-3 max-w-3xl leading-7 text-text-secondary">{t("attention.admin.overviewDescription")}</p>
               </div>
-              <RoleDashboard role="ADMIN" />
+              <RoleDashboard role="ADMIN" attention={adminAttention} />
             </>
           )}
         />

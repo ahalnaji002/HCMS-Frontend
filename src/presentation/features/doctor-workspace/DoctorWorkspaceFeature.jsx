@@ -16,13 +16,26 @@ function DoctorWorkspaceFeature() {
     handleNoteSubmit, handleDiagnosisSubmit, saveMedicalRecord,
   } = useDoctorWorkspace();
 
+  const doctorAttention = (dashboard) => [
+    ...(dashboard ? [{ id: "emergencies", tone: "danger", count: dashboard.assigned_emergency_alerts, title: t("attention.doctor.emergencies"), description: t("attention.doctor.emergenciesHint") }] : []),
+    ...patients.slice(0, 4).map((patient) => ({
+      id: `patient-${patient.id}`,
+      tone: "info",
+      title: patient.full_name,
+      description: t("attention.doctor.patientHint"),
+      href: "/doctor/patients",
+      onAction: () => selectPatient(String(patient.id)),
+      actionLabel: t("attention.doctor.openFile"),
+    })),
+  ];
+
   const overview = (
     <>
       <div className="mb-8">
         <p className="text-sm font-semibold text-primary">{t("doctorWorkspace.eyebrow")}</p>
         <h1 className="mt-2 text-3xl font-bold">{t("doctorWorkspace.title")}</h1>
       </div>
-      <RoleDashboard role="DOCTOR" />
+      <RoleDashboard role="DOCTOR" attention={doctorAttention} />
     </>
   );
 

@@ -931,5 +931,49 @@
     "switchToArabic": "Switch to Arabic",
     "switchToLightTheme": "Switch to light theme",
     "switchToDarkTheme": "Switch to dark theme"
+  },
+  "attention": {
+    "title": "Needs your attention",
+    "allClear": "Nothing needs your attention right now.",
+    "admin": {
+      "overviewEyebrow": "Administration",
+      "overviewTitle": "Today's overview",
+      "overviewDescription": "Start with what needs action, then check the overall system summary.",
+      "emergencies": "Emergency alerts awaiting a doctor",
+      "emergenciesHint": "Assign an eligible doctor as soon as possible.",
+      "emergenciesAction": "Assign now",
+      "newIntakes": "New health forms",
+      "newIntakesHint": "Start the review so the patient can be assigned a doctor.",
+      "reviewAction": "Review",
+      "awaitingDoctor": "Reviewed cases without a doctor",
+      "awaitingDoctorHint": "Choose a doctor and an assignment reason.",
+      "assignAction": "Assign a doctor",
+      "joinRequests": "Doctor and NGO applications",
+      "joinRequestsHint": "Approve or reject pending applications.",
+      "corrections": "Open correction requests",
+      "correctionsHint": "Patients asked to correct their health form.",
+      "respondAction": "Respond",
+      "doctors": "Doctors unavailable or at capacity",
+      "doctorsHint": "Check workload before assigning new patients.",
+      "viewAction": "View"
+    },
+    "doctor": {
+      "emergencies": "Emergency alerts assigned to you",
+      "emergenciesHint": "Contact the patient right away and coordinate with the administration.",
+      "patientHint": "Open the patient file: health form, record, plans, diagnoses, and notes.",
+      "openFile": "Open file"
+    },
+    "patient": {
+      "intakeMissing": "Complete your health information",
+      "intakeMissingHint": "The administration needs it to assign you a doctor.",
+      "intakeAction": "Complete the form",
+      "intakeSUBMITTED": "Your health form was sent and is waiting for review",
+      "intakeUNDER_REVIEW": "The administration is reviewing your case",
+      "careAssigned": "Your care team is assigned",
+      "openAlert": "You have an open emergency alert",
+      "noOpenAlert": "No open emergency alerts",
+      "activePlans": "Active treatment plans",
+      "viewAction": "View"
+    }
   }
 }
