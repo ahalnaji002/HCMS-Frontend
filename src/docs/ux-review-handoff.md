@@ -70,17 +70,16 @@
 | **#32** Responsive & Consistency Polish | العربي افتراضي؛ ترجمة رسائل السيرفر؛ مسافات العناوين؛ إخفاء "قريباً"؛ تنظيف نظرة المريض | باقي التلميع |
 | **#40** (9.5) | شغله مدموج من سبرنت 9 | **سكّره** |
 
-### 2.4 ميزات ناقصة **ما إلها issue** (لازم نقرر مين ياخدها)
-| الميزة | المتطلب | الـ Endpoint الجاهز بالباك |
-|---|---|---|
-| الطبيب يبدأ/ينهي حالة طوارئ | FR-6.4 | `PATCH /api/doctor/emergency-alerts/:alertId/status` |
-| تنبيه طوارئ عام بصفحة الهبوط (بدون حساب) | FR-6.1 | `POST /api/emergency-alerts` |
-| المريض يلغي تنبيه | FR-6.5 | `PATCH /api/patient/emergency-alerts/:alertId/cancel` |
-| المريض يتابع طلبات المساعدة | FR-7.4 | `GET /api/patient/assistance-requests` |
-| الطبيب يطلب مساعدة لمريض | FR-7.1 | `POST /api/doctor/patients/:patientId/assistance-requests` |
-| إدارة المستخدمين والمؤسسات | FR-10.1/10.2 | ❌ لسا ما انبنى بالباك (قرار: بنضيفه) |
+### 2.4 ميزات كانت ناقصة بدون issue — تم فتحها وتوزيعها
+| Issue | الميزة | المتطلب | المسؤول | الـ Endpoint بالباك |
+|---|---|---|---|---|
+| #75 | الطبيب يبدأ/ينهي حالة طوارئ | FR-6.4 | أحمد الناجي | `PATCH /api/doctor/emergency-alerts/:alertId/status` موجود؛ القائمة بتنضاف بـ HCMS-Backend #108 |
+| #76 | تنبيه طوارئ عام بصفحة الهبوط | FR-6.1 | أحمد الناجي | `POST /api/emergency-alerts` |
+| #77 | المريض يلغي تنبيه | FR-6.5 | **أبو رضا** | `PATCH /api/patient/emergency-alerts/:alertId/cancel` |
+| #78 | المريض يتابع طلبات المساعدة | FR-7.4 | **أبو رضا** | `GET /api/patient/assistance-requests` (+ `/:requestId` و `/resources`) |
+| #79 | إدارة المستخدمين والمؤسسات | FR-10.1/10.2 | أحمد الناجي | بتنبني بـ HCMS-Backend #108 |
 
-**تم إصلاحه بالباك (HCMS-Backend #107):** عدّادات الطوارئ النشطة بالـ Dashboard ما عادت تحسب التنبيهات الملغاة (`CANCELLED`).
+و **#57** (الطبيب يطلب مساعدة لمريض، FR-7.1، `POST /api/doctor/patients/:patientId/assistance-requests`) صار معيّن **لأبو رضا**.
 
 ### 2.5 التستات والـ CI
 - **كل PR على `develop` بيمرّ على CI** (lint + build + 160+ تست Playwright). لا تدمج قبل ✅.
