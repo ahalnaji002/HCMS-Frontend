@@ -11,6 +11,9 @@ export default defineConfig({
   use: {
     channel: process.env.PLAYWRIGHT_CHANNEL || 'chromium',
     baseURL: 'http://127.0.0.1:4178',
+    // Tests are written against the English interface; the app itself
+    // defaults to Arabic for first-time visitors.
+    storageState: './tests/fixtures/english-browser-state.json',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     serviceWorkers: 'block',
