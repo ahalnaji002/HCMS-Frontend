@@ -25,6 +25,26 @@ function PatientWorkspaceFeature() {
     updateProfileField, cancelProfileEdit, handleProfileSubmit, setProfileEditing,
   } = usePatientWorkspace();
 
+  const openAlerts = alerts.filter((alert) => !["RESOLVED", "CANCELLED"].includes(alert.status));
+  const intakeItem = isLoading ? [] : !intake
+    ? [{ id: "intake", tone: "warning", title: t("attention.patient.intakeMissing"), description: t("attention.patient.intakeMissingHint"), href: "/patient/health-information", actionLabel: t("attention.patient.intakeAction") }]
+    : intake.status === "DOCTOR_ASSIGNED"
+      ? [{ id: "intake", count: 0, title: t("attention.patient.careAssigned") }]
+      : [{ id: "intake", tone: "info", title: t(`attention.patient.intake${intake.status}`), href: "/patient/health-information", actionLabel: t("attention.patient.viewAction") }];
+  const patientAttention = (dashboard) => [
+    ...(alertsLoading ? [] : [{
+      id: "emergency",
+      tone: "danger",
+      count: openAlerts.length,
+      title: openAlerts.length ? t("attention.patient.openAlert") : t("attention.patient.noOpenAlert"),
+      description: openAlerts.length ? t(`patientWorkspace.alertStatuses.${openAlerts[0].status}`, { defaultValue: openAlerts[0].status }) : undefined,
+      href: "/patient/emergency-alerts",
+      actionLabel: t("attention.patient.viewAction"),
+    }]),
+    ...intakeItem,
+    ...(dashboard ? [{ id: "plans", tone: "info", count: dashboard.active_treatment_plans, title: t("attention.patient.activePlans"), href: "/patient/treatment-plans", actionLabel: t("attention.patient.viewAction") }] : []),
+  ];
+
   const pages = {
     overview: (
       <>
@@ -33,7 +53,7 @@ function PatientWorkspaceFeature() {
           <h1 className="mt-2 text-3xl font-bold">{t("patientWorkspace.title")}</h1>
           <p className="mt-3 max-w-3xl leading-7 text-text-secondary">{t("patientWorkspace.intro")}</p>
         </div>
-        <RoleDashboard role="PATIENT" />
+        <RoleDashboard role="PATIENT" attention={patientAttention} />
         <PatientCareSummary
           t={t}
           assignments={assignments}

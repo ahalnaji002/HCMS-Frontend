@@ -4,8 +4,10 @@ import { useAuth } from "@/presentation/context/useAuth";
 import useRoleDashboard from "@/presentation/features/role-dashboard/useRoleDashboard";
 import roleDashboardConfig from "@/presentation/features/role-dashboard/roleDashboardConfig";
 import DashboardMetricCard from "@/presentation/features/role-dashboard/DashboardMetricCard";
+import AttentionPanel from "@/presentation/features/role-dashboard/AttentionPanel";
 
-function RoleDashboard({ role }) {
+// `attention(dashboard)` returns the role's "needs your attention" items.
+function RoleDashboard({ role, attention }) {
   const { t } = useTranslation();
   const { user } = useAuth();
   const config = roleDashboardConfig[role];
@@ -26,6 +28,8 @@ function RoleDashboard({ role }) {
           {t(`roleDashboard.descriptions.${role.toLowerCase()}`)}
         </p>
       </header>
+
+      {attention && <div className="mt-6"><AttentionPanel t={t} items={attention(dashboard)} /></div>}
 
       <section aria-labelledby="role-dashboard-summary" className="mt-6">
         <h3 id="role-dashboard-summary" className="text-lg font-bold">

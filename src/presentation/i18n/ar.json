@@ -932,5 +932,49 @@
     "switchToArabic": "التبديل إلى العربية",
     "switchToLightTheme": "التبديل إلى الوضع الفاتح",
     "switchToDarkTheme": "التبديل إلى الوضع الداكن"
+  },
+  "attention": {
+    "title": "يحتاج انتباهك",
+    "allClear": "لا يوجد ما يحتاج انتباهك حاليًا.",
+    "admin": {
+      "overviewEyebrow": "الإدارة",
+      "overviewTitle": "نظرة اليوم",
+      "overviewDescription": "ابدأ بما يحتاج إجراءً، ثم راجع ملخص النظام العام.",
+      "emergencies": "تنبيهات طوارئ بانتظار طبيب",
+      "emergenciesHint": "عيّن طبيبًا مؤهلًا في أسرع وقت.",
+      "emergenciesAction": "تعيين الآن",
+      "newIntakes": "نماذج صحية جديدة",
+      "newIntakesHint": "ابدأ المراجعة ليتم تعيين طبيب للمريض.",
+      "reviewAction": "مراجعة",
+      "awaitingDoctor": "حالات تمت مراجعتها دون طبيب",
+      "awaitingDoctorHint": "اختر طبيبًا واكتب سبب التعيين.",
+      "assignAction": "تعيين طبيب",
+      "joinRequests": "طلبات انضمام الأطباء والمؤسسات",
+      "joinRequestsHint": "وافق على الطلبات المعلّقة أو ارفضها.",
+      "corrections": "طلبات تصحيح مفتوحة",
+      "correctionsHint": "مرضى طلبوا تصحيح نموذجهم الصحي.",
+      "respondAction": "الرد",
+      "doctors": "أطباء غير متاحين أو وصلوا للسعة",
+      "doctorsHint": "راجع الضغط قبل تعيين مرضى جدد.",
+      "viewAction": "عرض"
+    },
+    "doctor": {
+      "emergencies": "تنبيهات طوارئ مسندة إليك",
+      "emergenciesHint": "تواصل مع المريض فورًا ونسّق مع الإدارة.",
+      "patientHint": "افتح ملف المريض: النموذج الصحي والسجل والخطط والتشخيصات والملاحظات.",
+      "openFile": "فتح الملف"
+    },
+    "patient": {
+      "intakeMissing": "أكمل معلوماتك الصحية",
+      "intakeMissingHint": "تحتاجها الإدارة لتعيين طبيب لك.",
+      "intakeAction": "إكمال النموذج",
+      "intakeSUBMITTED": "تم إرسال نموذجك الصحي وهو بانتظار المراجعة",
+      "intakeUNDER_REVIEW": "الإدارة تراجع حالتك",
+      "careAssigned": "تم تعيين فريقك الطبي",
+      "openAlert": "لديك تنبيه طوارئ مفتوح",
+      "noOpenAlert": "لا توجد تنبيهات طوارئ مفتوحة",
+      "activePlans": "الخطط العلاجية النشطة",
+      "viewAction": "عرض"
+    }
   }
 }
