@@ -1,6 +1,7 @@
 import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard";
 import PatientCareSummary from "@/presentation/features/patient-workspace/components/PatientCareSummary";
 import PatientEmergencyAlertsSection from "@/presentation/features/patient-workspace/components/PatientEmergencyAlertsSection";
+import PatientEmergencyDialog, { PatientEmergencyButton } from "@/presentation/features/patient-workspace/components/PatientEmergencyDialog";
 import PatientIntakeSection from "@/presentation/features/patient-workspace/components/PatientIntakeSection";
 import PatientMedicalRecordSection from "@/presentation/features/patient-workspace/components/PatientMedicalRecordSection";
 import PatientProfileSection from "@/presentation/features/patient-workspace/components/PatientProfileSection";
@@ -16,7 +17,7 @@ function PatientWorkspaceFeature() {
     medicalRecord, medicalRecordLoading, medicalRecordAbsent, medicalRecordError,
     assignmentsLoading, assignmentsError, diagnosesLoading, diagnosesError,
     assignments, diagnoses, alertForm, setAlertForm, alertNotice, alertError,
-    isAlertSubmitting, correctionRequests, correctionMessage, setCorrectionMessage,
+    isAlertSubmitting, isAlertDialogOpen, openAlertDialog, closeAlertDialog, correctionRequests, correctionMessage, setCorrectionMessage,
     correctionNotice, correctionError, isCorrectionSubmitting, canEdit, statusLabel,
     updateField, handleSubmit, handleAlertSubmit, handleCorrectionSubmit,
     retryProfile, retryAlerts, retryAssignments, retryDiagnoses, retryMedicalRecord,
@@ -96,6 +97,15 @@ function PatientWorkspaceFeature() {
         alertsLoading={alertsLoading}
         alertsError={alertsError}
         onRetryAlerts={retryAlerts}
+        onOpenDialog={openAlertDialog}
+      />
+      {/* Keeps the last section clear of the floating emergency button. */}
+      <div aria-hidden="true" className="h-20" />
+      <PatientEmergencyButton t={t} onClick={openAlertDialog} />
+      <PatientEmergencyDialog
+        t={t}
+        open={isAlertDialogOpen}
+        onClose={closeAlertDialog}
         form={alertForm}
         setForm={setAlertForm}
         error={alertError}

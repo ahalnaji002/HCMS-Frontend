@@ -113,6 +113,7 @@ export default function usePatientWorkspace() {
   const [alertNotice, setAlertNotice] = useState("");
   const [alertError, setAlertError] = useState("");
   const [isAlertSubmitting, setIsAlertSubmitting] = useState(false);
+  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
   const [correctionRequests, setCorrectionRequests] = useState([]);
   const [correctionMessage, setCorrectionMessage] = useState("");
   const [correctionNotice, setCorrectionNotice] = useState("");
@@ -353,13 +354,26 @@ export default function usePatientWorkspace() {
     try {
       const response = await patientWorkspace.createPatientAlert(alertForm);
       setAlerts((current) => [response.data.emergency_alert, ...current]);
-      setAlertForm({ phone: "", location: "", description: "" });
+      setAlertForm({ phone: profile?.phone || "", location: "", description: "" });
       setAlertNotice(t("patientWorkspace.alertSubmitted"));
     } catch {
       setAlertError(t("patientWorkspace.alertError"));
     } finally {
       setIsAlertSubmitting(false);
     }
+  }
+
+  // The emergency form is reachable from every scroll position through a
+  // floating button; the phone number is pre-filled from the patient profile.
+  function openAlertDialog() {
+    setAlertError("");
+    setAlertNotice("");
+    setAlertForm((current) => ({ ...current, phone: current.phone || profile?.phone || "" }));
+    setIsAlertDialogOpen(true);
+  }
+
+  function closeAlertDialog() {
+    setIsAlertDialogOpen(false);
   }
 
   async function handleCorrectionSubmit(event) {
@@ -391,7 +405,7 @@ export default function usePatientWorkspace() {
     medicalRecord, medicalRecordLoading, medicalRecordAbsent, medicalRecordError,
     assignments, assignmentsLoading, assignmentsError, diagnoses, diagnosesLoading, diagnosesError,
     alertForm, setAlertForm, alertNotice, alertError,
-    isAlertSubmitting, correctionRequests, correctionMessage, setCorrectionMessage,
+    isAlertSubmitting, isAlertDialogOpen, openAlertDialog, closeAlertDialog, correctionRequests, correctionMessage, setCorrectionMessage,
     correctionNotice, correctionError, isCorrectionSubmitting, canEdit, statusLabel,
     updateField, handleSubmit, handleAlertSubmit, handleCorrectionSubmit,
     retryProfile, retryAlerts, retryAssignments, retryDiagnoses, retryMedicalRecord,
