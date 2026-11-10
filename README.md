@@ -1,5 +1,7 @@
 # HCMS Frontend
 
+[![Frontend CI](https://github.com/ahalnaji002/HCMS-Frontend/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/ahalnaji002/HCMS-Frontend/actions/workflows/ci.yml)
+
 ## Project Overview
 
 Frontend application for the **Healthcare Conflict Management System (HCMS)**.
