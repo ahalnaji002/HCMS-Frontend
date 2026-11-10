@@ -83,7 +83,7 @@ test("administrator reviews pending Doctor and NGO applications", async ({ page 
     await reply(route, { join_request: { id: 102, status: "REJECTED" } });
   });
 
-  await page.goto("/admin");
+  await page.goto("/admin/join-requests");
   const section = page.locator("#admin-join-requests");
   await expect(section.getByRole("heading", { name: "Doctor and NGO applications" })).toBeVisible();
   await expect(section.getByText("Dr. Rami Saleh")).toBeVisible();

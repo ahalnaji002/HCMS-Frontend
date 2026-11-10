@@ -67,7 +67,7 @@ async function setupPatient(page, plansHandler = (route) => reply(route, { treat
   await page.route("**/api/profile", (route) => reply(route, { profile }));
   await page.route("**/api/patient/medical-record", (route) => reply(route, {}, 404));
   await page.route("**/api/patient/treatment-plans", plansHandler);
-  await page.goto("/patient");
+  await page.goto("/patient/treatment-plans");
 }
 
 test("patient can review an own plan and follow its medication and appointment relationships", async ({ page }) => {
@@ -82,7 +82,7 @@ test("patient can review an own plan and follow its medication and appointment r
     return reply(route, { treatment_plan: plan });
   });
   const section = page.locator("#patient-treatment-plans");
-  await expect(page.locator('a[href="/patient#patient-treatment-plans"]')).toHaveCount(1);
+  await expect(page.locator('a[href="/patient/treatment-plans"][aria-current="page"]')).toHaveCount(1);
   await expect(section.getByRole("heading", { name: "My treatment plans" })).toBeVisible();
   await expect(section.getByRole("button", { name: /Recovery plan/ })).toBeVisible();
   await section.getByRole("button", { name: /Recovery plan/ }).click();

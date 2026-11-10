@@ -1,3 +1,4 @@
+import { Navigate, Route, Routes } from "react-router-dom";
 import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard";
 import PatientCareSummary from "@/presentation/features/patient-workspace/components/PatientCareSummary";
 import PatientEmergencyAlertsSection from "@/presentation/features/patient-workspace/components/PatientEmergencyAlertsSection";
@@ -24,15 +25,30 @@ function PatientWorkspaceFeature() {
     updateProfileField, cancelProfileEdit, handleProfileSubmit, setProfileEditing,
   } = usePatientWorkspace();
 
-  return (
-    <>
-      <div className="mb-8">
-        <p className="text-sm font-semibold text-primary">{t("patientWorkspace.eyebrow")}</p>
-        <h1 className="mt-2 text-3xl font-bold">{t("patientWorkspace.title")}</h1>
-        <p className="mt-3 max-w-3xl leading-7 text-text-secondary">{t("patientWorkspace.intro")}</p>
-      </div>
-
-      <RoleDashboard role="PATIENT" />
+  const pages = {
+    overview: (
+      <>
+        <div className="mb-8">
+          <p className="text-sm font-semibold text-primary">{t("patientWorkspace.eyebrow")}</p>
+          <h1 className="mt-2 text-3xl font-bold">{t("patientWorkspace.title")}</h1>
+          <p className="mt-3 max-w-3xl leading-7 text-text-secondary">{t("patientWorkspace.intro")}</p>
+        </div>
+        <RoleDashboard role="PATIENT" />
+        <PatientCareSummary
+          t={t}
+          assignments={assignments}
+          assignmentsLoading={assignmentsLoading}
+          assignmentsError={assignmentsError}
+          onRetryAssignments={retryAssignments}
+          diagnoses={diagnoses}
+          diagnosesLoading={diagnosesLoading}
+          diagnosesError={diagnosesError}
+          onRetryDiagnoses={retryDiagnoses}
+          intake={intake}
+        />
+      </>
+    ),
+    healthInformation: (
       <PatientIntakeSection
         t={t}
         intake={intake}
@@ -53,18 +69,8 @@ function PatientWorkspaceFeature() {
         onCorrectionChange={setCorrectionMessage}
         onCorrectionSubmit={handleCorrectionSubmit}
       />
-      <PatientCareSummary
-        t={t}
-        assignments={assignments}
-        assignmentsLoading={assignmentsLoading}
-        assignmentsError={assignmentsError}
-        onRetryAssignments={retryAssignments}
-        diagnoses={diagnoses}
-        diagnosesLoading={diagnosesLoading}
-        diagnosesError={diagnosesError}
-        onRetryDiagnoses={retryDiagnoses}
-        intake={intake}
-      />
+    ),
+    medicalRecord: (
       <PatientMedicalRecordSection
         t={t}
         record={medicalRecord}
@@ -73,8 +79,8 @@ function PatientWorkspaceFeature() {
         error={medicalRecordError}
         onRetry={retryMedicalRecord}
       />
-      <PatientTreatmentPlansSection />
-      <PatientTreatmentResourcesSection />
+    ),
+    profile: (
       <PatientProfileSection
         t={t}
         profile={profile}
@@ -91,6 +97,8 @@ function PatientWorkspaceFeature() {
         onFieldChange={updateProfileField}
         onSubmit={handleProfileSubmit}
       />
+    ),
+    emergencyAlerts: (
       <PatientEmergencyAlertsSection
         t={t}
         alerts={alerts}
@@ -99,6 +107,22 @@ function PatientWorkspaceFeature() {
         onRetryAlerts={retryAlerts}
         onOpenDialog={openAlertDialog}
       />
+    ),
+  };
+
+  // Workspace data is loaded once here and shared by every patient page.
+  return (
+    <>
+      <Routes>
+        <Route index element={pages.overview} />
+        <Route path="health-information" element={pages.healthInformation} />
+        <Route path="medical-record" element={pages.medicalRecord} />
+        <Route path="treatment-plans" element={<PatientTreatmentPlansSection />} />
+        <Route path="medications-appointments" element={<PatientTreatmentResourcesSection />} />
+        <Route path="profile" element={pages.profile} />
+        <Route path="emergency-alerts" element={pages.emergencyAlerts} />
+        <Route path="*" element={<Navigate to="/patient" replace />} />
+      </Routes>
       {/* Keeps the last section clear of the floating emergency button. */}
       <div aria-hidden="true" className="h-20" />
       <PatientEmergencyButton t={t} onClick={openAlertDialog} />

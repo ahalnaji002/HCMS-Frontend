@@ -8,9 +8,9 @@ const roleDashboardConfig = {
       "unread_notifications",
     ],
     actions: [
-      { label: "intake", href: "#patient-intake" },
-      { label: "emergencyAlerts", href: "#emergency-alerts" },
-      { label: "profile", href: "#patient-profile" },
+      { label: "intake", href: "/patient/health-information" },
+      { label: "emergencyAlerts", href: "/patient/emergency-alerts" },
+      { label: "profile", href: "/patient/profile" },
     ],
   },
   DOCTOR: {
@@ -20,7 +20,7 @@ const roleDashboardConfig = {
       "submitted_assistance_requests",
     ],
     actions: [
-      { label: "assignedPatients", href: "#doctor-patients" },
+      { label: "assignedPatients", href: "/doctor/patients" },
     ],
   },
   NGO: {
@@ -37,9 +37,9 @@ const roleDashboardConfig = {
       "pending_assistance_requests",
     ],
     actions: [
-      { label: "patientIntakes", href: "#admin-intakes" },
-      { label: "doctorWorkload", href: "#admin-workload" },
-      { label: "emergencyAlerts", href: "#admin-emergencies" },
+      { label: "patientIntakes", href: "/admin/patient-intakes" },
+      { label: "doctorWorkload", href: "/admin/doctor-workload" },
+      { label: "emergencyAlerts", href: "/admin/emergency-alerts" },
     ],
   },
 };

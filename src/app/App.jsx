@@ -35,7 +35,7 @@ function App() {
         {Object.entries(roleRoutes).map(([role, path]) => (
           <Route
             key={role}
-            path={path}
+            path={`${path}/*`}
             element={
               <RequireRole role={role}>
                 {role === "PATIENT" ? (

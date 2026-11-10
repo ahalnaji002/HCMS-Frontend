@@ -36,7 +36,7 @@ async function setupPatient(page, onCreateAlert) {
   await page.route("**/api/patient/emergency-alerts", (route) => (
     route.request().method() === "POST" ? onCreateAlert(route) : reply(route, { emergency_alerts: [] })
   ));
-  await page.goto("/patient");
+  await page.goto("/patient/emergency-alerts");
 }
 
 test("floating emergency button is visible at the top of the page and pre-fills the profile phone", async ({ page }) => {

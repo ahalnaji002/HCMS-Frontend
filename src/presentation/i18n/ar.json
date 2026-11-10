@@ -338,6 +338,7 @@
   },
   "roleHome": {
     "loading": "جارٍ التحقق من جلستك...",
+    "dismissMessage": "إغلاق الرسالة",
     "logout": "تسجيل الخروج",
     "accountFallback": "الحساب",
     "accountMenuLabel": "قائمة حساب {{name}}، {{role}}",
@@ -424,6 +425,7 @@
     "close": "إغلاق القائمة",
     "comingSoon": "قريبًا",
     "patient": {
+      "medicationsAppointments": "الأدوية والمواعيد",
       "home": "نظرة عامة",
       "profile": "ملفي الشخصي",
       "intake": "معلومات الحالة الصحية",
@@ -460,6 +462,7 @@
       "notifications": "الإشعارات"
     },
     "admin": {
+      "assignments": "تعيينات الأطباء",
       "home": "نظرة عامة",
       "profile": "ملف الإدارة",
       "joinRequests": "طلبات انضمام الأطباء وNGOs",
