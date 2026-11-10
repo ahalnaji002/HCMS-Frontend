@@ -338,6 +338,7 @@
   },
   "roleHome": {
     "loading": "جارٍ التحقق من جلستك...",
+    "dismissMessage": "إغلاق الرسالة",
     "logout": "تسجيل الخروج",
     "accountFallback": "الحساب",
     "accountMenuLabel": "قائمة حساب {{name}}، {{role}}",
@@ -424,6 +425,7 @@
     "close": "إغلاق القائمة",
     "comingSoon": "قريبًا",
     "patient": {
+      "medicationsAppointments": "الأدوية والمواعيد",
       "home": "نظرة عامة",
       "profile": "ملفي الشخصي",
       "intake": "معلومات الحالة الصحية",
@@ -460,6 +462,7 @@
       "notifications": "الإشعارات"
     },
     "admin": {
+      "assignments": "تعيينات الأطباء",
       "home": "نظرة عامة",
       "profile": "ملف الإدارة",
       "joinRequests": "طلبات انضمام الأطباء وNGOs",
@@ -548,6 +551,18 @@
     "alertPhone": "رقم للتواصل",
     "alertLocation": "الموقع (اختياري)",
     "alertDescription": "وصف مختصر (اختياري)",
+    "emergencyButton": "طوارئ",
+    "emergencyDialogTitle": "إرسال تنبيه طوارئ",
+    "emergencyDialogHint": "تصل الإدارة فوراً وتعيّن طبيباً متاحاً. تمت تعبئة رقم جوالك من ملفك الشخصي.",
+    "close": "إغلاق",
+    "useMyLocation": "استخدم موقعي الحالي",
+    "locating": "جارٍ تحديد موقعك...",
+    "viewOnMap": "عرض على الخريطة",
+    "meters": "م",
+    "locationPlaceholder": "المنطقة أو المخيم أو أقرب معلم",
+    "locationDenied": "تم رفض الوصول إلى الموقع. اكتب موقعك يدوياً.",
+    "locationUnavailable": "تعذّر تحديد موقعك. اكتبه يدوياً.",
+    "locationTimeout": "استغرق تحديد الموقع وقتاً طويلاً. حاول مجدداً أو اكتبه يدوياً.",
     "sendAlert": "إرسال تنبيه طارئ",
     "alertSubmitted": "تم إرسال التنبيه الطارئ.",
     "alertError": "تعذر إرسال التنبيه. تحقق من البيانات وحاول مجددًا.",

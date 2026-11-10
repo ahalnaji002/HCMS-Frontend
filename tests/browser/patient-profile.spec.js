@@ -27,7 +27,7 @@ test.beforeEach(async ({ page }) => {
   await page.route("**/api/**", (route) => route.abort("blockedbyclient"));
 });
 
-async function setupPatient(page, intakeStatus = null) {
+async function setupPatient(page, intakeStatus = null, path = "/patient/profile") {
   await page.addInitScript((value) => localStorage.setItem("hcms_access_token", value), token);
   await page.route("**/api/auth/me", (route) => reply(route, { user: patient }));
   await page.route("**/api/patient/dashboard", (route) => reply(route, dashboard));
@@ -39,7 +39,7 @@ async function setupPatient(page, intakeStatus = null) {
   await page.route("**/api/patient/diagnoses", (route) => reply(route, { diagnoses: [] }));
   await page.route("**/api/patient/emergency-alerts", (route) => reply(route, { emergency_alerts: [] }));
   await page.route("**/api/profile", (route) => reply(route, { profile }));
-  await page.goto("/patient");
+  await page.goto(path);
 }
 
 test("patient can edit approved fields while email and National ID stay read-only", async ({ page }) => {
@@ -129,14 +129,14 @@ for (const failure of ["403", "500", "network"]) {
 }
 
 for (const resource of [
-  { name: "emergency alerts", path: "**/api/patient/emergency-alerts", errorText: "Could not load emergency alerts.", section: "#emergency-alerts", heading: "My recent alerts" },
-  { name: "doctor assignments", path: "**/api/patient/doctor-assignments", errorText: "Could not load your doctor assignments.", section: null, heading: "Doctors assigned to your care" },
-  { name: "diagnoses", path: "**/api/patient/diagnoses", errorText: "Could not load your diagnoses.", section: null, heading: "Doctors’ diagnoses" },
+  { name: "emergency alerts", path: "**/api/patient/emergency-alerts", errorText: "Could not load emergency alerts.", section: "#emergency-alerts", heading: "My recent alerts", page: "/patient/emergency-alerts" },
+  { name: "doctor assignments", path: "**/api/patient/doctor-assignments", errorText: "Could not load your doctor assignments.", section: null, heading: "Doctors assigned to your care", page: "/patient" },
+  { name: "diagnoses", path: "**/api/patient/diagnoses", errorText: "Could not load your diagnoses.", section: null, heading: "Doctors’ diagnoses", page: "/patient" },
 ]) {
   for (const failure of ["403", "500", "network"]) {
     test(`${resource.name} ${failure} failure is explicit and retryable`, async ({ page }) => {
       let failed = true;
-      await setupPatient(page, "DOCTOR_ASSIGNED");
+      await setupPatient(page, "DOCTOR_ASSIGNED", resource.page);
       await page.route(resource.path, (route) => {
         if (!failed) return reply(route, resource.path.includes("diagnoses") ? { diagnoses: [] } : resource.path.includes("doctor-assignments") ? { assignments: [] } : { emergency_alerts: [] });
         return failure === "network" ? route.abort("internetdisconnected") : reply(route, {}, Number(failure));

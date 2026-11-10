@@ -45,7 +45,7 @@ async function setupPatient(page, recordHandler = (route) => reply(route, { medi
   await page.route("**/api/patient/emergency-alerts", (route) => reply(route, { emergency_alerts: [] }));
   await page.route("**/api/profile", (route) => reply(route, { profile }));
   await page.route("**/api/patient/medical-record", recordHandler);
-  await page.goto("/patient");
+  await page.goto("/patient/medical-record");
 }
 
 test("patient sees only their own read-only medical record fields", async ({ page }) => {
@@ -59,7 +59,7 @@ test("patient sees only their own read-only medical record fields", async ({ pag
 
   const section = page.locator("#patient-medical-record");
   await expect(section.getByRole("heading", { name: "My medical record" })).toBeVisible();
-  await expect(page.locator('a[href="/patient#patient-medical-record"]')).toHaveCount(1);
+  await expect(page.locator('a[href="/patient/medical-record"][aria-current="page"]')).toHaveCount(1);
   await expect(section.getByText("Loading your medical record...")).toHaveCount(0);
   for (const value of Object.values(medicalRecord)) await expect(section.getByText(value, { exact: true })).toBeVisible();
   await expect(section.getByRole("button")).toHaveCount(1);

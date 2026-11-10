@@ -337,6 +337,7 @@
   },
   "roleHome": {
     "loading": "Checking your session...",
+    "dismissMessage": "Dismiss message",
     "logout": "Log out",
     "accountFallback": "Account",
     "accountMenuLabel": "Account menu for {{name}}, {{role}}",
@@ -423,6 +424,7 @@
     "close": "Close menu",
     "comingSoon": "Coming soon",
     "patient": {
+      "medicationsAppointments": "Medications & appointments",
       "home": "Overview",
       "profile": "My profile",
       "intake": "Health information",
@@ -459,6 +461,7 @@
       "notifications": "Notifications"
     },
     "admin": {
+      "assignments": "Doctor assignments",
       "home": "Overview",
       "profile": "Admin profile",
       "joinRequests": "Doctor and NGO applications",
@@ -547,6 +550,18 @@
     "alertPhone": "Contact phone",
     "alertLocation": "Location (optional)",
     "alertDescription": "Short description (optional)",
+    "emergencyButton": "Emergency",
+    "emergencyDialogTitle": "Send an emergency alert",
+    "emergencyDialogHint": "The administration is notified immediately and assigns an available doctor. Your phone number is filled in from your profile.",
+    "close": "Close",
+    "useMyLocation": "Use my current location",
+    "locating": "Finding your location...",
+    "viewOnMap": "View on map",
+    "meters": "m",
+    "locationPlaceholder": "Area, camp, or a nearby landmark",
+    "locationDenied": "Location access was denied. Type your location instead.",
+    "locationUnavailable": "Your location could not be determined. Type it instead.",
+    "locationTimeout": "Finding your location took too long. Try again or type it.",
     "sendAlert": "Send emergency alert",
     "alertSubmitted": "Emergency alert sent.",
     "alertError": "Could not send the alert. Check the information and try again.",

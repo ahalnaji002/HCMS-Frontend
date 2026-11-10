@@ -38,7 +38,7 @@ test("switching patients does not retain data after access to the new patient is
   await page.route("**/api/doctor/patients/102/medical-notes", (route) => reply(route, { medical_notes: [] }));
   await page.route("**/api/doctor/patients/102/diagnoses", (route) => reply(route, { diagnoses: [] }));
 
-  await page.goto("/doctor");
+  await page.goto("/doctor/patients");
   await expect(page.getByText("Patient A confidential symptom")).toBeVisible();
 
   await page.getByRole("button", { name: "Patient B" }).click();

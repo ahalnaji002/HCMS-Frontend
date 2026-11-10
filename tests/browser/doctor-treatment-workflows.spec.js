@@ -94,8 +94,8 @@ test("assigned Doctor creates a treatment plan, medication, and appointment and 
     return reply(route, { appointment }, 201);
   });
 
-  await page.goto("/doctor");
-  await expect(page.locator('a[href="/doctor#doctor-treatment-plans"]')).toHaveCount(3);
+  await page.goto("/doctor/patients");
+  await expect(page.locator('a[href="/doctor/patients"][aria-current="page"]')).toHaveCount(1);
   const plans = page.locator("#doctor-treatment-plans");
   await expect(plans.getByText("This patient has no treatment plans yet.")).toBeVisible();
   await plans.getByRole("button", { name: "Create treatment plan" }).click();
@@ -141,7 +141,7 @@ test("Doctor keeps the plan draft and shows backend validation feedback", async 
     if (route.request().method() === "GET") return reply(route, { treatment_plans: [] });
     return route.fulfill({ status: 400, json: { success: false, message: "Validation failed", errors: { title: ["Required"] } } });
   });
-  await page.goto("/doctor");
+  await page.goto("/doctor/patients");
   const plans = page.locator("#doctor-treatment-plans");
   await plans.getByRole("button", { name: "Create treatment plan" }).click();
   await plans.getByLabel("Plan title").fill("Draft plan");
@@ -158,7 +158,7 @@ test("Doctor plan management clears plan details when assignment access is lost"
     if (route.request().method() === "GET") return reply(route, { treatment_plans: [] });
     return reply(route, {}, 403);
   });
-  await page.goto("/doctor");
+  await page.goto("/doctor/patients");
   const plans = page.locator("#doctor-treatment-plans");
   await plans.getByRole("button", { name: "Create treatment plan" }).click();
   await plans.getByLabel("Plan title").fill("Unassigned plan");

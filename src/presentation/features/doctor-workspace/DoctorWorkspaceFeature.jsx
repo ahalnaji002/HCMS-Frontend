@@ -1,3 +1,4 @@
+import { Navigate, Route, Routes } from "react-router-dom";
 import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard";
 import AssignedPatientsList from "@/presentation/features/doctor-workspace/components/AssignedPatientsList";
 import PatientDiagnosesSection from "@/presentation/features/doctor-workspace/components/PatientDiagnosesSection";
@@ -15,11 +16,19 @@ function DoctorWorkspaceFeature() {
     handleNoteSubmit, handleDiagnosisSubmit, saveMedicalRecord,
   } = useDoctorWorkspace();
 
-  return (
+  const overview = (
     <>
-      <p className="text-sm font-semibold text-primary">{t("doctorWorkspace.eyebrow")}</p>
-      <h1 id="doctor-patients" className="mt-2 text-3xl font-bold">{t("doctorWorkspace.title")}</h1>
+      <div className="mb-8">
+        <p className="text-sm font-semibold text-primary">{t("doctorWorkspace.eyebrow")}</p>
+        <h1 className="mt-2 text-3xl font-bold">{t("doctorWorkspace.title")}</h1>
+      </div>
       <RoleDashboard role="DOCTOR" />
+    </>
+  );
+
+  const patientsPage = (
+    <>
+      <h1 id="doctor-patients" className="mb-8 text-3xl font-bold">{t("roleNavigation.doctor.patients")}</h1>
       {error && <p role="alert" className="mt-6 rounded-xl bg-danger/10 p-4 text-sm text-danger">{error}</p>}
       {notice && <p role="status" className="mt-6 rounded-xl bg-primary/10 p-4 text-sm text-primary">{notice}</p>}
       {loading ? <p className="py-12 text-center text-text-secondary">{t("doctorWorkspace.loading")}</p> : patients.length === 0 ? (
@@ -58,6 +67,15 @@ function DoctorWorkspaceFeature() {
         </div>
       )}
     </>
+  );
+
+  // Patient data is loaded once here and shared by the doctor pages.
+  return (
+    <Routes>
+      <Route index element={overview} />
+      <Route path="patients" element={patientsPage} />
+      <Route path="*" element={<Navigate to="/doctor" replace />} />
+    </Routes>
   );
 }
 
