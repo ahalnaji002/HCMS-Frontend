@@ -158,6 +158,7 @@ function RegisterProfessional({ role }) {
         setFieldErrors(nextErrors);
         setFormError(t("registerProfessional.errors.validation"));
       } else if (normalized.type === "conflict") setFormError(t(`registerProfessional.errors.${role}Conflict`));
+      else if (normalized.type === "rateLimited") setFormError(t("registerProfessional.errors.rateLimited"));
       else if (normalized.type === "network") setFormError(t("registerProfessional.errors.network"));
       else if (normalized.type === "server") setFormError(t("registerProfessional.errors.server"));
       else setFormError(t("registerProfessional.errors.generic"));

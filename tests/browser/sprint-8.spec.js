@@ -91,12 +91,13 @@ test('browser offline mode shows network error and recovers after reconnect', as
   await expect(page).toHaveURL(/\/ngo$/);
 });
 
-for (const failure of ['network', '500', '401', '400']) {
+for (const failure of ['network', '500', '429', '401', '400']) {
   test(`login ${failure} shows a safe error and supports retry`, async ({ page }) => {
     let failed = true;
     const messages = {
       network: 'Unable to connect to the server. Check your connection and try again.',
       500: 'An error occurred while logging in. Please try again.',
+      429: 'Too many failed sign-in attempts. Please wait 15 minutes and try again.',
       401: 'The email address or password is incorrect.',
       400: 'Please check your login information.',
     };
@@ -167,7 +168,7 @@ for (const failure of ['network', '500']) {
 }
 
 for (const role of ['patient', 'doctor', 'ngo']) {
-  for (const failure of ['network', '500', '409']) {
+  for (const failure of ['network', '500', '409', '429']) {
     test(`${role} registration survives ${failure} and retries without creating a session`, async ({ page }) => {
       let failed = true;
       await page.route(`**/api/auth/register/${role}`, (route) => {
@@ -186,7 +187,8 @@ for (const role of ['patient', 'doctor', 'ngo']) {
       if (role === 'patient') await page.locator('[name=gender]').selectOption('MALE');
       await page.locator('button[type=submit]').click();
       await expect(page.getByRole('alert')).toContainText(failure === 'network' ? 'Unable to connect'
-        : failure === '500' ? 'The server could not' : /already/);
+        : failure === '500' ? 'The server could not'
+          : failure === '429' ? 'Too many registration attempts' : /already/);
       for (const [name, value] of Object.entries(values)) await expect(page.locator(`[name="${name}"]`)).toHaveValue(value);
       await expect(page.locator('button[type=submit]')).toBeEnabled();
       expect(await storedToken(page)).toBeNull();

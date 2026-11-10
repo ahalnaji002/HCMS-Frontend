@@ -175,6 +175,7 @@
       "inactiveAccount": "This account is currently inactive. You cannot log in.",
       "invalidRequest": "Please check your login information.",
       "network": "Unable to connect to the server. Check your connection and try again.",
+      "rateLimited": "Too many failed sign-in attempts. Please wait 15 minutes and try again.",
       "server": "An error occurred while logging in. Please try again.",
       "unknownRole": "Unable to determine the account type."
     },
@@ -239,6 +240,7 @@
       "validation": "Some details need attention. Review the fields below and try again.",
       "conflict": "An account with this email address or National ID already exists. Check your details or log in.",
       "network": "Unable to connect to the server. Check your connection and try again.",
+      "rateLimited": "Too many registration attempts from this network. Please wait and try again later.",
       "server": "The server could not create your account. Please try again.",
       "generic": "We could not create your account. Check your details and try again.",
       "serverFields": {
@@ -306,6 +308,7 @@
       "doctorConflict": "This email address or professional license number is already registered.",
       "ngoConflict": "This email address or organization registration number is already registered.",
       "network": "Unable to connect to the server. Check your connection and try again.",
+      "rateLimited": "Too many registration attempts from this network. Please wait and try again later.",
       "server": "The server could not submit your registration. Please try again.",
       "generic": "We could not submit your registration. Check your details and try again.",
       "serverFields": {

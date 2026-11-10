@@ -311,6 +311,8 @@ function RegisterPatient() {
         setFormError(t("registerPatient.errors.validation"));
       } else if (normalizedError.type === "conflict") {
         setFormError(t("registerPatient.errors.conflict"));
+      } else if (normalizedError.type === "rateLimited") {
+        setFormError(t("registerPatient.errors.rateLimited"));
       } else if (normalizedError.type === "network") {
         setFormError(t("registerPatient.errors.network"));
       } else if (normalizedError.type === "server") {
