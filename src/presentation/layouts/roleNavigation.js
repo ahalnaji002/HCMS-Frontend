@@ -1,5 +1,6 @@
-// Sidebar entries per role. Items without `available` are planned features
-// shown as "Coming soon"; available items link to real routed pages.
+// Sidebar entries per role. Only items with `available: true` are shown.
+// Entries without it are planned screens (mostly Sprint 10): when a screen is
+// built, add its route and set `available: true` with its `href` here.
 const roleNavigation = {
   PATIENT: [
     { label: "roleNavigation.patient.home", href: "/patient", available: true },

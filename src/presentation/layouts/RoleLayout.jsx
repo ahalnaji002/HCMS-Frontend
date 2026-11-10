@@ -17,7 +17,9 @@ function RoleLayout({ children, mainClassName, role }) {
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const accountMenuRef = useRef(null);
-  const navigationItems = roleNavigation[role] ?? [];
+  // Only built screens appear in the sidebar; planned entries stay in
+  // roleNavigation.js until they are marked available.
+  const navigationItems = (roleNavigation[role] ?? []).filter((item) => item.available);
   const accountName = user?.full_name || t("roleHome.accountFallback");
   const accountRole = t(`roleHome.roles.${role.toLowerCase()}.label`);
 
@@ -129,30 +131,18 @@ function RoleLayout({ children, mainClassName, role }) {
 
                 return (
                   <li key={item.label}>
-                    {item.available ? (
-                      <NavLink
-                        to={item.href}
-                        end
-                        onClick={() => setIsNavigationOpen(false)}
-                        className={({ isActive }) => `flex min-h-11 items-center rounded-lg px-3 py-2 text-start text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
-                          isActive
-                            ? "bg-primary text-white"
-                            : "text-text-secondary hover:bg-background hover:text-text-primary"
-                        }`}
-                      >
-                        {label}
-                      </NavLink>
-                    ) : (
-                      <span
-                        aria-disabled="true"
-                        className="flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm text-text-secondary/70"
-                      >
-                        <span>{label}</span>
-                        <span className="shrink-0 rounded-full bg-background px-2 py-1 text-xs">
-                          {t("roleNavigation.comingSoon")}
-                        </span>
-                      </span>
-                    )}
+                    <NavLink
+                      to={item.href}
+                      end
+                      onClick={() => setIsNavigationOpen(false)}
+                      className={({ isActive }) => `flex min-h-11 items-center rounded-lg px-3 py-2 text-start text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+                        isActive
+                          ? "bg-primary text-white"
+                          : "text-text-secondary hover:bg-background hover:text-text-primary"
+                      }`}
+                    >
+                      {label}
+                    </NavLink>
                   </li>
                 );
               })}

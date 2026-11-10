@@ -85,6 +85,9 @@ function DashboardLoadError({ errorKind, onRetry }) {
 
 function DashboardActions({ actions, dashboard }) {
   const { t } = useTranslation();
+  // Planned actions (available: false) stay hidden until their screen exists.
+  const visibleActions = actions.filter((action) => action.available !== false);
+  if (visibleActions.length === 0) return null;
 
   return (
     <section aria-labelledby="role-dashboard-actions" className="mt-6 border-t border-border pt-5">
@@ -92,10 +95,10 @@ function DashboardActions({ actions, dashboard }) {
         {t("roleDashboard.nextActions")}
       </h3>
       <ul className="mt-3 flex flex-wrap gap-3">
-        {actions.map((action) => {
+        {visibleActions.map((action) => {
           const waitingForPatient =
             action.requiresMetric && dashboard?.[action.requiresMetric] === 0;
-          const unavailable = action.available === false || waitingForPatient;
+          const unavailable = waitingForPatient;
 
           return (
             <li key={action.label}>
@@ -103,9 +106,7 @@ function DashboardActions({ actions, dashboard }) {
                 <span aria-disabled="true" className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm text-text-secondary">
                   {t(`roleDashboard.actions.${action.label}`)}
                   <span className="rounded-full bg-background px-2 py-1 text-xs">
-                    {waitingForPatient
-                      ? t("roleDashboard.noAssignedPatients")
-                      : t("roleDashboard.comingSoon")}
+                    {t("roleDashboard.noAssignedPatients")}
                   </span>
                 </span>
               ) : (
