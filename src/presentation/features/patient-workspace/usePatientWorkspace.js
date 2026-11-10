@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { translateServerMessage } from "@/presentation/utils/serverMessages";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
 
@@ -387,7 +388,7 @@ export default function usePatientWorkspace() {
       setCorrectionMessage("");
       setCorrectionNotice(t("patientWorkspace.correctionSent"));
     } catch (requestError) {
-      setCorrectionError(requestError.response?.data?.message || t("patientWorkspace.correctionError"));
+      setCorrectionError(translateServerMessage(t, requestError.response?.data?.message, "patientWorkspace.correctionError"));
     } finally {
       setIsCorrectionSubmitting(false);
     }
