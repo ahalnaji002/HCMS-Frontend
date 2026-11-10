@@ -115,16 +115,23 @@ test("patient sees empty states when no plans or related resources exist", async
 
 test("patient receives a loading state and can retry an API error", async ({ page }) => {
   let fail = true;
+  // Hold the first response until the loading state has been observed, so the
+  // assertion does not depend on machine speed.
+  let releaseFirstResponse;
+  const firstResponseReleased = new Promise((resolve) => { releaseFirstResponse = resolve; });
   await setupPatient(page);
   await page.route(`**/api/patient/treatment-plans/${plan.id}/medications`, async (route) => {
-    await new Promise((resolve) => setTimeout(resolve, 250));
-    if (fail) return reply(route, {}, 500);
+    if (fail) {
+      await firstResponseReleased;
+      return reply(route, {}, 500);
+    }
     return reply(route, { medications });
   });
   await page.route(`**/api/patient/treatment-plans/${plan.id}/appointments`, (route) => reply(route, { appointments }));
   await page.goto("/patient");
   const section = page.locator("#patient-medications-appointments");
   await expect(section.getByRole("status")).toContainText("Loading your medications and appointments");
+  releaseFirstResponse();
   await expect(section.getByRole("alert")).toContainText("server could not load");
   fail = false;
   await section.getByRole("button", { name: "Try again" }).click();
