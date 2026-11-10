@@ -8,7 +8,7 @@ System. It communicates with the HCMS Backend through the shared Axios client.
 ## Technology and Setup
 
 - React 19, Vite 8, React Router 7, Tailwind CSS 4, and Axios.
-- English and Arabic localization with LTR/RTL support.
+- Arabic (default for first-time visitors) and English localization with RTL/LTR support.
 - Node.js and npm are required.
 - Copy `.env.example` to `.env` and set `VITE_API_URL` to the backend URL.
 - Run `npm install`, then `npm run dev` to start the application.
@@ -42,13 +42,24 @@ directory.
 | `/register/patient` | Public | Patient registration |
 | `/register/doctor` | Public | Doctor registration |
 | `/register/ngo` | Public | NGO registration |
-| `/patient` | Authenticated PATIENT | Patient workspace |
-| `/doctor` | Authenticated DOCTOR | Doctor workspace |
-| `/ngo` | Authenticated NGO | NGO dashboard summary; feature pages remain unavailable |
-| `/admin` | Authenticated ADMIN | Administrator workspace |
+| `/patient` | Authenticated PATIENT | Overview: "Needs your attention", care team, summary |
+| `/patient/profile` · `/health-information` · `/medical-record` · `/treatment-plans` · `/medications-appointments` · `/emergency-alerts` | Authenticated PATIENT | One page per section; floating Emergency button on every page |
+| `/doctor` | Authenticated DOCTOR | Overview: assigned emergencies and quick patient list |
+| `/doctor/patients` | Authenticated DOCTOR | Patient list and full patient file (intake, record, plans, diagnoses, notes) |
+| `/ngo` | Authenticated NGO | NGO dashboard summary; feature pages not built yet (Sprint 10) |
+| `/admin` | Authenticated ADMIN | Overview: "Needs your attention" and system summary |
+| `/admin/emergency-alerts` · `/patient-intakes` · `/assignments` · `/doctor-workload` · `/join-requests` · `/support` | Authenticated ADMIN | One page per task |
 
 Role routes are guarded by `RequireRole`; backend authorization remains the
 security boundary. Password recovery and reset are out of scope.
+
+`App.jsx` mounts each role at `/<role>/*`; each `*WorkspaceFeature.jsx` declares
+its own sub-routes with `Routes`, loads workspace data once, and shares it
+between its pages. Unknown sub-paths redirect to the role overview. The sidebar
+(`src/presentation/layouts/roleNavigation.js`) lists only entries marked
+`available: true`; planned screens stay in that file without `available` and
+appear once given an `href` and `available: true`. See
+`src/docs/ux-review-handoff.md` for adding a screen.
 
 ## Authentication and Application Status
 
@@ -126,6 +137,10 @@ The patient-intake and care-coordination frontend is implemented on
 
 ## Key Documentation
 
+- [`src/docs/ux-review-handoff.md`](src/docs/ux-review-handoff.md) — **start here
+  for Sprint 10**: changes since Sprint 9, how to add a routed screen, reusable
+  components, touched Sprint 10 issues, and missing features with ready backend
+  endpoints.
 - `src/docs/auth-contract.md` — frontend reference derived from the approved
   backend authentication documentation.
 - [`src/docs/sprint-9-1-api-contract.md`](src/docs/sprint-9-1-api-contract.md) —
