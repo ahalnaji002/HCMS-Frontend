@@ -46,7 +46,7 @@ export default function useNgoAssistanceRequests(requestId) {
         let resources = [];
         let resourceErrorKind = "";
 
-        if (request?.status === "APPROVED") {
+        if (request && ["APPROVED", "COMPLETED"].includes(request.status)) {
           try {
             const resourceResponse = await ngoWorkspace.listAssistanceRequestResources(requestId);
             resources = resourceResponse?.data?.resource_allocations ?? [];

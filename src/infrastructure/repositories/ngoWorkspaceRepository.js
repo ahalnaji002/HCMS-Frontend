@@ -15,3 +15,15 @@ export function listAssistanceRequestResources(requestId) {
 export function updateAssistanceRequestStatus(requestId, status) {
   return api.patch(`/api/ngo/assistance-requests/${requestId}/status`, { status });
 }
+
+export function createResourceAllocation(requestId, allocation) {
+  return api.post(`/api/ngo/assistance-requests/${requestId}/resources`, allocation);
+}
+
+export function updateResourceAllocation(requestId, resourceId, allocation) {
+  return api.patch(`/api/ngo/assistance-requests/${requestId}/resources/${resourceId}`, allocation);
+}
+
+export function deleteResourceAllocation(requestId, resourceId) {
+  return api.delete(`/api/ngo/assistance-requests/${requestId}/resources/${resourceId}`);
+}

@@ -67,6 +67,9 @@ export function createApplicationServices(repositories) {
       getAssistanceRequest: execute(ngoWorkspace.getAssistanceRequest),
       listAssistanceRequestResources: execute(ngoWorkspace.listAssistanceRequestResources),
       updateAssistanceRequestStatus: execute(ngoWorkspace.updateAssistanceRequestStatus),
+      createResourceAllocation: execute(ngoWorkspace.createResourceAllocation),
+      updateResourceAllocation: execute(ngoWorkspace.updateResourceAllocation),
+      deleteResourceAllocation: execute(ngoWorkspace.deleteResourceAllocation),
     },
     admin: {
       listJoinRequests: execute(admin.listJoinRequests),
