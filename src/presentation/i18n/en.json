@@ -491,9 +491,25 @@
     "updatedAt": "Last updated",
     "reviewedAt": "Reviewed",
     "descriptionLabel": "Request details",
+    "reviewActions": "Review request",
+    "allocationRequired": "At least one resource allocation is required before this request can be completed.",
+    "updatingStatus": "Updating status...",
+    "statusUpdated": "The request status was updated.",
     "viewDetails": "View details",
     "backToList": "Back to assigned requests",
     "retry": "Try again",
+    "actions": {
+      "startReview": "Start review",
+      "approve": "Approve request",
+      "reject": "Reject request",
+      "complete": "Mark as completed"
+    },
+    "confirm": {
+      "UNDER_REVIEW": "Start reviewing this assistance request?",
+      "APPROVED": "Approve this assistance request?",
+      "REJECTED": "Reject this assistance request?",
+      "COMPLETED": "Mark this assistance request as completed?"
+    },
     "statuses": {
       "PENDING": "Pending",
       "UNDER_REVIEW": "Under review",
@@ -504,7 +520,14 @@
     "errors": {
       "forbidden": "You do not have permission to view this request.",
       "notFound": "This assistance request could not be found.",
-      "loadFailed": "Could not load assistance requests. Check your connection and try again."
+      "loadFailed": "Could not load assistance requests. Check your connection and try again.",
+      "resourceCheckFailed": "Could not verify the request's resource allocations. Try again before completing it.",
+      "completionNeedsAllocation": "Add at least one resource allocation before completing this request.",
+      "statusValidation": "The status update was not accepted. Check the request and try again.",
+      "statusForbidden": "You do not have permission to update this request.",
+      "statusNotFound": "This request is no longer available. Its details have been refreshed.",
+      "statusConflict": "The request changed or this status transition is no longer valid. The latest details have been loaded.",
+      "statusUpdateFailed": "Could not update the request status. Check your connection and try again."
     }
   },
   "patientWorkspace": {
