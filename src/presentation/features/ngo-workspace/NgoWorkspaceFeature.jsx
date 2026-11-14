@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
 import StatusToast from "@/presentation/components/common/StatusToast";
 import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard";
+import NgoResourceAllocationsSection from "@/presentation/features/ngo-workspace/NgoResourceAllocationsSection";
 import useNgoAssistanceRequests from "@/presentation/features/ngo-workspace/useNgoAssistanceRequests";
 
 const STATUS_TRANSITIONS = {
@@ -141,15 +142,10 @@ function RequestDetail() {
           <h2 className="text-lg font-bold">{t("ngoAssistance.descriptionLabel")}</h2>
           <p className="mt-3 whitespace-pre-wrap leading-7 text-text-secondary">{request.description || "—"}</p>
         </div>
-        {(availableTransitions.length > 0 || resourceErrorKind || (request.status === "APPROVED" && resources.length === 0)) && (
+        {(availableTransitions.length > 0 || (!resourceErrorKind && request.status === "APPROVED" && resources.length === 0)) && (
           <div className="mt-7 border-t border-border pt-6">
             <h2 className="text-lg font-bold">{t("ngoAssistance.reviewActions")}</h2>
-            {request.status === "APPROVED" && resourceErrorKind ? (
-              <div className="mt-3 rounded-xl border border-border bg-background p-4">
-                <p role="status" className="text-sm text-text-secondary">{t("ngoAssistance.errors.resourceCheckFailed")}</p>
-                <button type="button" onClick={retry} className="mt-3 min-h-11 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-primary">{t("ngoAssistance.retry")}</button>
-              </div>
-            ) : request.status === "APPROVED" && resources.length === 0 ? (
+            {request.status === "APPROVED" && resources.length === 0 ? (
               <p role="status" className="mt-3 rounded-xl bg-background p-4 text-sm text-text-secondary">{t("ngoAssistance.allocationRequired")}</p>
             ) : (
               <div className="mt-4 flex flex-wrap gap-3">
@@ -168,6 +164,13 @@ function RequestDetail() {
             )}
           </div>
         )}
+        <NgoResourceAllocationsSection
+          request={request}
+          resources={resources}
+          resourceErrorKind={resourceErrorKind}
+          onRetry={retry}
+          onActionFeedback={({ error, notice }) => { setActionError(error); setActionNotice(notice); }}
+        />
       </article>
       <StatusToast
         error={actionError}
