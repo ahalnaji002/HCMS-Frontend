@@ -36,6 +36,10 @@ export async function createPatientMedicalNote(patientId, payload) {
   return api.post(`/api/doctor/patients/${patientId}/medical-notes`, payload);
 }
 
+export async function createPatientAssistanceRequest(patientId, payload) {
+  return api.post(`/api/doctor/patients/${patientId}/assistance-requests`, payload);
+}
+
 export async function listPatientTreatmentPlans(patientId) {
   return api.get(`/api/doctor/patients/${patientId}/treatment-plans`);
 }

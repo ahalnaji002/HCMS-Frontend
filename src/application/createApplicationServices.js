@@ -46,6 +46,7 @@ export function createApplicationServices(repositories) {
       createPatientMedicalRecord: execute(doctorWorkspace.createPatientMedicalRecord),
       updatePatientMedicalRecord: execute(doctorWorkspace.updatePatientMedicalRecord),
       createPatientMedicalNote: execute(doctorWorkspace.createPatientMedicalNote),
+      createPatientAssistanceRequest: execute(doctorWorkspace.createPatientAssistanceRequest),
       listPatientTreatmentPlans: execute(doctorWorkspace.listPatientTreatmentPlans),
       getPatientTreatmentPlan: execute(doctorWorkspace.getPatientTreatmentPlan),
       createPatientTreatmentPlan: execute(doctorWorkspace.createPatientTreatmentPlan),
