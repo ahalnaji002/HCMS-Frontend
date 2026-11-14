@@ -1,7 +1,23 @@
-import { Navigate, Route, Routes, Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { Link, Navigate, Route, Routes, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useApplicationServices } from "@/app/useApplicationServices";
+import StatusToast from "@/presentation/components/common/StatusToast";
 import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard";
 import useNgoAssistanceRequests from "@/presentation/features/ngo-workspace/useNgoAssistanceRequests";
+
+const STATUS_TRANSITIONS = {
+  PENDING: ["UNDER_REVIEW"],
+  UNDER_REVIEW: ["APPROVED", "REJECTED"],
+  APPROVED: ["COMPLETED"],
+};
+
+const STATUS_ACTION_KEYS = {
+  UNDER_REVIEW: "startReview",
+  APPROVED: "approve",
+  REJECTED: "reject",
+  COMPLETED: "complete",
+};
 
 function RequestList() {
   const { t } = useTranslation();
@@ -54,11 +70,50 @@ function RequestCard({ request }) {
 function RequestDetail() {
   const { requestId } = useParams();
   const { t, i18n } = useTranslation();
-  const { request, loading, errorKind, retry } = useNgoAssistanceRequests(requestId);
+  const { ngoWorkspace } = useApplicationServices();
+  const { request, resources, resourceErrorKind, loading, errorKind, retry } = useNgoAssistanceRequests(requestId);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [actionError, setActionError] = useState("");
+  const [actionNotice, setActionNotice] = useState("");
 
   if (loading) return <p role="status" aria-live="polite" className="rounded-xl border border-border bg-surface p-5 text-text-secondary">{t("ngoAssistance.loading")}</p>;
   if (errorKind) return <LoadError errorKind={errorKind} onRetry={retry} />;
   if (!request) return <LoadError errorKind="notFound" onRetry={retry} />;
+
+  const availableTransitions = (STATUS_TRANSITIONS[request.status] ?? []).filter(
+    (status) => status !== "COMPLETED" || (!resourceErrorKind && resources.length > 0),
+  );
+
+  async function updateStatus(nextStatus) {
+    if (!window.confirm(t(`ngoAssistance.confirm.${nextStatus}`))) return;
+
+    setIsUpdating(true);
+    setActionError("");
+    setActionNotice("");
+    try {
+      await ngoWorkspace.updateAssistanceRequestStatus(request.id, nextStatus);
+      setActionNotice(t("ngoAssistance.statusUpdated"));
+      retry();
+    } catch (error) {
+      const statusCode = error.response?.status;
+      const serverMessage = error.response?.data?.message;
+      const messageKey = serverMessage === "At least one resource allocation is required before completing the assistance request."
+        ? "completionNeedsAllocation"
+        : statusCode === 400
+          ? "statusValidation"
+          : statusCode === 403
+            ? "statusForbidden"
+            : statusCode === 404
+              ? "statusNotFound"
+              : statusCode === 409
+                ? "statusConflict"
+                : "statusUpdateFailed";
+      setActionError(t(`ngoAssistance.errors.${messageKey}`));
+      if (statusCode === 409) retry();
+    } finally {
+      setIsUpdating(false);
+    }
+  }
 
   return (
     <section aria-labelledby="ngo-assistance-detail-title" className="mx-auto max-w-3xl">
@@ -86,7 +141,40 @@ function RequestDetail() {
           <h2 className="text-lg font-bold">{t("ngoAssistance.descriptionLabel")}</h2>
           <p className="mt-3 whitespace-pre-wrap leading-7 text-text-secondary">{request.description || "—"}</p>
         </div>
+        {(availableTransitions.length > 0 || resourceErrorKind || (request.status === "APPROVED" && resources.length === 0)) && (
+          <div className="mt-7 border-t border-border pt-6">
+            <h2 className="text-lg font-bold">{t("ngoAssistance.reviewActions")}</h2>
+            {request.status === "APPROVED" && resourceErrorKind ? (
+              <div className="mt-3 rounded-xl border border-border bg-background p-4">
+                <p role="status" className="text-sm text-text-secondary">{t("ngoAssistance.errors.resourceCheckFailed")}</p>
+                <button type="button" onClick={retry} className="mt-3 min-h-11 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-primary">{t("ngoAssistance.retry")}</button>
+              </div>
+            ) : request.status === "APPROVED" && resources.length === 0 ? (
+              <p role="status" className="mt-3 rounded-xl bg-background p-4 text-sm text-text-secondary">{t("ngoAssistance.allocationRequired")}</p>
+            ) : (
+              <div className="mt-4 flex flex-wrap gap-3">
+                {availableTransitions.map((status) => (
+                  <button
+                    key={status}
+                    type="button"
+                    disabled={isUpdating}
+                    onClick={() => updateStatus(status)}
+                    className={`min-h-11 rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:cursor-wait disabled:opacity-60 ${status === "REJECTED" ? "bg-danger" : "bg-primary"}`}
+                  >
+                    {isUpdating ? t("ngoAssistance.updatingStatus") : t(`ngoAssistance.actions.${STATUS_ACTION_KEYS[status]}`)}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </article>
+      <StatusToast
+        error={actionError}
+        notice={actionNotice}
+        onDismiss={() => { setActionError(""); setActionNotice(""); }}
+        dismissLabel={t("roleHome.dismissMessage")}
+      />
     </section>
   );
 }

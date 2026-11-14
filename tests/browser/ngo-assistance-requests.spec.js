@@ -30,7 +30,7 @@ async function authenticateAsNgo(page) {
   }));
 }
 
-test("NGO sees assigned requests and opens a read-only request detail page", async ({ page }) => {
+test("NGO sees assigned requests and opens the request detail page with valid review actions", async ({ page }) => {
   await authenticateAsNgo(page);
   const calls = [];
   await page.route("**/api/ngo/assistance-requests", (route) => {
@@ -56,7 +56,9 @@ test("NGO sees assigned requests and opens a read-only request detail page", asy
   await expect(page.getByText("Submitting doctor reference")).toBeVisible();
   await expect(page.getByText("7", { exact: true })).toBeVisible();
   await expect(page.locator("form")).toHaveCount(0);
-  await expect(page.locator("article").getByRole("button")).toHaveCount(0);
+  await expect(page.locator("article").getByRole("button", { name: "Approve request" })).toBeVisible();
+  await expect(page.locator("article").getByRole("button", { name: "Reject request" })).toBeVisible();
+  await expect(page.locator("article").getByRole("button", { name: "Mark as completed" })).toHaveCount(0);
   await expect(page.locator("article").getByRole("link")).toHaveCount(0);
   expect(calls.length).toBeGreaterThanOrEqual(2);
   expect(calls.every(({ method }) => method === "GET")).toBe(true);
@@ -134,4 +136,127 @@ test("NGO assistance request navigation is linked from the workspace", async ({ 
   if (await menuButton.isVisible()) await menuButton.click();
   await link.click();
   await expect(page).toHaveURL(/\/ngo\/assistance-requests$/);
+});
+
+test("NGO can start review after confirmation and sees refreshed request details", async ({ page }) => {
+  await authenticateAsNgo(page);
+  let currentRequest = { ...assistanceRequest, status: "PENDING" };
+  const updates = [];
+  let detailLoads = 0;
+
+  await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}`, (route) => {
+    detailLoads += 1;
+    return reply(route, { assistance_request: currentRequest });
+  });
+  await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}/status`, async (route) => {
+    updates.push({ method: route.request().method(), body: route.request().postDataJSON() });
+    currentRequest = { ...currentRequest, status: route.request().postDataJSON().status };
+    return reply(route, { assistance_request: currentRequest });
+  });
+  page.on("dialog", (dialog) => dialog.accept());
+
+  await page.goto(`/ngo/assistance-requests/${assistanceRequest.id}`);
+  await expect(page.getByRole("button", { name: "Start review" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Approve request" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Reject request" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Start review" }).click();
+
+  await expect(page.getByText("Under review")).toBeVisible();
+  await expect(page.getByText("The request status was updated.")).toBeVisible();
+  expect(updates).toEqual([{ method: "PATCH", body: { status: "UNDER_REVIEW" } }]);
+  expect(detailLoads).toBeGreaterThanOrEqual(2);
+});
+
+test("NGO can approve or reject an under-review request, with only contract transitions shown", async ({ page }) => {
+  await authenticateAsNgo(page);
+  await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}`, (route) => reply(route, {
+    assistance_request: { ...assistanceRequest, status: "UNDER_REVIEW" },
+  }));
+
+  await page.goto(`/ngo/assistance-requests/${assistanceRequest.id}`);
+  await expect(page.getByRole("button", { name: "Approve request" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Reject request" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Mark as completed" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Start review" })).toHaveCount(0);
+});
+
+test("dismissing an NGO status confirmation does not send a status update", async ({ page }) => {
+  await authenticateAsNgo(page);
+  let updateCount = 0;
+  await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}`, (route) => reply(route, {
+    assistance_request: { ...assistanceRequest, status: "PENDING" },
+  }));
+  await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}/status`, (route) => {
+    updateCount += 1;
+    return reply(route, {});
+  });
+  page.on("dialog", (dialog) => dialog.dismiss());
+
+  await page.goto(`/ngo/assistance-requests/${assistanceRequest.id}`);
+  await page.getByRole("button", { name: "Start review" }).click();
+  await expect(page.getByText("Pending", { exact: true })).toBeVisible();
+  expect(updateCount).toBe(0);
+});
+
+test("approved request cannot be completed until resource allocations are confirmed", async ({ page }) => {
+  await authenticateAsNgo(page);
+  await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}`, (route) => reply(route, {
+    assistance_request: { ...assistanceRequest, status: "APPROVED" },
+  }));
+  await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}/resources`, (route) => reply(route, {
+    resource_allocations: [],
+  }));
+
+  await page.goto(`/ngo/assistance-requests/${assistanceRequest.id}`);
+  await expect(page.getByRole("status")).toContainText("At least one resource allocation is required");
+  await expect(page.getByRole("button", { name: "Mark as completed" })).toHaveCount(0);
+});
+
+test("approved request with an allocation can be completed and details reload", async ({ page }) => {
+  await authenticateAsNgo(page);
+  let currentRequest = { ...assistanceRequest, status: "APPROVED" };
+  let detailLoads = 0;
+  const updates = [];
+  await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}`, (route) => {
+    detailLoads += 1;
+    return reply(route, { assistance_request: currentRequest });
+  });
+  await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}/resources`, (route) => reply(route, {
+    resource_allocations: [{ id: 4, resource_type: "Medical supplies", quantity: 1 }],
+  }));
+  await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}/status`, async (route) => {
+    const body = route.request().postDataJSON();
+    updates.push(body);
+    currentRequest = { ...currentRequest, status: body.status };
+    return reply(route, { assistance_request: currentRequest });
+  });
+  page.on("dialog", (dialog) => dialog.accept());
+
+  await page.goto(`/ngo/assistance-requests/${assistanceRequest.id}`);
+  await page.getByRole("button", { name: "Mark as completed" }).click();
+  await expect(page.getByText("Completed", { exact: true })).toBeVisible();
+  expect(updates).toEqual([{ status: "COMPLETED" }]);
+  expect(detailLoads).toBeGreaterThanOrEqual(2);
+});
+
+test("status conflict shows a friendly message and reloads the latest request", async ({ page }) => {
+  await authenticateAsNgo(page);
+  let detailLoads = 0;
+  let latestStatus = "PENDING";
+  await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}`, (route) => {
+    detailLoads += 1;
+    return reply(route, { assistance_request: { ...assistanceRequest, status: latestStatus } });
+  });
+  await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}/status`, (route) => {
+    latestStatus = "UNDER_REVIEW";
+    return reply(route, { message: "Raw backend conflict detail" }, 409);
+  });
+  page.on("dialog", (dialog) => dialog.accept());
+
+  await page.goto(`/ngo/assistance-requests/${assistanceRequest.id}`);
+  await page.getByRole("button", { name: "Start review" }).click();
+  await expect(page.getByText("The request changed or this status transition is no longer valid. The latest details have been loaded.")).toBeVisible();
+  await expect(page.getByText("Under review", { exact: true })).toBeVisible();
+  await expect(page.getByText("Raw backend conflict detail")).toHaveCount(0);
+  expect(detailLoads).toBeGreaterThanOrEqual(2);
 });
