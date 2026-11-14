@@ -833,6 +833,33 @@
     "diagnosisSaved": "Diagnosis saved.",
     "noDiagnoses": "No diagnoses documented for this patient."
   },
+  "doctorAssistanceRequest": {
+    "title": "Request assistance",
+    "description": "Submit an assistance request for {{patientName}}. The request will be sent for administrator review.",
+    "fields": {
+      "requestType": "Request type",
+      "description": "Describe the assistance needed"
+    },
+    "submit": "Submit assistance request",
+    "submitting": "Submitting...",
+    "created": "The assistance request was submitted successfully.",
+    "latestRequest": "Submitted request",
+    "status": "Status",
+    "statuses": { "PENDING": "Pending" },
+    "errors": {
+      "validation": "Check the request fields and try again.",
+      "requestTypeRequired": "Enter a request type.",
+      "requestTypeTooLong": "Request type must be 100 characters or fewer.",
+      "descriptionRequired": "Describe the assistance needed.",
+      "descriptionTooLong": "The description exceeds the allowed size.",
+      "unauthorized": "Your session has expired. Sign in again.",
+      "notFound": "The patient or doctor profile could not be found.",
+      "conflict": "A submitted patient health intake is required before requesting assistance.",
+      "server": "The server could not submit this request. Try again.",
+      "network": "Unable to connect to the server. Check your connection and try again.",
+      "unknown": "Could not submit the assistance request. Try again."
+    }
+  },
   "doctorTreatmentPlans": {
     "eyebrow": "Care planning",
     "title": "Treatment plans",

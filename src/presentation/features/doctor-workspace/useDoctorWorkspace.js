@@ -132,6 +132,12 @@ export default function useDoctorWorkspace() {
     setSelectedPatientId("");
   }
 
+  const handleAssistanceAccessLoss = useCallback(() => {
+    clearPatientData();
+    setSelectedPatientId("");
+    setError(t("doctorWorkspace.accessDenied"));
+  }, [clearPatientData, t]);
+
   async function handleNoteSubmit(event) {
     event.preventDefault();
     if (!selectedPatientId) return;
@@ -206,6 +212,6 @@ export default function useDoctorWorkspace() {
     t, patients, selectedPatientId, selectPatient, intake, notes, diagnoses, medicalRecord,
     diagnosisText, setDiagnosisText, noteForm, setNoteForm, loading, detailLoading,
     saving, error, setError, notice, currentPatient,
-    handleNoteSubmit, handleDiagnosisSubmit, saveMedicalRecord,
+    handleNoteSubmit, handleDiagnosisSubmit, saveMedicalRecord, handleAssistanceAccessLoss,
   };
 }

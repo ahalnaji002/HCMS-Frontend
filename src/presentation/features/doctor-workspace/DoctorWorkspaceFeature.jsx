@@ -5,6 +5,7 @@ import PatientDiagnosesSection from "@/presentation/features/doctor-workspace/co
 import PatientIntakeSummary from "@/presentation/features/doctor-workspace/components/PatientIntakeSummary";
 import PatientMedicalNotesSection from "@/presentation/features/doctor-workspace/components/PatientMedicalNotesSection";
 import PatientMedicalRecordSection from "@/presentation/features/doctor-workspace/components/PatientMedicalRecordSection";
+import DoctorAssistanceRequestSection from "@/presentation/features/doctor-workspace/components/DoctorAssistanceRequestSection";
 import DoctorTreatmentPlansSection from "@/presentation/features/doctor-workspace/components/DoctorTreatmentPlansSection";
 import useDoctorWorkspace from "@/presentation/features/doctor-workspace/useDoctorWorkspace";
 
@@ -13,7 +14,7 @@ function DoctorWorkspaceFeature() {
     t, patients, selectedPatientId, selectPatient, intake, notes, diagnoses, medicalRecord,
     diagnosisText, setDiagnosisText, noteForm, setNoteForm, loading, detailLoading,
     saving, error, notice, currentPatient,
-    handleNoteSubmit, handleDiagnosisSubmit, saveMedicalRecord,
+    handleNoteSubmit, handleDiagnosisSubmit, saveMedicalRecord, handleAssistanceAccessLoss,
   } = useDoctorWorkspace();
 
   const doctorAttention = (dashboard) => [
@@ -57,6 +58,7 @@ function DoctorWorkspaceFeature() {
           <div className="space-y-6">
             {detailLoading ? <p className="py-12 text-center text-text-secondary">{t("doctorWorkspace.loadingDetails")}</p> : currentPatient && <>
               <PatientIntakeSummary t={t} patient={currentPatient} intake={intake} />
+              <DoctorAssistanceRequestSection key={`assistance-${selectedPatientId}`} patient={currentPatient} onAccessDenied={handleAssistanceAccessLoss} />
               <PatientMedicalRecordSection key={`${selectedPatientId}-${medicalRecord?.id || "new"}`} t={t} record={medicalRecord} isSaving={saving} onSave={saveMedicalRecord} />
               <DoctorTreatmentPlansSection key={`plans-${selectedPatientId}`} patientId={selectedPatientId} />
               <PatientDiagnosesSection
