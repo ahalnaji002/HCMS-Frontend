@@ -478,6 +478,36 @@
       "notifications": "الإشعارات"
     }
   },
+  "ngoAssistance": {
+    "eyebrow": "مساحة طلبات المساعدة للمؤسسة",
+    "description": "راجع الطلبات المسندة إلى مؤسستك وافتح أي طلب للاطلاع على تفاصيله.",
+    "loading": "جارٍ تحميل طلبات المساعدة المسندة...",
+    "empty": "لا توجد طلبات مساعدة مسندة إلى مؤسستك حاليًا.",
+    "requestNumber": "طلب المساعدة رقم {{id}}",
+    "requestType": "نوع الطلب",
+    "patientReference": "مرجع المريض",
+    "doctorReference": "مرجع الطبيب مقدّم الطلب",
+    "submittedAt": "تاريخ التقديم",
+    "createdAt": "تاريخ الإنشاء",
+    "updatedAt": "آخر تحديث",
+    "reviewedAt": "تاريخ المراجعة",
+    "descriptionLabel": "تفاصيل الطلب",
+    "viewDetails": "عرض التفاصيل",
+    "backToList": "العودة إلى الطلبات المسندة",
+    "retry": "إعادة المحاولة",
+    "statuses": {
+      "PENDING": "قيد الانتظار",
+      "UNDER_REVIEW": "قيد المراجعة",
+      "APPROVED": "مقبول",
+      "REJECTED": "مرفوض",
+      "COMPLETED": "مكتمل"
+    },
+    "errors": {
+      "forbidden": "لا تملك صلاحية عرض هذا الطلب.",
+      "notFound": "تعذر العثور على طلب المساعدة هذا.",
+      "loadFailed": "تعذر تحميل طلبات المساعدة. تحقق من الاتصال وحاول مجددًا."
+    }
+  },
   "patientWorkspace": {
     "sections": "التنقل في مساحة المريض",
     "profile": "ملفي الشخصي",

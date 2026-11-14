@@ -16,6 +16,7 @@ const RoleHome = lazy(() => import("@/presentation/pages/role/RoleHome"));
 const PatientHome = lazy(() => import("@/presentation/pages/role/PatientHome"));
 const AdminHome = lazy(() => import("@/presentation/pages/role/AdminHome"));
 const DoctorHome = lazy(() => import("@/presentation/pages/role/DoctorHome"));
+const NgoHome = lazy(() => import("@/presentation/pages/role/NgoHome"));
 
 function App() {
   return (
@@ -44,6 +45,8 @@ function App() {
                   <AdminHome />
                 ) : role === "DOCTOR" ? (
                   <DoctorHome />
+                ) : role === "NGO" ? (
+                  <NgoHome />
                 ) : (
                   <RoleHome role={role} />
                 )}

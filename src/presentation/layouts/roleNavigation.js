@@ -27,7 +27,7 @@ const roleNavigation = {
   NGO: [
     { label: "roleNavigation.ngo.home", href: "/ngo", available: true },
     { label: "roleNavigation.ngo.profile" },
-    { label: "roleNavigation.ngo.assistanceRequests" },
+    { label: "roleNavigation.ngo.assistanceRequests", href: "/ngo/assistance-requests", available: true },
     { label: "roleNavigation.ngo.resources" },
     { label: "roleNavigation.ngo.notifications" },
   ],
