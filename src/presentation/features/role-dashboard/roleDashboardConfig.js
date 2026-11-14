@@ -25,7 +25,7 @@ const roleDashboardConfig = {
   },
   NGO: {
     metrics: ["assigned_assistance_requests", "resource_allocations"],
-    actions: [{ label: "assistanceRequests", available: false }],
+    actions: [{ label: "assistanceRequests", href: "/ngo/assistance-requests" }],
   },
   ADMIN: {
     metrics: [

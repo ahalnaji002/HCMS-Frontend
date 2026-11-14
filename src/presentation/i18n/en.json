@@ -477,6 +477,36 @@
       "notifications": "Notifications"
     }
   },
+  "ngoAssistance": {
+    "eyebrow": "NGO assistance workspace",
+    "description": "Review requests assigned to your organization and open a request to see its details.",
+    "loading": "Loading assigned assistance requests...",
+    "empty": "There are no assistance requests assigned to your organization yet.",
+    "requestNumber": "Assistance request #{{id}}",
+    "requestType": "Request type",
+    "patientReference": "Patient reference",
+    "doctorReference": "Submitting doctor reference",
+    "submittedAt": "Submitted",
+    "createdAt": "Created",
+    "updatedAt": "Last updated",
+    "reviewedAt": "Reviewed",
+    "descriptionLabel": "Request details",
+    "viewDetails": "View details",
+    "backToList": "Back to assigned requests",
+    "retry": "Try again",
+    "statuses": {
+      "PENDING": "Pending",
+      "UNDER_REVIEW": "Under review",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "COMPLETED": "Completed"
+    },
+    "errors": {
+      "forbidden": "You do not have permission to view this request.",
+      "notFound": "This assistance request could not be found.",
+      "loadFailed": "Could not load assistance requests. Check your connection and try again."
+    }
+  },
   "patientWorkspace": {
     "sections": "Patient workspace navigation",
     "profile": "My profile",
