@@ -1238,6 +1238,57 @@
       "server": "The setting could not be saved. Try again."
     }
   },
+  "adminReports": {
+    "eyebrow": "Backend reports",
+    "description": "Review paginated records and totals supplied by the server. Reports include only approved fields and filters.",
+    "reportTypes": "Report types",
+    "loading": "Loading report...",
+    "empty": "No records are available for this report and filter.",
+    "notAvailable": "—",
+    "totalRecords": "Records: {{count}}",
+    "statusFilter": "Assistance status",
+    "allStatuses": "All statuses",
+    "pageSize": "Rows per page",
+    "tableCaption": "{{report}} report records",
+    "pagination": "Report pages",
+    "pageOf": "Page {{page}} of {{totalPages}}",
+    "previous": "Previous",
+    "next": "Next",
+    "retry": "Try again",
+    "types": {
+      "patients": "Patients",
+      "treatmentPlans": "Treatment plans",
+      "assistanceRequests": "Assistance requests"
+    },
+    "columns": {
+      "id": "Record ID",
+      "user_id": "User ID",
+      "full_name": "Patient name",
+      "patient_id": "Patient ID",
+      "doctor_id": "Doctor ID",
+      "ngo_id": "NGO ID",
+      "status": "Status",
+      "request_type": "Request type",
+      "start_date": "Start date",
+      "end_date": "End date",
+      "created_at": "Created",
+      "updated_at": "Last updated"
+    },
+    "statuses": {
+      "PENDING": "Pending",
+      "UNDER_REVIEW": "Under review",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "COMPLETED": "Completed"
+    },
+    "errors": {
+      "network": "Could not reach the server. Check your connection and try again.",
+      "unauthorized": "Your session has expired. Sign in again.",
+      "forbidden": "You do not have permission to view these reports.",
+      "validation": "The report request was invalid. Review the selected filter and try again.",
+      "server": "Could not load this report. Try again."
+    }
+  },
   "serverMessages": {
     "doctorUnavailable": "This doctor is marked unavailable and cannot receive routine assignments.",
     "activeAssignmentExists": "This doctor is already actively assigned to this patient.",

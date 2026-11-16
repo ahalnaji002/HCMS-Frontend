@@ -1,5 +1,6 @@
 import { createApplicationServices } from "@/application/createApplicationServices";
 import * as admin from "@/infrastructure/repositories/adminPatientIntakesRepository";
+import * as adminReports from "@/infrastructure/repositories/adminReportsRepository";
 import * as auth from "@/infrastructure/repositories/authRepository";
 import * as dashboard from "@/infrastructure/repositories/roleDashboardRepository";
 import * as doctorWorkspace from "@/infrastructure/repositories/doctorWorkspaceRepository";
@@ -13,6 +14,7 @@ import { sessionRepository as session } from "@/infrastructure/repositories/sess
 
 const applicationServices = createApplicationServices({
   admin,
+  adminReports,
   auth,
   dashboard,
   doctorWorkspace,

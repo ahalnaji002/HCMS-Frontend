@@ -5,7 +5,7 @@ function execute(repositoryOperation) {
 }
 
 export function createApplicationServices(repositories) {
-  const { admin, auth, dashboard, doctorWorkspace, ngoWorkspace, patientIntake, patientWorkspace, messaging, notifications, reminders, session } = repositories;
+  const { admin, adminReports, auth, dashboard, doctorWorkspace, ngoWorkspace, patientIntake, patientWorkspace, messaging, notifications, reminders, session } = repositories;
 
   return {
     session,
@@ -105,6 +105,11 @@ export function createApplicationServices(repositories) {
       resolveIntakeCorrectionRequest: execute(admin.resolveIntakeCorrectionRequest),
       listSystemSettings: execute(admin.listSystemSettings),
       updateSystemSetting: execute(admin.updateSystemSetting),
+    },
+    adminReports: {
+      getPatientReport: execute(adminReports.getPatientReport),
+      getTreatmentPlanReport: execute(adminReports.getTreatmentPlanReport),
+      getAssistanceRequestReport: execute(adminReports.getAssistanceRequestReport),
     },
     dashboard: {
       getRoleDashboard(role) {

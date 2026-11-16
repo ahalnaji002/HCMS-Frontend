@@ -10,6 +10,7 @@ import DoctorPatientAssignmentsSection from "@/presentation/features/admin-works
 import PatientIntakeQueue from "@/presentation/features/admin-workspace/components/PatientIntakeQueue";
 import NotificationsFeature from "@/presentation/features/notifications/NotificationsFeature";
 import SystemSettingsFeature from "@/presentation/features/admin-workspace/components/SystemSettingsFeature";
+import AdminReportsFeature from "@/presentation/features/admin-workspace/components/AdminReportsFeature";
 import useAdminWorkspace from "@/presentation/features/admin-workspace/useAdminWorkspace";
 
 function AdminWorkspaceFeature() {
@@ -121,6 +122,7 @@ function AdminWorkspaceFeature() {
         />
         <Route path="notifications" element={<NotificationsFeature role="ADMIN" />} />
         <Route path="settings" element={<SystemSettingsFeature />} />
+        <Route path="reports" element={<AdminReportsFeature />} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Routes>
     </>
