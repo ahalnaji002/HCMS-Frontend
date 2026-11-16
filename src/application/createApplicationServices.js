@@ -103,6 +103,8 @@ export function createApplicationServices(repositories) {
       updateDoctorPatientAssignmentStatus: execute(admin.updateDoctorPatientAssignmentStatus),
       listIntakeCorrectionRequests: execute(admin.listIntakeCorrectionRequests),
       resolveIntakeCorrectionRequest: execute(admin.resolveIntakeCorrectionRequest),
+      listSystemSettings: execute(admin.listSystemSettings),
+      updateSystemSetting: execute(admin.updateSystemSetting),
     },
     dashboard: {
       getRoleDashboard(role) {

@@ -9,6 +9,7 @@ import JoinRequestsSection from "@/presentation/features/admin-workspace/compone
 import DoctorPatientAssignmentsSection from "@/presentation/features/admin-workspace/components/DoctorPatientAssignmentsSection";
 import PatientIntakeQueue from "@/presentation/features/admin-workspace/components/PatientIntakeQueue";
 import NotificationsFeature from "@/presentation/features/notifications/NotificationsFeature";
+import SystemSettingsFeature from "@/presentation/features/admin-workspace/components/SystemSettingsFeature";
 import useAdminWorkspace from "@/presentation/features/admin-workspace/useAdminWorkspace";
 
 function AdminWorkspaceFeature() {
@@ -119,6 +120,7 @@ function AdminWorkspaceFeature() {
           )}
         />
         <Route path="notifications" element={<NotificationsFeature role="ADMIN" />} />
+        <Route path="settings" element={<SystemSettingsFeature />} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Routes>
     </>

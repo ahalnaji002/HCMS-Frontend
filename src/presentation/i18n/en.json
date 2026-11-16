@@ -1207,6 +1207,36 @@
       "actionFailed": "Could not cancel the reminder. Try again."
     }
   },
+  "systemSettings": {
+    "eyebrow": "Administrator controls",
+    "description": "Review and update the approved public contact and system identity settings. Credentials and deployment secrets are not available here.",
+    "loading": "Loading system settings...",
+    "valueLabel": "Setting value",
+    "updatedAt": "Last updated {{date}}",
+    "unavailable": "This approved setting was not returned by the server and cannot be edited.",
+    "save": "Save setting",
+    "saving": "Saving...",
+    "retry": "Try again",
+    "fields": {
+      "system_name": { "label": "System name", "description": "Required display name, up to 100 characters." },
+      "support_email": { "label": "Support email", "description": "Optional support contact email. Clear the field to remove it." },
+      "support_phone": { "label": "Support phone", "description": "Optional Palestinian mobile number starting with 059 or 056. Clear the field to remove it." }
+    },
+    "notices": { "saved": "Setting saved successfully." },
+    "errors": {
+      "nameRequired": "Enter a system name.",
+      "nameTooLong": "The system name must be 100 characters or fewer.",
+      "emailTooLong": "The support email must be 255 characters or fewer.",
+      "emailInvalid": "Enter a valid email address or leave the field empty.",
+      "phoneInvalid": "Enter a 10-digit Palestinian mobile number starting with 059 or 056, or leave the field empty.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "unauthorized": "Your session has expired. Sign in again.",
+      "forbidden": "You do not have permission to manage system settings.",
+      "notFound": "This system setting was not found. Refresh the page and try again.",
+      "validation": "Check the setting value and try again.",
+      "server": "The setting could not be saved. Try again."
+    }
+  },
   "serverMessages": {
     "doctorUnavailable": "This doctor is marked unavailable and cannot receive routine assignments.",
     "activeAssignmentExists": "This doctor is already actively assigned to this patient.",
