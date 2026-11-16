@@ -15,17 +15,17 @@ test.beforeEach(async ({ page }) => {
   await page.route("**/api/admin/active-doctors", (route) => reply(route, { doctors: [] }));
   await page.route("**/api/admin/intake-correction-requests", (route) => reply(route, { requests: [] }));
   await page.route("**/api/admin/emergency-alerts", (route) => reply(route, { emergency_alerts: [] }));
-  await page.route("**/api/admin/reports/patients", (route) => reply(route, {
+  await page.route("**/api/admin/reports/patients**", (route) => reply(route, {
     items: [{ id: 29, user_id: 9, full_name: "Maya Patient", created_at: "2026-11-15 09:30:00", password_hash: "private" }],
     page: 1, limit: 20, total: 1, total_pages: 1,
   }));
-  await page.route("**/api/admin/reports/treatment-plans", (route) => reply(route, { items: [], page: 1, limit: 20, total: 0, total_pages: 0 }));
-  await page.route("**/api/admin/reports/assistance-requests", (route) => reply(route, { items: [], page: 1, limit: 20, total: 0, total_pages: 0 }));
+  await page.route("**/api/admin/reports/treatment-plans**", (route) => reply(route, { items: [], page: 1, limit: 20, total: 0, total_pages: 0 }));
+  await page.route("**/api/admin/reports/assistance-requests**", (route) => reply(route, { items: [], page: 1, limit: 20, total: 0, total_pages: 0 }));
 });
 
 test("shows the server-paginated Patient report using only approved fields", async ({ page }) => {
   let params;
-  await page.route("**/api/admin/reports/patients", async (route) => {
+  await page.route("**/api/admin/reports/patients**", async (route) => {
     params = Object.fromEntries(new URL(route.request().url()).searchParams);
     await reply(route, {
       items: [{ id: 29, user_id: 9, full_name: "Maya Patient", created_at: "2026-11-15 09:30:00", password_hash: "private" }],
@@ -48,7 +48,7 @@ test("shows the server-paginated Patient report using only approved fields", asy
 
 test("requests only the approved Assistance Request filter and server pagination", async ({ page }) => {
   const requests = [];
-  await page.route("**/api/admin/reports/assistance-requests", async (route) => {
+  await page.route("**/api/admin/reports/assistance-requests**", async (route) => {
     const params = Object.fromEntries(new URL(route.request().url()).searchParams);
     requests.push(params);
     const currentPage = Number(params.page ?? 1);
@@ -71,7 +71,7 @@ test("requests only the approved Assistance Request filter and server pagination
 });
 
 test("renders the approved Treatment Plan columns and server values", async ({ page }) => {
-  await page.route("**/api/admin/reports/treatment-plans", (route) => reply(route, {
+  await page.route("**/api/admin/reports/treatment-plans**", (route) => reply(route, {
     items: [{ id: 5, patient_id: 15, doctor_id: 3, status: "ACTIVE", start_date: "2026-11-01", end_date: null, created_at: "2026-11-10 10:00:00" }],
     page: 1, limit: 20, total: 1, total_pages: 1,
   }));
@@ -85,7 +85,7 @@ test("renders the approved Treatment Plan columns and server values", async ({ p
 
 test("hides internal report errors and retries safely", async ({ page }) => {
   let attempts = 0;
-  await page.route("**/api/admin/reports/patients", (route) => {
+  await page.route("**/api/admin/reports/patients**", (route) => {
     attempts += 1;
     return attempts <= 2
       ? route.fulfill({ status: 500, json: { success: false, message: "SQL password internal detail" } })
