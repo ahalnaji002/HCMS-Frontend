@@ -5,7 +5,7 @@ function execute(repositoryOperation) {
 }
 
 export function createApplicationServices(repositories) {
-  const { admin, auth, dashboard, doctorWorkspace, ngoWorkspace, patientIntake, patientWorkspace, messaging, session } = repositories;
+  const { admin, auth, dashboard, doctorWorkspace, ngoWorkspace, patientIntake, patientWorkspace, messaging, notifications, session } = repositories;
 
   return {
     session,
@@ -76,6 +76,11 @@ export function createApplicationServices(repositories) {
       getConversationHistory: execute(messaging.getConversationHistory),
       sendMessage: execute(messaging.sendMessage),
       markMessageRead: execute(messaging.markMessageRead),
+    },
+    notifications: {
+      listNotifications: execute(notifications.listNotifications),
+      markNotificationRead: execute(notifications.markNotificationRead),
+      markAllNotificationsRead: execute(notifications.markAllNotificationsRead),
     },
     admin: {
       listJoinRequests: execute(admin.listJoinRequests),

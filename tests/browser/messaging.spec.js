@@ -98,7 +98,7 @@ test("sends only the approved message fields to the selected participant", async
   await page.getByRole("textbox", { name: "Message" }).fill("I am feeling better.");
   await page.getByRole("button", { name: "Send message" }).click();
   await expect(page.getByLabel("Conversation messages").getByText("I am feeling better.")).toBeVisible();
-  await expect(page.getByRole("status")).toContainText("Message sent.");
+  await expect(page.getByText("Message sent.", { exact: true })).toBeVisible();
 });
 
 test("backend assignment denial switches the thread to read-only and preserves the draft", async ({ page }) => {

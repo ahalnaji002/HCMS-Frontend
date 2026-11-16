@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
 import StatusToast from "@/presentation/components/common/StatusToast";
 import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard";
+import NotificationsFeature from "@/presentation/features/notifications/NotificationsFeature";
 import NgoResourceAllocationsSection from "@/presentation/features/ngo-workspace/NgoResourceAllocationsSection";
 import useNgoAssistanceRequests from "@/presentation/features/ngo-workspace/useNgoAssistanceRequests";
 
@@ -213,6 +214,7 @@ function NgoWorkspaceFeature() {
     <Route index element={overview} />
     <Route path="assistance-requests" element={<RequestList />} />
     <Route path="assistance-requests/:requestId" element={<RequestDetail />} />
+    <Route path="notifications" element={<NotificationsFeature role="NGO" />} />
     <Route path="*" element={<Navigate to="/ngo" replace />} />
   </Routes>;
 }

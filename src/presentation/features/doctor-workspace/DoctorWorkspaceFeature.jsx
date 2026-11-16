@@ -8,6 +8,7 @@ import PatientMedicalRecordSection from "@/presentation/features/doctor-workspac
 import DoctorAssistanceRequestSection from "@/presentation/features/doctor-workspace/components/DoctorAssistanceRequestSection";
 import DoctorTreatmentPlansSection from "@/presentation/features/doctor-workspace/components/DoctorTreatmentPlansSection";
 import MessagingFeature from "@/presentation/features/messaging/MessagingFeature";
+import NotificationsFeature from "@/presentation/features/notifications/NotificationsFeature";
 import useDoctorWorkspace from "@/presentation/features/doctor-workspace/useDoctorWorkspace";
 
 function DoctorWorkspaceFeature() {
@@ -91,6 +92,7 @@ function DoctorWorkspaceFeature() {
       <Route index element={overview} />
       <Route path="patients" element={patientsPage} />
       <Route path="messages" element={<MessagingFeature role="DOCTOR" />} />
+      <Route path="notifications" element={<NotificationsFeature role="DOCTOR" />} />
       <Route path="*" element={<Navigate to="/doctor" replace />} />
     </Routes>
   );

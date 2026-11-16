@@ -9,6 +9,7 @@ import PatientProfileSection from "@/presentation/features/patient-workspace/com
 import PatientTreatmentPlansSection from "@/presentation/features/patient-workspace/components/PatientTreatmentPlansSection";
 import PatientTreatmentResourcesSection from "@/presentation/features/patient-workspace/components/PatientTreatmentResourcesSection";
 import MessagingFeature from "@/presentation/features/messaging/MessagingFeature";
+import NotificationsFeature from "@/presentation/features/notifications/NotificationsFeature";
 import usePatientWorkspace from "@/presentation/features/patient-workspace/usePatientWorkspace";
 
 function PatientWorkspaceFeature() {
@@ -143,6 +144,7 @@ function PatientWorkspaceFeature() {
         <Route path="profile" element={pages.profile} />
         <Route path="emergency-alerts" element={pages.emergencyAlerts} />
         <Route path="messages" element={<MessagingFeature role="PATIENT" />} />
+        <Route path="notifications" element={<NotificationsFeature role="PATIENT" />} />
         <Route path="*" element={<Navigate to="/patient" replace />} />
       </Routes>
       {/* Keeps the last section clear of the floating emergency button. */}

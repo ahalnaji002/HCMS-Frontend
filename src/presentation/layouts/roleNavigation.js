@@ -13,7 +13,7 @@ const roleNavigation = {
     { label: "roleNavigation.patient.assistanceRequests" },
     { label: "roleNavigation.patient.messages", href: "/patient/messages", available: true },
     { label: "roleNavigation.patient.reminders" },
-    { label: "roleNavigation.patient.notifications" },
+    { label: "roleNavigation.patient.notifications", href: "/patient/notifications", available: true },
   ],
   DOCTOR: [
     { label: "roleNavigation.doctor.home", href: "/doctor", available: true },
@@ -22,14 +22,14 @@ const roleNavigation = {
     { label: "roleNavigation.doctor.emergencyAlerts" },
     { label: "roleNavigation.doctor.assistanceRequests" },
     { label: "roleNavigation.doctor.messages", href: "/doctor/messages", available: true },
-    { label: "roleNavigation.doctor.notifications" },
+    { label: "roleNavigation.doctor.notifications", href: "/doctor/notifications", available: true },
   ],
   NGO: [
     { label: "roleNavigation.ngo.home", href: "/ngo", available: true },
     { label: "roleNavigation.ngo.profile" },
     { label: "roleNavigation.ngo.assistanceRequests", href: "/ngo/assistance-requests", available: true },
     { label: "roleNavigation.ngo.resources" },
-    { label: "roleNavigation.ngo.notifications" },
+    { label: "roleNavigation.ngo.notifications", href: "/ngo/notifications", available: true },
   ],
   ADMIN: [
     { label: "roleNavigation.admin.home", href: "/admin", available: true },
@@ -45,7 +45,7 @@ const roleNavigation = {
     { label: "roleNavigation.admin.reports" },
     { label: "roleNavigation.admin.activityLogs" },
     { label: "roleNavigation.admin.settings" },
-    { label: "roleNavigation.admin.notifications" },
+    { label: "roleNavigation.admin.notifications", href: "/admin/notifications", available: true },
   ],
 };
 
