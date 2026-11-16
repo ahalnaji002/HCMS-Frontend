@@ -43,12 +43,14 @@ directory.
 | `/register/doctor` | Public | Doctor registration |
 | `/register/ngo` | Public | NGO registration |
 | `/patient` | Authenticated PATIENT | Overview: "Needs your attention", care team, summary |
-| `/patient/profile` · `/health-information` · `/medical-record` · `/treatment-plans` · `/medications-appointments` · `/emergency-alerts` | Authenticated PATIENT | One page per section; floating Emergency button on every page |
-| `/doctor` | Authenticated DOCTOR | Overview: assigned emergencies and quick patient list |
-| `/doctor/patients` | Authenticated DOCTOR | Patient list and full patient file (intake, record, plans, diagnoses, notes) |
-| `/ngo` | Authenticated NGO | NGO dashboard summary; feature pages not built yet (Sprint 10) |
+| `/patient/profile` · `/patient/health-information` · `/patient/medical-record` · `/patient/treatment-plans` · `/patient/medications-appointments` · `/patient/emergency-alerts` · `/patient/messages` · `/patient/notifications` · `/patient/reminders` | Authenticated PATIENT | Separate workspace pages; floating Emergency button on every patient page. Assistance tracking is not yet enabled in navigation. |
+| `/doctor` | Authenticated DOCTOR | Overview with role dashboard and assigned patient summary |
+| `/doctor/patients` | Authenticated DOCTOR | Patient list and full patient file (intake, record, plans, diagnoses, notes, assistance request) |
+| `/doctor/messages` · `/doctor/notifications` | Authenticated DOCTOR | Shared messaging and notifications pages |
+| `/ngo` | Authenticated NGO | NGO dashboard summary |
+| `/ngo/assistance-requests` · `/ngo/assistance-requests/:requestId` · `/ngo/notifications` | Authenticated NGO | Request list/detail, review/status actions, resource allocations, and notifications |
 | `/admin` | Authenticated ADMIN | Overview: "Needs your attention" and system summary |
-| `/admin/emergency-alerts` · `/patient-intakes` · `/assignments` · `/doctor-workload` · `/join-requests` · `/support` | Authenticated ADMIN | One page per task |
+| `/admin/emergency-alerts` · `/admin/patient-intakes` · `/admin/assignments` · `/admin/doctor-workload` · `/admin/join-requests` · `/admin/support` · `/admin/notifications` · `/admin/settings` · `/admin/reports` | Authenticated ADMIN | One page per available task; user/organization management and assistance assignment remain unavailable pending approved endpoints |
 
 Role routes are guarded by `RequireRole`; backend authorization remains the
 security boundary. Password recovery and reset are out of scope.
@@ -109,7 +111,8 @@ The patient-intake and care-coordination frontend is implemented on
 - English and Arabic are available throughout patient, doctor, and admin
   workspaces, including the role-header language and light/dark theme toggles.
 - Each role route now includes a dashboard summary backed by its documented
-  role-specific endpoint. NGO assistance features remain a coming-soon area.
+  role-specific endpoint. NGO assistance request workflows are implemented;
+  see the Sprint 10 closure record for limitations and backend dependencies.
 
 ## Sprint 8 Status
 
@@ -137,10 +140,15 @@ The patient-intake and care-coordination frontend is implemented on
 
 ## Key Documentation
 
-- [`src/docs/ux-review-handoff.md`](src/docs/ux-review-handoff.md) — **start here
-  for Sprint 10**: changes since Sprint 9, how to add a routed screen, reusable
-  components, touched Sprint 10 issues, and missing features with ready backend
-  endpoints.
+- [`src/docs/sprint-10-final-review.md`](src/docs/sprint-10-final-review.md) —
+  current Sprint 10 routes, workflows, dependencies, review and remaining work.
+- [`src/docs/sprint-10-api-contract.md`](src/docs/sprint-10-api-contract.md) —
+  approved Sprint 10 API payloads, roles, transitions, and unsupported behavior.
+- [`src/docs/sprint-10-integration-verification.md`](src/docs/sprint-10-integration-verification.md) —
+  browser coverage, responsive checks, command results, and integration limits.
+- [`src/docs/ux-review-handoff.md`](src/docs/ux-review-handoff.md) — historical
+  Sprint 10 starting notes and reusable UI patterns; current completion status is
+  summarized in the final review.
 - `src/docs/auth-contract.md` — frontend reference derived from the approved
   backend authentication documentation.
 - [`src/docs/sprint-9-1-api-contract.md`](src/docs/sprint-9-1-api-contract.md) —
