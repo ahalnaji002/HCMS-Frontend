@@ -44,7 +44,7 @@ const roleNavigation = {
     { label: "roleNavigation.admin.assistanceRequests" },
     { label: "roleNavigation.admin.reports" },
     { label: "roleNavigation.admin.activityLogs" },
-    { label: "roleNavigation.admin.settings" },
+    { label: "roleNavigation.admin.settings", href: "/admin/settings", available: true },
     { label: "roleNavigation.admin.notifications", href: "/admin/notifications", available: true },
   ],
 };

@@ -63,3 +63,11 @@ export async function resolveIntakeCorrectionRequest(requestId, adminResponse) {
     admin_response: adminResponse,
   });
 }
+
+export async function listSystemSettings() {
+  return api.get("/api/admin/settings");
+}
+
+export async function updateSystemSetting(key, settingValue) {
+  return api.patch(`/api/admin/settings/${key}`, { setting_value: settingValue });
+}
