@@ -50,7 +50,7 @@ test("shows reminder statuses and only allows pending reminders to be cancelled"
     { id: 73, user_id: 17, type: "MEDICATION", reference_type: "TREATMENT_MEDICATION", reference_id: 42, remind_at: "2026-11-18 10:00:00", status: "CANCELLED", sent_at: null },
   ];
   await setupPatient(page, () => page.route("**/api/patient/reminders", (route) => reply(route, { reminders })));
-  await expect(page.getByText("Paracetamol — Daily care").first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Paracetamol — Daily care" })).toBeVisible();
   await expect(page.getByText("Pending", { exact: true })).toBeVisible();
   await expect(page.getByText("Sent", { exact: true })).toBeVisible();
   await expect(page.getByText("Cancelled", { exact: true })).toBeVisible();
@@ -74,7 +74,7 @@ test("creates an appointment reminder with the exact approved local-time payload
   await page.getByRole("button", { name: "Schedule reminder" }).click();
 
   await expect(page.getByRole("status")).toContainText("Reminder scheduled.");
-  await expect(page.getByText(/Follow-up visit.*Daily care/)).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Follow-up visit.*Daily care/ })).toBeVisible();
   expect(created).toEqual({ type: "APPOINTMENT", reference_id: "43", remind_at: dueAt });
   expect(created.remind_at).not.toMatch(/[zZ]|[+-]\d\d:?\d\d$/);
 });

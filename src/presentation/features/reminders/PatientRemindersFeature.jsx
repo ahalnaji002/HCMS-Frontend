@@ -2,11 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
 
-function localDateTimeValue(date = new Date()) {
-  const part = (value) => String(value).padStart(2, "0");
-  return `${date.getFullYear()}-${part(date.getMonth() + 1)}-${part(date.getDate())}T${part(date.getHours())}:${part(date.getMinutes())}:${part(date.getSeconds())}`;
-}
-
 function exactLocalDateTime(value) {
   if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) return `${value}:00`;
   return value;
@@ -234,7 +229,7 @@ function PatientRemindersFeature() {
           </div>
           <div>
             <label htmlFor="remind-at" className="mb-2 block text-sm font-semibold">{t("reminders.dateLabel")}</label>
-            <input id="remind-at" type="datetime-local" step="1" min={localDateTimeValue()} value={remindAt} onChange={(event) => { setRemindAt(event.target.value); setFormError(""); }} required disabled={saving} className="min-h-12 w-full rounded-xl border border-border bg-background px-4 text-sm" />
+            <input id="remind-at" type="datetime-local" step="1" value={remindAt} onChange={(event) => { setRemindAt(event.target.value); setFormError(""); }} required disabled={saving} className="min-h-12 w-full rounded-xl border border-border bg-background px-4 text-sm" />
           </div>
           <div className="flex items-end">
             <button type="submit" disabled={saving || referenceState.loading || Boolean(referenceState.error) || availableReferences.length === 0} className="min-h-12 w-full rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60">
