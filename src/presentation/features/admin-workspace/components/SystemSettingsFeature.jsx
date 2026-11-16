@@ -17,6 +17,14 @@ function errorKind(error) {
   return "server";
 }
 
+function loadErrorKind(error) {
+  if (!error.response) return "network";
+  if (error.response.status === 401) return "unauthorized";
+  if (error.response.status === 403) return "forbidden";
+  if (error.response.status === 404) return "notFound";
+  return "loadFailed";
+}
+
 function normalizedValue(field, value) {
   const trimmed = value.trim();
   return field.kind !== "name" && trimmed === "" ? null : trimmed;
@@ -85,7 +93,7 @@ function SystemSettingsFeature() {
         setLoadError("");
       })
       .catch((error) => {
-        if (active) setLoadError(errorKind(error));
+        if (active) setLoadError(loadErrorKind(error));
       })
       .finally(() => {
         if (active) setLoading(false);

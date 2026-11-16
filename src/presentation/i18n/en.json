@@ -1234,6 +1234,7 @@
       "forbidden": "You do not have permission to manage system settings.",
       "notFound": "This system setting was not found. Refresh the page and try again.",
       "validation": "Check the setting value and try again.",
+      "loadFailed": "Could not load system settings. Try again.",
       "server": "The setting could not be saved. Try again."
     }
   },
