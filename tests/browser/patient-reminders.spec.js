@@ -50,7 +50,7 @@ test("shows reminder statuses and only allows pending reminders to be cancelled"
     { id: 73, user_id: 17, type: "MEDICATION", reference_type: "TREATMENT_MEDICATION", reference_id: 42, remind_at: "2026-11-18 10:00:00", status: "CANCELLED", sent_at: null },
   ];
   await setupPatient(page, () => page.route("**/api/patient/reminders", (route) => reply(route, { reminders })));
-  await expect(page.getByRole("heading", { name: "Paracetamol — Daily care" })).toBeVisible();
+  await expect(page.getByRole("article").filter({ hasText: "Pending" }).getByRole("heading", { name: "Paracetamol — Daily care" })).toBeVisible();
   await expect(page.getByText("Pending", { exact: true })).toBeVisible();
   await expect(page.getByText("Sent", { exact: true })).toBeVisible();
   await expect(page.getByText("Cancelled", { exact: true })).toBeVisible();
@@ -73,7 +73,7 @@ test("creates an appointment reminder with the exact approved local-time payload
   await page.getByLabel("Reminder date and time").fill(dueAt);
   await page.getByRole("button", { name: "Schedule reminder" }).click();
 
-  await expect(page.getByRole("status")).toContainText("Reminder scheduled.");
+  await expect(page.getByText("Reminder scheduled.", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: /Follow-up visit.*Daily care/ })).toBeVisible();
   expect(created).toEqual({ type: "APPOINTMENT", reference_id: "43", remind_at: dueAt });
   expect(created.remind_at).not.toMatch(/[zZ]|[+-]\d\d:?\d\d$/);
@@ -129,6 +129,7 @@ test("rejects a past local reminder time before sending and explains validation"
   const past = new Date(Date.now() - 60_000);
   const part = (value) => String(value).padStart(2, "0");
   const pastValue = `${past.getFullYear()}-${part(past.getMonth() + 1)}-${part(past.getDate())}T${part(past.getHours())}:${part(past.getMinutes())}:${part(past.getSeconds())}`;
+  await page.getByLabel("Medication", { exact: true }).selectOption("42");
   await page.getByLabel("Reminder date and time").fill(pastValue);
   await page.getByRole("button", { name: "Schedule reminder" }).click();
   await expect(page.getByRole("alert")).toContainText("Choose a valid date and time in the future.");
