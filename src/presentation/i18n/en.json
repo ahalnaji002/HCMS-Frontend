@@ -1154,6 +1154,59 @@
       "actionFailed": "Could not update notification status. Try again."
     }
   },
+  "reminders": {
+    "eyebrow": "Medication and appointment follow-up",
+    "description": "Schedule reminders for medications or appointments in your treatment plans. Times use your local clock.",
+    "createTitle": "Schedule a reminder",
+    "localTimeHelp": "Choose a future local date and time. The time is sent as entered, without timezone conversion.",
+    "typeLabel": "Reminder for",
+    "types": {
+      "MEDICATION": "Medication",
+      "APPOINTMENT": "Appointment"
+    },
+    "medicationLabel": "Medication",
+    "appointmentLabel": "Appointment",
+    "loadingReferences": "Loading your treatment plan items...",
+    "selectReference": "Choose an item",
+    "noReferences": "No items of this type are available in your treatment plans.",
+    "dateLabel": "Reminder date and time",
+    "create": "Schedule reminder",
+    "creating": "Scheduling...",
+    "listTitle": "Your reminders",
+    "pendingCount": "Pending: {{count}}",
+    "refresh": "Refresh",
+    "retry": "Try again",
+    "loading": "Loading reminders...",
+    "empty": "You have no reminders yet.",
+    "referenceFallback": "{{type}} #{{id}}",
+    "scheduledFor": "Scheduled for",
+    "sentAt": "Sent at",
+    "cancel": "Cancel reminder",
+    "cancelling": "Cancelling...",
+    "statuses": {
+      "PENDING": "Pending",
+      "SENT": "Sent",
+      "CANCELLED": "Cancelled"
+    },
+    "notices": {
+      "created": "Reminder scheduled.",
+      "cancelled": "Reminder cancelled."
+    },
+    "errors": {
+      "network": "Could not connect to the server. Check your connection and try again.",
+      "unauthorized": "Your session has expired. Sign in again.",
+      "forbidden": "You do not have permission to access this reminder data.",
+      "loadFailed": "Could not load reminders or treatment plan items. Try again.",
+      "validation": "Check the selected item and reminder date and time.",
+      "referenceRequired": "Choose a medication or appointment.",
+      "futureDateRequired": "Choose a valid date and time in the future.",
+      "createFailed": "Could not schedule the reminder. Try again.",
+      "referenceNotFound": "That medication or appointment is no longer available. Refresh your treatment plan items.",
+      "stateConflict": "The reminder status changed. The reminder list has been refreshed.",
+      "notFound": "This reminder is no longer available.",
+      "actionFailed": "Could not cancel the reminder. Try again."
+    }
+  },
   "serverMessages": {
     "doctorUnavailable": "This doctor is marked unavailable and cannot receive routine assignments.",
     "activeAssignmentExists": "This doctor is already actively assigned to this patient.",
