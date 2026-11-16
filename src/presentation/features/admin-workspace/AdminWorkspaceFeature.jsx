@@ -15,7 +15,8 @@ function AdminWorkspaceFeature() {
     t, intakes, doctors, reasons, setReasons, selectedDoctors, setSelectedDoctors,
     workloadDrafts, setWorkloadDrafts, loading, busyId, error, notice, clearMessages,
     correctionRequests, correctionResponses, setCorrectionResponses, emergencyAlerts,
-    emergencyDoctors, setEmergencyDoctors, handleStartReview, handleAssign,
+    emergencyDoctors, setEmergencyDoctors, emergencyLoading, emergencyLoadError,
+    handleRefreshEmergencyAlerts, handleStartReview, handleAssign,
     handleEmergencyAssign, handleSaveWorkload, handleResolveCorrection,
   } = useAdminWorkspace();
   const { pathname } = useLocation();
@@ -93,7 +94,10 @@ function AdminWorkspaceFeature() {
               t={t}
               alerts={emergencyAlerts}
               doctors={doctors}
+              loading={emergencyLoading}
+              loadError={emergencyLoadError}
               selectedDoctorIds={emergencyDoctors}
+              onRefresh={handleRefreshEmergencyAlerts}
               onDoctorChange={(id, doctorId) => setEmergencyDoctors((current) => ({ ...current, [id]: doctorId }))}
               busyId={busyId}
               onAssign={handleEmergencyAssign}

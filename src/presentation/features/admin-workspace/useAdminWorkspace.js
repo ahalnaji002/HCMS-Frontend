@@ -19,33 +19,39 @@ export default function useAdminWorkspace() {
   const [correctionResponses, setCorrectionResponses] = useState({});
   const [emergencyAlerts, setEmergencyAlerts] = useState([]);
   const [emergencyDoctors, setEmergencyDoctors] = useState({});
+  const [emergencyLoading, setEmergencyLoading] = useState(true);
+  const [emergencyLoadError, setEmergencyLoadError] = useState(false);
+
+  const refreshEmergencyAlerts = useCallback(async () => {
+    const response = await admin.listAdminEmergencyAlerts();
+    setEmergencyAlerts(response.data.emergency_alerts);
+    setEmergencyLoadError(false);
+  }, [admin]);
 
   const refresh = useCallback(async () => {
-    const [intakeResponse, doctorResponse, correctionResponse, emergencyResponse] = await Promise.all([
+    const [intakeResponse, doctorResponse, correctionResponse] = await Promise.all([
       admin.listPatientIntakes(),
       admin.listActiveDoctors(),
       admin.listIntakeCorrectionRequests(),
-      admin.listAdminEmergencyAlerts(),
     ]);
     setIntakes(intakeResponse.data.intakes);
     setCorrectionRequests(correctionResponse.data.requests);
-    setEmergencyAlerts(emergencyResponse.data.emergency_alerts);
     const activeDoctors = doctorResponse.data.doctors;
     setDoctors(activeDoctors);
     setWorkloadDrafts(Object.fromEntries(activeDoctors.map((doctor) => [doctor.id, {
       availability: doctor.availability,
       capacity_limit: doctor.capacity_limit ?? "",
     }])));
-  }, [admin]);
+    await refreshEmergencyAlerts();
+  }, [admin, refreshEmergencyAlerts]);
 
   useEffect(() => {
     let active = true;
-    Promise.all([admin.listPatientIntakes(), admin.listActiveDoctors(), admin.listIntakeCorrectionRequests(), admin.listAdminEmergencyAlerts()])
-      .then(([intakeResponse, doctorResponse, correctionResponse, emergencyResponse]) => {
+    Promise.all([admin.listPatientIntakes(), admin.listActiveDoctors(), admin.listIntakeCorrectionRequests()])
+      .then(([intakeResponse, doctorResponse, correctionResponse]) => {
         if (!active) return;
         setIntakes(intakeResponse.data.intakes);
         setCorrectionRequests(correctionResponse.data.requests);
-        setEmergencyAlerts(emergencyResponse.data.emergency_alerts);
         const activeDoctors = doctorResponse.data.doctors;
         setDoctors(activeDoctors);
         setWorkloadDrafts(Object.fromEntries(activeDoctors.map((doctor) => [doctor.id, {
@@ -59,8 +65,32 @@ export default function useAdminWorkspace() {
       .finally(() => {
         if (active) setLoading(false);
       });
+    admin.listAdminEmergencyAlerts()
+      .then((response) => {
+        if (active) {
+          setEmergencyAlerts(response.data.emergency_alerts);
+          setEmergencyLoadError(false);
+        }
+      })
+      .catch(() => {
+        if (active) setEmergencyLoadError(true);
+      })
+      .finally(() => {
+        if (active) setEmergencyLoading(false);
+      });
     return () => { active = false; };
   }, [admin, t]);
+
+  async function handleRefreshEmergencyAlerts() {
+    setEmergencyLoading(true);
+    try {
+      await refreshEmergencyAlerts();
+    } catch {
+      setEmergencyLoadError(true);
+    } finally {
+      setEmergencyLoading(false);
+    }
+  }
 
   async function handleStartReview(intakeId) {
     setBusyId(intakeId);
@@ -113,11 +143,39 @@ export default function useAdminWorkspace() {
     setError(null);
     setNotice(null);
     try {
-      await admin.assignDoctorToEmergencyAlert(alert.id, doctorId);
-      await refresh();
+      await admin.assignDoctorToEmergencyAlert(alert.id, Number(doctorId));
+      setEmergencyDoctors((current) => {
+        const next = { ...current };
+        delete next[alert.id];
+        return next;
+      });
       setNotice({ key: "adminIntakes.emergencyAssigned" });
+      try {
+        await refreshEmergencyAlerts();
+      } catch {
+        setNotice(null);
+        setError({ key: "adminIntakes.emergencyRefreshError" });
+      }
     } catch (requestError) {
-      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
+      const status = requestError.response?.status;
+      setEmergencyDoctors((current) => {
+        const next = { ...current };
+        delete next[alert.id];
+        return next;
+      });
+      if (status === 404 || status === 409) {
+        await handleRefreshEmergencyAlerts();
+      }
+      setError({
+        server: requestError.response?.data?.message,
+        key: status === 403
+          ? "adminIntakes.emergencyForbidden"
+          : status === 404
+            ? "serverMessages.emergencyNotFound"
+            : status === 409
+              ? "serverMessages.emergencyNoLongerPending"
+              : "adminIntakes.actionError",
+      });
     } finally {
       setBusyId(null);
     }
@@ -176,7 +234,8 @@ export default function useAdminWorkspace() {
     workloadDrafts, setWorkloadDrafts, loading, busyId,
     error: translate(error), notice: translate(notice), clearMessages,
     correctionRequests, correctionResponses, setCorrectionResponses, emergencyAlerts,
-    emergencyDoctors, setEmergencyDoctors, handleStartReview, handleAssign,
+    emergencyDoctors, setEmergencyDoctors, emergencyLoading, emergencyLoadError,
+    handleRefreshEmergencyAlerts, handleStartReview, handleAssign,
     handleEmergencyAssign, handleSaveWorkload, handleResolveCorrection,
   };
 }
