@@ -100,7 +100,7 @@ test("notification loading errors are safe and recover on retry", async ({ page 
   let attempts = 0;
   await page.route("**/api/notifications", (route) => {
     attempts += 1;
-    return attempts === 1
+    return attempts <= 2
       ? route.fulfill({ status: 500, json: { success: false, message: "Internal SQL detail" } })
       : reply(route, { notifications: [notification()] });
   });
