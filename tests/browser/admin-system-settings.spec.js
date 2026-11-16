@@ -29,9 +29,10 @@ test("admin settings page lists only approved settings and is linked from the si
   await expect(page.getByRole("heading", { name: "System settings", level: 1 })).toBeVisible();
   await expect(page.getByLabel("Setting value")).toHaveCount(3);
   await expect(page.getByText("must never be shown")).toHaveCount(0);
-  await expect(page.getByLabel("System name")).toHaveValue("HCMS");
-  await expect(page.getByLabel("Support email")).toHaveValue("help@example.test");
-  await expect(page.getByLabel("Support phone")).toHaveValue("");
+  const valueInputs = page.getByRole("textbox", { name: "Setting value" });
+  await expect(valueInputs.nth(0)).toHaveValue("HCMS");
+  await expect(valueInputs.nth(1)).toHaveValue("help@example.test");
+  await expect(valueInputs.nth(2)).toHaveValue("");
   await expect(page.locator("#role-navigation a[href='/admin/settings']")).toBeVisible();
 });
 
@@ -43,11 +44,12 @@ test("saves the approved system_name contract and displays success", async ({ pa
     await reply(route, { setting: { ...settings[0], setting_value: "HCMS Care" } });
   });
   await page.goto("/admin/settings");
-  await page.getByLabel("System name").fill(" HCMS Care ");
+  const systemName = page.getByRole("textbox", { name: "Setting value" }).nth(0);
+  await systemName.fill(" HCMS Care ");
   await page.getByRole("button", { name: "Save setting" }).nth(0).click();
   await expect(page.getByText("Setting saved successfully.", { exact: true })).toBeVisible();
   expect(payload).toEqual({ setting_value: "HCMS Care" });
-  await expect(page.getByLabel("System name")).toHaveValue("HCMS Care");
+  await expect(systemName).toHaveValue("HCMS Care");
 });
 
 test("clears nullable email as null and rejects invalid support phones before saving", async ({ page }) => {
@@ -62,12 +64,12 @@ test("clears nullable email as null and rejects invalid support phones before sa
     return reply(route, { setting: settings[2] });
   });
   await page.goto("/admin/settings");
-  await page.getByLabel("Support email").fill("   ");
+  await page.getByRole("textbox", { name: "Setting value" }).nth(1).fill("   ");
   await page.getByRole("button", { name: "Save setting" }).nth(1).click();
   await expect(page.getByText("Setting saved successfully.", { exact: true })).toBeVisible();
   expect(emailPayload).toEqual({ setting_value: null });
 
-  await page.getByLabel("Support phone").fill("1234567890");
+  await page.getByRole("textbox", { name: "Setting value" }).nth(2).fill("1234567890");
   await page.getByRole("button", { name: "Save setting" }).nth(2).click();
   await expect(page.getByRole("alert")).toContainText("10-digit Palestinian mobile number");
   expect(phoneRequests).toBe(0);
@@ -78,7 +80,7 @@ test("shows safe save failures and loading errors with a retry", async ({ page }
     status: 500, json: { success: false, message: "Internal database password" },
   }));
   await page.goto("/admin/settings");
-  await page.getByLabel("System name").fill("Updated HCMS");
+  await page.getByRole("textbox", { name: "Setting value" }).nth(0).fill("Updated HCMS");
   await page.getByRole("button", { name: "Save setting" }).nth(0).click();
   await expect(page.getByRole("alert")).toContainText("The setting could not be saved. Try again.");
   await expect(page.getByRole("alert")).not.toContainText("database password");
@@ -93,6 +95,6 @@ test("shows safe save failures and loading errors with a retry", async ({ page }
   await page.reload();
   await expect(page.getByRole("alert")).toContainText("Could not load system settings. Try again.");
   await page.getByRole("button", { name: "Try again" }).click();
-  await expect(page.getByLabel("System name")).toHaveValue("HCMS");
+  await expect(page.getByRole("textbox", { name: "Setting value" }).nth(0)).toHaveValue("HCMS");
   expect(attempts).toBeGreaterThanOrEqual(2);
 });
