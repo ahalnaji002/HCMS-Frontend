@@ -5,7 +5,7 @@ function execute(repositoryOperation) {
 }
 
 export function createApplicationServices(repositories) {
-  const { admin, auth, dashboard, doctorWorkspace, ngoWorkspace, patientIntake, patientWorkspace, session } = repositories;
+  const { admin, auth, dashboard, doctorWorkspace, ngoWorkspace, patientIntake, patientWorkspace, messaging, session } = repositories;
 
   return {
     session,
@@ -70,6 +70,12 @@ export function createApplicationServices(repositories) {
       createResourceAllocation: execute(ngoWorkspace.createResourceAllocation),
       updateResourceAllocation: execute(ngoWorkspace.updateResourceAllocation),
       deleteResourceAllocation: execute(ngoWorkspace.deleteResourceAllocation),
+    },
+    messaging: {
+      listConversations: execute(messaging.listConversations),
+      getConversationHistory: execute(messaging.getConversationHistory),
+      sendMessage: execute(messaging.sendMessage),
+      markMessageRead: execute(messaging.markMessageRead),
     },
     admin: {
       listJoinRequests: execute(admin.listJoinRequests),

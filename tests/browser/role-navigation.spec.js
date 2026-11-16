@@ -20,6 +20,7 @@ test.beforeEach(async ({ page }) => {
   await page.route("**/api/patient/medical-record", (route) => reply(route, {}, 404));
   await page.route("**/api/patient/treatment-plans", (route) => reply(route, { treatment_plans: [] }));
   await page.route("**/api/profile", (route) => reply(route, { profile: { full_name: "Nav Patient", phone: "0591112223" } }));
+  await page.route("**/api/messages/conversations", (route) => reply(route, { conversations: [] }));
 });
 
 // On small screens the sidebar sits behind the "Menu" button.
@@ -35,7 +36,7 @@ test("sidebar links open separate pages and mark the current page", async ({ pag
   await expect(navLink("/patient")).toHaveAttribute("aria-current", "page");
   // Planned screens are not listed until they exist.
   await expect(page.locator("#role-navigation")).not.toContainText("Coming soon");
-  await expect(page.locator("#role-navigation a")).toHaveCount(7);
+  await expect(page.locator("#role-navigation a")).toHaveCount(8);
 
   await openSidebarLink(page, "Emergency alerts");
   await expect(page).toHaveURL(/\/patient\/emergency-alerts$/);
@@ -48,7 +49,14 @@ test("sidebar links open separate pages and mark the current page", async ({ pag
   await expect(page).toHaveURL(/\/patient\/profile$/);
   await expect(page.locator("#emergency-alerts")).toHaveCount(0);
 
+  await openSidebarLink(page, "Messages");
+  await expect(page).toHaveURL(/\/patient\/messages$/);
+  await expect(navLink("/patient/messages")).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("heading", { name: "Messages", level: 1 })).toBeVisible();
+
   // Browser history works between pages.
+  await page.goBack();
+  await expect(page).toHaveURL(/\/patient\/profile$/);
   await page.goBack();
   await expect(page).toHaveURL(/\/patient\/emergency-alerts$/);
 });

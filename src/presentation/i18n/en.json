@@ -1100,6 +1100,36 @@
       "viewAction": "View"
     }
   },
+  "messaging": {
+    "eyebrow": "Care team communication",
+    "description": "Review your existing conversations with your Patient or Doctor. New messages require an active care assignment.",
+    "conversationList": "Conversations",
+    "refresh": "Refresh",
+    "retry": "Try again",
+    "loadingConversations": "Loading conversations...",
+    "emptyConversations": "No existing conversations are available yet.",
+    "loadingMessages": "Loading conversation...",
+    "emptyMessages": "There are no messages in this conversation yet.",
+    "messagesLabel": "Conversation messages",
+    "selectConversation": "Select a conversation to read and reply.",
+    "backToConversations": "Back",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Write a message...",
+    "send": "Send message",
+    "sending": "Sending...",
+    "sent": "Message sent.",
+    "readOnly": "Messaging is unavailable because there is no active Doctor-Patient assignment. You can still read this conversation.",
+    "readWarning": "Some messages could not be marked as read. Try refreshing the conversation.",
+    "errors": {
+      "loadFailed": "Could not load conversations. Try again.",
+      "sendFailed": "Could not send the message. Try again.",
+      "unauthorized": "Your session has expired. Sign in again.",
+      "forbidden": "You do not have access to this conversation.",
+      "notFound": "This conversation or participant could not be found.",
+      "validation": "Enter a valid message of up to 65,535 UTF-8 bytes.",
+      "activeAssignmentRequired": "A current active Doctor-Patient assignment is required to send messages. This conversation is now read-only."
+    }
+  },
   "serverMessages": {
     "doctorUnavailable": "This doctor is marked unavailable and cannot receive routine assignments.",
     "activeAssignmentExists": "This doctor is already actively assigned to this patient.",
@@ -1119,6 +1149,7 @@
     "correctionBeforeReview": "You can request corrections after the administration starts reviewing your form.",
     "correctionWithoutIntake": "Submit your health form before requesting a correction.",
     "validationFailed": "Check the entered information and try again.",
-    "assignmentStatusUnchanged": "The assignment already has this status."
+    "assignmentStatusUnchanged": "The assignment already has this status.",
+    "activeAssignmentRequired": "An active Doctor-Patient assignment is required to send a message."
   }
 }

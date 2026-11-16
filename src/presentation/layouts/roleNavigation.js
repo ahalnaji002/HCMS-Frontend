@@ -11,7 +11,7 @@ const roleNavigation = {
     { label: "roleNavigation.patient.medicationsAppointments", href: "/patient/medications-appointments", available: true },
     { label: "roleNavigation.patient.emergencyAlerts", href: "/patient/emergency-alerts", available: true },
     { label: "roleNavigation.patient.assistanceRequests" },
-    { label: "roleNavigation.patient.messages" },
+    { label: "roleNavigation.patient.messages", href: "/patient/messages", available: true },
     { label: "roleNavigation.patient.reminders" },
     { label: "roleNavigation.patient.notifications" },
   ],
@@ -21,7 +21,7 @@ const roleNavigation = {
     { label: "roleNavigation.doctor.profile" },
     { label: "roleNavigation.doctor.emergencyAlerts" },
     { label: "roleNavigation.doctor.assistanceRequests" },
-    { label: "roleNavigation.doctor.messages" },
+    { label: "roleNavigation.doctor.messages", href: "/doctor/messages", available: true },
     { label: "roleNavigation.doctor.notifications" },
   ],
   NGO: [
