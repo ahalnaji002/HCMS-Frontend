@@ -33,6 +33,8 @@ test("admin settings page lists only approved settings and is linked from the si
   await expect(valueInputs.nth(0)).toHaveValue("HCMS");
   await expect(valueInputs.nth(1)).toHaveValue("help@example.test");
   await expect(valueInputs.nth(2)).toHaveValue("");
+  const menuButton = page.getByRole("button", { name: "Menu", exact: true });
+  if (await menuButton.isVisible()) await menuButton.click();
   await expect(page.locator("#role-navigation a[href='/admin/settings']")).toBeVisible();
 });
 
@@ -88,7 +90,7 @@ test("shows safe save failures and loading errors with a retry", async ({ page }
   let attempts = 0;
   await page.route("**/api/admin/settings", (route) => {
     attempts += 1;
-    return attempts === 1
+    return attempts <= 2
       ? route.fulfill({ status: 500, json: { success: false, message: "Internal detail" } })
       : reply(route, { settings });
   });
