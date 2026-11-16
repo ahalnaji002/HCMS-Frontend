@@ -19,6 +19,7 @@ test.beforeEach(async ({ page }) => {
   await page.route("**/api/patient/emergency-alerts", (route) => reply(route, { emergency_alerts: [] }));
   await page.route("**/api/patient/medical-record", (route) => reply(route, {}, 404));
   await page.route("**/api/patient/treatment-plans", (route) => reply(route, { treatment_plans: [] }));
+  await page.route("**/api/patient/reminders", (route) => reply(route, { reminders: [] }));
   await page.route("**/api/profile", (route) => reply(route, { profile: { full_name: "Nav Patient", phone: "0591112223" } }));
   await page.route("**/api/messages/conversations", (route) => reply(route, { conversations: [] }));
 });
@@ -36,7 +37,7 @@ test("sidebar links open separate pages and mark the current page", async ({ pag
   await expect(navLink("/patient")).toHaveAttribute("aria-current", "page");
   // Planned screens are not listed until they exist.
   await expect(page.locator("#role-navigation")).not.toContainText("Coming soon");
-  await expect(page.locator("#role-navigation a")).toHaveCount(9);
+  await expect(page.locator("#role-navigation a")).toHaveCount(10);
 
   await openSidebarLink(page, "Emergency alerts");
   await expect(page).toHaveURL(/\/patient\/emergency-alerts$/);
@@ -59,7 +60,14 @@ test("sidebar links open separate pages and mark the current page", async ({ pag
   await expect(navLink("/patient/notifications")).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("heading", { name: "Notifications", level: 1 })).toBeVisible();
 
+  await openSidebarLink(page, "Reminders");
+  await expect(page).toHaveURL(/\/patient\/reminders$/);
+  await expect(navLink("/patient/reminders")).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("heading", { name: "Reminders", level: 1 })).toBeVisible();
+
   // Browser history works between pages.
+  await page.goBack();
+  await expect(page).toHaveURL(/\/patient\/notifications$/);
   await page.goBack();
   await expect(page).toHaveURL(/\/patient\/messages$/);
   await page.goBack();
