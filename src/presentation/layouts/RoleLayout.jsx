@@ -123,7 +123,7 @@ function RoleLayout({ children, mainClassName, role }) {
           <nav
             id="role-navigation"
             aria-label={t("roleNavigation.label")}
-            className={`${isNavigationOpen ? "block" : "hidden"} max-h-[calc(100vh-10rem)] overflow-y-auto px-5 py-4 sm:px-6 md:sticky md:top-0 md:block md:max-h-[calc(100vh-72px)] md:px-0 md:py-0`}
+            className={`${isNavigationOpen ? "block" : "hidden"} max-h-[calc(100vh-10rem)] overflow-y-auto px-5 py-4 sm:px-6 md:sticky md:top-[72px] md:block md:max-h-[calc(100vh-72px)] md:px-0 md:py-0`}
           >
             <ul className="space-y-1 rounded-xl border border-border bg-surface p-3 md:space-y-1 md:rounded-none md:border-0 md:bg-transparent md:px-3 md:py-5">
               {navigationItems.map((item) => {
