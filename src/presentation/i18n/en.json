@@ -1130,6 +1130,30 @@
       "activeAssignmentRequired": "A current active Doctor-Patient assignment is required to send messages. This conversation is now read-only."
     }
   },
+  "notifications": {
+    "eyebrow": "Updates from your care system",
+    "unreadCount": "Unread: {{count}}",
+    "markAllRead": "Mark all as read",
+    "markingAll": "Marking all as read...",
+    "markRead": "Mark as read",
+    "markingRead": "Marking as read...",
+    "read": "Read",
+    "unread": "Unread",
+    "loading": "Loading notifications...",
+    "empty": "You have no notifications yet.",
+    "retry": "Try again",
+    "notices": {
+      "readOne": "Notification marked as read.",
+      "readAll": "All notifications marked as read."
+    },
+    "errors": {
+      "network": "Could not connect to the server. Check your connection and try again.",
+      "unauthorized": "Your session has expired. Sign in again.",
+      "forbidden": "You do not have permission to view these notifications.",
+      "loadFailed": "Could not load notifications. Try again.",
+      "actionFailed": "Could not update notification status. Try again."
+    }
+  },
   "serverMessages": {
     "doctorUnavailable": "This doctor is marked unavailable and cannot receive routine assignments.",
     "activeAssignmentExists": "This doctor is already actively assigned to this patient.",

@@ -7,6 +7,7 @@ import * as ngoWorkspace from "@/infrastructure/repositories/ngoWorkspaceReposit
 import * as patientIntake from "@/infrastructure/repositories/patientIntakeRepository";
 import * as patientWorkspace from "@/infrastructure/repositories/patientWorkspaceRepository";
 import * as messaging from "@/infrastructure/repositories/messagingRepository";
+import * as notifications from "@/infrastructure/repositories/notificationsRepository";
 import { sessionRepository as session } from "@/infrastructure/repositories/sessionRepository";
 
 const applicationServices = createApplicationServices({
@@ -18,6 +19,7 @@ const applicationServices = createApplicationServices({
   patientIntake,
   patientWorkspace,
   messaging,
+  notifications,
   session,
 });
 
