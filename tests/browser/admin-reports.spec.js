@@ -80,7 +80,7 @@ test("renders the approved Treatment Plan columns and server values", async ({ p
   await expect(page.getByRole("columnheader")).toHaveCount(7);
   await expect(page.getByRole("row", { name: /5 15 3 ACTIVE/ })).toBeVisible();
   await expect(page.getByText("Records: 1", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Previous" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Previous" })).toBeDisabled();
 });
 
 test("hides internal report errors and retries safely", async ({ page }) => {

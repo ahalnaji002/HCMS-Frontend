@@ -26,7 +26,7 @@ function AdminReportsFeature() {
   const [limit, setLimit] = useState(20);
   const [status, setStatus] = useState("");
   const [reloadKey, setReloadKey] = useState(0);
-  const [state, setState] = useState({ requestKey: "", error: "", items: [], total: 0, totalPages: 0 });
+  const [state, setState] = useState({ requestKey: "", error: "", items: [], page: 1, total: 0, totalPages: 0 });
 
   const report = REPORTS.find((item) => item.id === reportId) ?? REPORTS[0];
   const requestKey = JSON.stringify({ reportId, page, limit, status: report.filter ? status : "", reloadKey });
@@ -45,12 +45,13 @@ function AdminReportsFeature() {
           requestKey,
           error: "",
           items: Array.isArray(data?.items) ? data.items : [],
+          page: Number.isFinite(data?.page) ? data.page : page,
           total: Number.isFinite(data?.total) ? data.total : 0,
           totalPages: Number.isFinite(data?.total_pages) ? data.total_pages : 0,
         });
       })
       .catch((error) => {
-        if (active) setState({ requestKey, error: errorKind(error), items: [], total: 0, totalPages: 0 });
+        if (active) setState({ requestKey, error: errorKind(error), items: [], page, total: 0, totalPages: 0 });
       });
     return () => { active = false; };
   }, [adminReports, report, page, limit, status, reloadKey, requestKey]);
