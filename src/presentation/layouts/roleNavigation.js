@@ -10,7 +10,7 @@ const roleNavigation = {
     { label: "roleNavigation.patient.treatmentPlans", href: "/patient/treatment-plans", available: true },
     { label: "roleNavigation.patient.medicationsAppointments", href: "/patient/medications-appointments", available: true },
     { label: "roleNavigation.patient.emergencyAlerts", href: "/patient/emergency-alerts", available: true },
-    { label: "roleNavigation.patient.assistanceRequests" },
+    { label: "roleNavigation.patient.assistanceRequests", href: "/patient/assistance-requests", available: true },
     { label: "roleNavigation.patient.messages", href: "/patient/messages", available: true },
     { label: "roleNavigation.patient.reminders", href: "/patient/reminders", available: true },
     { label: "roleNavigation.patient.notifications", href: "/patient/notifications", available: true },
