@@ -40,6 +40,14 @@ export async function cancelPatientAlert(alertId) {
   return api.patch(`/api/patient/emergency-alerts/${alertId}/cancel`, {});
 }
 
+export async function listPatientAssistanceRequests() {
+  return api.get("/api/patient/assistance-requests");
+}
+
+export async function listPatientAssistanceRequestResources(requestId) {
+  return api.get(`/api/patient/assistance-requests/${requestId}/resources`);
+}
+
 export async function getPatientAssignments() {
   return api.get("/api/patient/doctor-assignments");
 }

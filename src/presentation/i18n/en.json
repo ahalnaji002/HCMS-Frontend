@@ -568,6 +568,35 @@
       "statusUpdateFailed": "Could not update the request status. Check your connection and try again."
     }
   },
+  "patientAssistance": {
+    "eyebrow": "Patient support",
+    "title": "My assistance requests",
+    "description": "Follow the review status of your assistance requests and see the resources allocated to them.",
+    "loading": "Loading your assistance requests...",
+    "empty": "You do not have any assistance requests yet.",
+    "requestNumber": "Assistance request #{{id}}",
+    "requestType": "Request type",
+    "submittedAt": "Submitted",
+    "resourcesTitle": "Allocated resources",
+    "noResources": "No resources have been allocated to this request yet.",
+    "quantity": "Quantity: {{count}}",
+    "deliveryDate": "Delivery date: {{date}}",
+    "retry": "Try again",
+    "statuses": {
+      "PENDING": "Pending",
+      "UNDER_REVIEW": "Under review",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "COMPLETED": "Completed"
+    },
+    "errors": {
+      "network": "Could not connect to load your assistance requests. Check your connection and try again.",
+      "unauthorized": "Your session has expired. Sign in again to view your requests.",
+      "forbidden": "You do not have permission to view these assistance requests.",
+      "loadFailed": "Could not load your assistance requests. Try again.",
+      "resourceLoadFailed": "Could not load the resources allocated to this request. Try again."
+    }
+  },
   "patientWorkspace": {
     "sections": "Patient workspace navigation",
     "profile": "My profile",

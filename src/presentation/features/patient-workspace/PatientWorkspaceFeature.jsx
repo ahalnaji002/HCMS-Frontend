@@ -8,6 +8,7 @@ import PatientMedicalRecordSection from "@/presentation/features/patient-workspa
 import PatientProfileSection from "@/presentation/features/patient-workspace/components/PatientProfileSection";
 import PatientTreatmentPlansSection from "@/presentation/features/patient-workspace/components/PatientTreatmentPlansSection";
 import PatientTreatmentResourcesSection from "@/presentation/features/patient-workspace/components/PatientTreatmentResourcesSection";
+import PatientAssistanceRequestsFeature from "@/presentation/features/patient-workspace/PatientAssistanceRequestsFeature";
 import MessagingFeature from "@/presentation/features/messaging/MessagingFeature";
 import NotificationsFeature from "@/presentation/features/notifications/NotificationsFeature";
 import PatientRemindersFeature from "@/presentation/features/reminders/PatientRemindersFeature";
@@ -149,6 +150,7 @@ function PatientWorkspaceFeature() {
         <Route path="medications-appointments" element={<PatientTreatmentResourcesSection />} />
         <Route path="profile" element={pages.profile} />
         <Route path="emergency-alerts" element={pages.emergencyAlerts} />
+        <Route path="assistance-requests" element={<PatientAssistanceRequestsFeature />} />
         <Route path="messages" element={<MessagingFeature role="PATIENT" />} />
         <Route path="notifications" element={<NotificationsFeature role="PATIENT" />} />
         <Route path="reminders" element={<PatientRemindersFeature />} />
