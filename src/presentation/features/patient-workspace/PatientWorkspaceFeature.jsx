@@ -18,12 +18,13 @@ function PatientWorkspaceFeature() {
     t, intake, form, isLoading, isSaving, error, notice,
     profile, profileLoading, profileError, profileNotice, profileForm, profileFieldErrors,
     profileEditing, profileSaving, alerts, alertsLoading, alertsError,
+    alertCancelError, alertCancelNotice, cancellingAlertId,
     medicalRecord, medicalRecordLoading, medicalRecordAbsent, medicalRecordError,
     assignmentsLoading, assignmentsError, diagnosesLoading, diagnosesError,
     assignments, diagnoses, alertForm, setAlertForm, alertNotice, alertError,
     isAlertSubmitting, isAlertDialogOpen, openAlertDialog, closeAlertDialog, correctionRequests, correctionMessage, setCorrectionMessage,
     correctionNotice, correctionError, isCorrectionSubmitting, canEdit, statusLabel,
-    updateField, handleSubmit, handleAlertSubmit, handleCorrectionSubmit,
+    updateField, handleSubmit, handleAlertSubmit, handleCancelPatientAlert, handleCorrectionSubmit,
     retryProfile, retryAlerts, retryAssignments, retryDiagnoses, retryMedicalRecord,
     updateProfileField, cancelProfileEdit, handleProfileSubmit, setProfileEditing,
   } = usePatientWorkspace();
@@ -129,6 +130,10 @@ function PatientWorkspaceFeature() {
         alertsError={alertsError}
         onRetryAlerts={retryAlerts}
         onOpenDialog={openAlertDialog}
+        cancelError={alertCancelError}
+        cancelNotice={alertCancelNotice}
+        cancellingAlertId={cancellingAlertId}
+        onCancelAlert={handleCancelPatientAlert}
       />
     ),
   };

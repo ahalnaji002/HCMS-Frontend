@@ -31,6 +31,7 @@ export function createApplicationServices(repositories) {
       listOwnTreatmentPlanAppointments: execute(patientWorkspace.listOwnTreatmentPlanAppointments),
       getPatientAlerts: execute(patientWorkspace.getPatientAlerts),
       createPatientAlert: execute(patientWorkspace.createPatientAlert),
+      cancelPatientAlert: execute(patientWorkspace.cancelPatientAlert),
       getPatientAssignments: execute(patientWorkspace.getPatientAssignments),
       listOwnDiagnoses: execute(patientWorkspace.listOwnDiagnoses),
       listPatientIntakeCorrectionRequests: execute(patientWorkspace.listPatientIntakeCorrectionRequests),

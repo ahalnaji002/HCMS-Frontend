@@ -24,7 +24,7 @@ test.beforeEach(async ({ page }) => {
   await page.route("**/api/**", (route) => route.abort("blockedbyclient"));
 });
 
-async function setupPatient(page, onCreateAlert) {
+async function setupPatient(page, onCreateAlert, onCancelAlert = (route) => reply(route, {}), initialAlerts = []) {
   await page.addInitScript((value) => localStorage.setItem("hcms_access_token", value), token);
   await page.route("**/api/auth/me", (route) => reply(route, { user: patient }));
   await page.route("**/api/patient/dashboard", (route) => reply(route, dashboard));
@@ -33,8 +33,12 @@ async function setupPatient(page, onCreateAlert) {
   await page.route("**/api/patient/doctor-assignments", (route) => reply(route, { assignments: [] }));
   await page.route("**/api/patient/diagnoses", (route) => reply(route, { diagnoses: [] }));
   await page.route("**/api/profile", (route) => reply(route, { profile }));
-  await page.route("**/api/patient/emergency-alerts", (route) => (
-    route.request().method() === "POST" ? onCreateAlert(route) : reply(route, { emergency_alerts: [] })
+  await page.route("**/api/patient/emergency-alerts", (route) => {
+    if (route.request().method() === "POST") return onCreateAlert(route);
+    return reply(route, { emergency_alerts: initialAlerts });
+  });
+  await page.route("**/api/patient/emergency-alerts/*/cancel", (route) => (
+    route.request().method() === "PATCH" ? onCancelAlert(route) : route.continue()
   ));
   await page.goto("/patient/emergency-alerts");
 }
@@ -112,4 +116,67 @@ test("denied location permission shows a clear message and keeps manual entry av
   await dialog.getByLabel("Location (optional)").fill("Deir al-Balah shelter");
   await expect(dialog.getByLabel("Location (optional)")).toHaveValue("Deir al-Balah shelter");
   await expect(dialog.getByRole("link", { name: "View on map" })).toHaveCount(0);
+});
+
+test("patient confirms cancellation of a pending alert and the refreshed list shows it cancelled", async ({ page }) => {
+  let alerts = [{ id: 701, status: "PENDING_ASSIGNMENT", sent_at: "2026-11-18T10:00:00Z" }];
+  let listRequests = 0;
+  let cancelPayload;
+  await setupPatient(
+    page,
+    (route) => reply(route, {}),
+    (route) => {
+      cancelPayload = route.request().postDataJSON();
+      alerts = [{ ...alerts[0], status: "CANCELLED" }];
+      return reply(route, { emergency_alert: alerts[0] });
+    },
+    alerts,
+  );
+  await page.unroute("**/api/patient/emergency-alerts");
+  await page.route("**/api/patient/emergency-alerts", (route) => {
+    if (route.request().method() === "POST") return reply(route, {});
+    listRequests += 1;
+    return reply(route, { emergency_alerts: alerts });
+  });
+
+  await page.getByRole("button", { name: "Cancel alert" }).click();
+  const confirmation = page.getByRole("group", { name: "Cancel this emergency alert?" });
+  await expect(confirmation).toBeVisible();
+  await confirmation.getByRole("button", { name: "Keep alert" }).click();
+  await expect(page.getByRole("group", { name: "Cancel this emergency alert?" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Cancel alert" }).click();
+  await page.getByRole("group", { name: "Cancel this emergency alert?" }).getByRole("button", { name: "Yes, cancel alert" }).click();
+
+  await expect(page.getByRole("status")).toHaveText("Emergency alert cancelled.");
+  await expect(page.locator("#emergency-alerts li")).toContainText("Cancelled");
+  await expect(page.getByRole("button", { name: "Cancel alert" })).toHaveCount(0);
+  expect(cancelPayload).toEqual({});
+  expect(listRequests).toBeGreaterThanOrEqual(1);
+});
+
+test("stale cancellation shows a translated conflict and refreshes the alert status", async ({ page }) => {
+  let alerts = [{ id: 702, status: "PENDING_ASSIGNMENT", sent_at: "2026-11-18T11:00:00Z" }];
+  let listRequests = 0;
+  await setupPatient(
+    page,
+    (route) => reply(route, {}),
+    (route) => {
+      alerts = [{ ...alerts[0], status: "ASSIGNED" }];
+      return reply(route, { message: "Emergency Alert is not pending assignment" }, 400);
+    },
+    alerts,
+  );
+  await page.unroute("**/api/patient/emergency-alerts");
+  await page.route("**/api/patient/emergency-alerts", (route) => {
+    listRequests += 1;
+    return reply(route, { emergency_alerts: alerts });
+  });
+
+  await page.getByRole("button", { name: "Cancel alert" }).click();
+  await page.getByRole("group", { name: "Cancel this emergency alert?" }).getByRole("button", { name: "Yes, cancel alert" }).click();
+
+  await expect(page.getByRole("alert")).toHaveText("This alert is no longer waiting for a doctor. The latest status has been loaded.");
+  await expect(page.locator("#emergency-alerts li")).toContainText("Doctor assigned");
+  await expect(page.getByRole("button", { name: "Cancel alert" })).toHaveCount(0);
+  expect(listRequests).toBeGreaterThanOrEqual(1);
 });

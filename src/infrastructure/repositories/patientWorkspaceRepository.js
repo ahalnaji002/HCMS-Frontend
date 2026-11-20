@@ -36,6 +36,10 @@ export async function createPatientAlert(payload) {
   return api.post("/api/patient/emergency-alerts", payload);
 }
 
+export async function cancelPatientAlert(alertId) {
+  return api.patch(`/api/patient/emergency-alerts/${alertId}/cancel`, {});
+}
+
 export async function getPatientAssignments() {
   return api.get("/api/patient/doctor-assignments");
 }
