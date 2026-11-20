@@ -37,7 +37,8 @@ test("sidebar links open separate pages and mark the current page", async ({ pag
   await expect(navLink("/patient")).toHaveAttribute("aria-current", "page");
   // Planned screens are not listed until they exist.
   await expect(page.locator("#role-navigation")).not.toContainText("Coming soon");
-  await expect(page.locator("#role-navigation a")).toHaveCount(10);
+  await expect(page.locator("#role-navigation a")).toHaveCount(11);
+  await expect(navLink("/patient/assistance-requests")).toHaveCount(1);
 
   await openSidebarLink(page, "Emergency alerts");
   await expect(page).toHaveURL(/\/patient\/emergency-alerts$/);
