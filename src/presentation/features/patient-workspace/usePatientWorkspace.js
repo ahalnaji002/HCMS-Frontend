@@ -104,6 +104,9 @@ export default function usePatientWorkspace() {
   const [alerts, setAlerts] = useState([]);
   const [alertsLoading, setAlertsLoading] = useState(true);
   const [alertsError, setAlertsError] = useState("");
+  const [alertCancelError, setAlertCancelError] = useState("");
+  const [alertCancelNotice, setAlertCancelNotice] = useState("");
+  const [cancellingAlertId, setCancellingAlertId] = useState(null);
   const [assignments, setAssignments] = useState([]);
   const [assignmentsLoading, setAssignmentsLoading] = useState(true);
   const [assignmentsError, setAssignmentsError] = useState("");
@@ -364,6 +367,31 @@ export default function usePatientWorkspace() {
     }
   }
 
+  async function handleCancelPatientAlert(alertId) {
+    setAlertCancelError("");
+    setAlertCancelNotice("");
+    setCancellingAlertId(alertId);
+    try {
+      await patientWorkspace.cancelPatientAlert(alertId);
+      setAlertCancelNotice(t("patientWorkspace.alertCancelled"));
+      await loadAlerts();
+    } catch (requestError) {
+      const status = requestError.response?.status;
+      if (status === 400 || status === 409) {
+        setAlertCancelError(t("patientWorkspace.alertCancelConflict"));
+        await loadAlerts();
+      } else if (status === 403) {
+        setAlertCancelError(t("patientWorkspace.errors.forbidden"));
+      } else if (status >= 500 || !requestError.response) {
+        setAlertCancelError(t("patientWorkspace.errors.server"));
+      } else {
+        setAlertCancelError(t("patientWorkspace.alertCancelError"));
+      }
+    } finally {
+      setCancellingAlertId(null);
+    }
+  }
+
   // The emergency form is reachable from every scroll position through a
   // floating button; the phone number is pre-filled from the patient profile.
   function openAlertDialog() {
@@ -403,12 +431,13 @@ export default function usePatientWorkspace() {
     t, intake, form, isLoading, isSaving, error, notice,
     profile, profileLoading, profileError, profileNotice, profileForm, profileFieldErrors,
     profileEditing, profileSaving, alerts, alertsLoading, alertsError,
+    alertCancelError, alertCancelNotice, cancellingAlertId,
     medicalRecord, medicalRecordLoading, medicalRecordAbsent, medicalRecordError,
     assignments, assignmentsLoading, assignmentsError, diagnoses, diagnosesLoading, diagnosesError,
     alertForm, setAlertForm, alertNotice, alertError,
     isAlertSubmitting, isAlertDialogOpen, openAlertDialog, closeAlertDialog, correctionRequests, correctionMessage, setCorrectionMessage,
     correctionNotice, correctionError, isCorrectionSubmitting, canEdit, statusLabel,
-    updateField, handleSubmit, handleAlertSubmit, handleCorrectionSubmit,
+    updateField, handleSubmit, handleAlertSubmit, handleCancelPatientAlert, handleCorrectionSubmit,
     retryProfile, retryAlerts, retryAssignments, retryDiagnoses, retryMedicalRecord,
     updateProfileField, cancelProfileEdit, handleProfileSubmit, setProfileEditing,
   };
