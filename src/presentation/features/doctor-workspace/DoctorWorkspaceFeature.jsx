@@ -6,6 +6,7 @@ import PatientIntakeSummary from "@/presentation/features/doctor-workspace/compo
 import PatientMedicalNotesSection from "@/presentation/features/doctor-workspace/components/PatientMedicalNotesSection";
 import PatientMedicalRecordSection from "@/presentation/features/doctor-workspace/components/PatientMedicalRecordSection";
 import DoctorAssistanceRequestSection from "@/presentation/features/doctor-workspace/components/DoctorAssistanceRequestSection";
+import DoctorEmergencyAlertsPage from "@/presentation/features/doctor-workspace/components/DoctorEmergencyAlertsPage";
 import DoctorTreatmentPlansSection from "@/presentation/features/doctor-workspace/components/DoctorTreatmentPlansSection";
 import MessagingFeature from "@/presentation/features/messaging/MessagingFeature";
 import NotificationsFeature from "@/presentation/features/notifications/NotificationsFeature";
@@ -20,7 +21,7 @@ function DoctorWorkspaceFeature() {
   } = useDoctorWorkspace();
 
   const doctorAttention = (dashboard) => [
-    ...(dashboard ? [{ id: "emergencies", tone: "danger", count: dashboard.assigned_emergency_alerts, title: t("attention.doctor.emergencies"), description: t("attention.doctor.emergenciesHint") }] : []),
+    ...(dashboard ? [{ id: "emergencies", tone: "danger", count: dashboard.assigned_emergency_alerts, title: t("attention.doctor.emergencies"), description: t("attention.doctor.emergenciesHint"), href: "/doctor/emergency-alerts", actionLabel: t("roleDashboard.actions.emergencyAlerts") }] : []),
     ...patients.slice(0, 4).map((patient) => ({
       id: `patient-${patient.id}`,
       tone: "info",
@@ -91,6 +92,7 @@ function DoctorWorkspaceFeature() {
     <Routes>
       <Route index element={overview} />
       <Route path="patients" element={patientsPage} />
+      <Route path="emergency-alerts" element={<DoctorEmergencyAlertsPage />} />
       <Route path="messages" element={<MessagingFeature role="DOCTOR" />} />
       <Route path="notifications" element={<NotificationsFeature role="DOCTOR" />} />
       <Route path="*" element={<Navigate to="/doctor" replace />} />

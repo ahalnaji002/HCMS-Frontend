@@ -19,7 +19,7 @@ const roleNavigation = {
     { label: "roleNavigation.doctor.home", href: "/doctor", available: true },
     { label: "roleNavigation.doctor.patients", href: "/doctor/patients", available: true },
     { label: "roleNavigation.doctor.profile" },
-    { label: "roleNavigation.doctor.emergencyAlerts" },
+    { label: "roleNavigation.doctor.emergencyAlerts", href: "/doctor/emergency-alerts", available: true },
     { label: "roleNavigation.doctor.assistanceRequests" },
     { label: "roleNavigation.doctor.messages", href: "/doctor/messages", available: true },
     { label: "roleNavigation.doctor.notifications", href: "/doctor/notifications", available: true },

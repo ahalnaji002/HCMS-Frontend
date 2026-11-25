@@ -95,3 +95,11 @@ export async function updateTreatmentPlanAppointment(planId, appointmentId, payl
 export async function deleteTreatmentPlanAppointment(planId, appointmentId) {
   return api.delete(`/api/doctor/treatment-plans/${planId}/appointments/${appointmentId}`);
 }
+
+export async function listAssignedEmergencyAlerts() {
+  return api.get("/api/doctor/emergency-alerts");
+}
+
+export async function updateEmergencyAlertStatus(alertId, status) {
+  return api.patch(`/api/doctor/emergency-alerts/${alertId}/status`, { status });
+}

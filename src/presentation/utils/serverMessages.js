@@ -17,6 +17,8 @@ const SERVER_MESSAGE_KEYS = {
   "Emergency Alert is not pending assignment": "serverMessages.emergencyNoLongerPending",
   "Emergency Alert can no longer be assigned": "serverMessages.emergencyNoLongerPending",
   "Emergency Alert not found": "serverMessages.emergencyNotFound",
+  "Invalid Emergency Alert status transition": "serverMessages.emergencyInvalidTransition",
+  "Emergency Alert status changed concurrently": "serverMessages.emergencyChangedConcurrently",
   "Active Doctor-Patient Assignment required": "serverMessages.activeAssignmentRequired",
   "Intake correction request not found": "serverMessages.correctionNotFound",
   "Intake correction request is already resolved": "serverMessages.correctionAlreadyResolved",

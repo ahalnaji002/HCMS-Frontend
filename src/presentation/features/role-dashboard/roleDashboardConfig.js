@@ -21,6 +21,7 @@ const roleDashboardConfig = {
     ],
     actions: [
       { label: "assignedPatients", href: "/doctor/patients" },
+      { label: "emergencyAlerts", href: "/doctor/emergency-alerts" },
     ],
   },
   NGO: {
