@@ -1347,6 +1347,41 @@
     "correctionWithoutIntake": "Submit your health form before requesting a correction.",
     "validationFailed": "Check the entered information and try again.",
     "assignmentStatusUnchanged": "The assignment already has this status.",
-    "activeAssignmentRequired": "An active Doctor-Patient assignment is required to send a message."
+    "activeAssignmentRequired": "An active Doctor-Patient assignment is required to send a message.",
+    "emergencyInvalidTransition": "This alert cannot move to that status from its current state. The list has been refreshed.",
+    "emergencyChangedConcurrently": "This alert was updated at the same time from somewhere else. The list has been refreshed."
+  },
+  "doctorEmergency": {
+    "description": "Emergency alerts the administration assigned to you. Call the patient, open the location, start the response, and mark it resolved when the patient is safe.",
+    "loading": "Loading your emergency alerts…",
+    "loadError": "Your emergency alerts could not be loaded.",
+    "retry": "Try again",
+    "refresh": "Refresh",
+    "activeTitle": "Needs your response",
+    "closedTitle": "Resolved",
+    "noActive": "No emergency alert needs your response right now.",
+    "visitor": "Visitor (not registered)",
+    "accountPhone": "Account phone:",
+    "noDescription": "No description was provided.",
+    "start": "Start response",
+    "resolve": "Mark resolved",
+    "resolveTitle": "Mark this emergency as resolved?",
+    "resolveConfirmation": "The patient will be notified and the alert can no longer be changed.",
+    "confirmResolve": "Yes, resolved",
+    "keepOpen": "Keep in progress",
+    "working": "Saving…",
+    "started": "Response started. The patient has been notified.",
+    "resolved": "Emergency alert marked resolved.",
+    "times": {
+      "sentAt": "Sent",
+      "assignedAt": "Assigned to you",
+      "respondedAt": "Response started",
+      "resolvedAt": "Resolved"
+    },
+    "errors": {
+      "conflict": "This alert was already updated. The list has been refreshed.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "server": "Something went wrong. Try again."
+    }
   }
 }

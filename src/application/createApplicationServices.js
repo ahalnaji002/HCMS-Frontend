@@ -64,6 +64,8 @@ export function createApplicationServices(repositories) {
       createTreatmentPlanAppointment: execute(doctorWorkspace.createTreatmentPlanAppointment),
       updateTreatmentPlanAppointment: execute(doctorWorkspace.updateTreatmentPlanAppointment),
       deleteTreatmentPlanAppointment: execute(doctorWorkspace.deleteTreatmentPlanAppointment),
+      listAssignedEmergencyAlerts: execute(doctorWorkspace.listAssignedEmergencyAlerts),
+      updateEmergencyAlertStatus: execute(doctorWorkspace.updateEmergencyAlertStatus),
     },
     ngoWorkspace: {
       listAssistanceRequests: execute(ngoWorkspace.listAssistanceRequests),

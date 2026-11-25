@@ -1,24 +1,4 @@
-import { mapUrl, parseCoordinates } from "@/presentation/utils/geolocation";
-
-// Phone opens a call on mobile; GPS coordinates from the patient's
-// emergency form open on a map.
-function AlertContact({ t, phone, location }) {
-  const coordinates = parseCoordinates(location);
-  return (
-    <div className="space-y-1">
-      <p className="font-bold">
-        <a href={`tel:${phone}`} dir="ltr" className="underline-offset-4 hover:underline">{phone}</a>
-        {" · "}
-        <span>{location || "—"}</span>
-      </p>
-      {coordinates && (
-        <a href={mapUrl(coordinates)} target="_blank" rel="noreferrer" className="inline-flex text-sm font-semibold text-primary underline underline-offset-4">
-          {t("patientWorkspace.viewOnMap")}
-        </a>
-      )}
-    </div>
-  );
-}
+import EmergencyAlertContact from "@/presentation/components/common/EmergencyAlertContact";
 
 function EmergencyAlertsSection({ t, alerts, doctors, selectedDoctorIds, busyId, loading, loadError, onDoctorChange, onRefresh, onAssign }) {
   const eligibleDoctors = doctors.filter((doctor) => ["General Medicine", "Emergency Medicine"].includes(doctor.specialization));
@@ -33,7 +13,7 @@ function EmergencyAlertsSection({ t, alerts, doctors, selectedDoctorIds, busyId,
         </div>
       ) : alerts.length === 0 ? <p className="mt-5 text-sm text-text-secondary">{t("adminIntakes.noEmergencies")}</p> : <div className="mt-5 space-y-4">
         {alerts.map((alert) => <article key={alert.id} className="rounded-xl border border-border bg-background p-5">
-          <div className="flex flex-wrap justify-between gap-2"><AlertContact t={t} phone={alert.phone} location={alert.location} /><span className="rounded-full bg-danger/10 px-3 py-1 text-xs font-semibold text-danger">{t(`patientWorkspace.alertStatuses.${alert.status}`, { defaultValue: alert.status })}</span></div>
+          <div className="flex flex-wrap justify-between gap-2"><EmergencyAlertContact t={t} phone={alert.phone} location={alert.location} /><span className="rounded-full bg-danger/10 px-3 py-1 text-xs font-semibold text-danger">{t(`patientWorkspace.alertStatuses.${alert.status}`, { defaultValue: alert.status })}</span></div>
           <p className="mt-3 whitespace-pre-wrap text-sm leading-6">{alert.description || "—"}</p>
           {alert.sent_at && !Number.isNaN(Date.parse(alert.sent_at)) && <p className="mt-2 text-xs text-text-secondary">{new Date(alert.sent_at).toLocaleString()}</p>}
           {alert.status === "PENDING_ASSIGNMENT" && <div className="mt-4 flex flex-wrap gap-3">
