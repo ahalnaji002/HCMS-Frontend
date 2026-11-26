@@ -77,7 +77,7 @@ function Features() {
     <section
       id="features"
       aria-labelledby="features-heading"
-      className="scroll-mt-20 bg-background py-14 sm:py-24 lg:py-28"
+      className="scroll-mt-20 bg-background py-12 sm:py-24 lg:py-28"
     >
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
@@ -95,16 +95,16 @@ function Features() {
           </p>
         </div>
 
-        <div className="mt-8 grid gap-5 sm:mt-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:mt-16 lg:grid-cols-3">
           {features.map(({ key, icon }) => (
             <article
               key={key}
-              className="rounded-2xl border border-border bg-surface p-6 transition duration-200 hover:-translate-y-1 hover:border-primary/50"
+              className="rounded-2xl border border-border bg-surface p-5 transition duration-200 hover:-translate-y-1 hover:border-primary/50 sm:p-6"
             >
               <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <FeatureIcon>{icon}</FeatureIcon>
               </div>
-              <h3 className="mt-5 text-lg font-semibold text-text-primary">
+              <h3 className="mt-4 text-lg font-semibold text-text-primary sm:mt-5">
                 {t(`landing.features.items.${key}.title`)}
               </h3>
               <p className="mt-3 text-sm leading-6 text-text-secondary">

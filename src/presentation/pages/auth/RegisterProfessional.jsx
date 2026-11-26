@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Alert, Button, buttonClasses, TextField } from "@/presentation/components/ui";
 
 import LanguageToggle from "@/presentation/components/common/LanguageToggle";
 import Logo from "@/presentation/components/common/Logo";
@@ -44,32 +45,19 @@ const initialForm = {
 
 function ProfessionalField({ field, value, error, disabled, onChange, t }) {
   const { name, required, help, ...inputProps } = field;
-  const inputId = `professional-${name}`;
-  const describedBy = [help && `${inputId}-hint`, error && `${inputId}-error`]
-    .filter(Boolean)
-    .join(" ");
-
   return (
-    <div>
-      <label htmlFor={inputId} className="mb-2 block text-sm font-medium text-text-primary">
-        {t(`registerProfessional.fields.${name}`)}
-        {required && <span aria-hidden="true"> *</span>}
-      </label>
-      <input
-        id={inputId}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-        disabled={disabled}
-        aria-invalid={Boolean(error)}
-        aria-describedby={describedBy || undefined}
-        {...inputProps}
-        className={`w-full rounded-xl border ${error ? "border-danger" : "border-border"} bg-background px-4 py-3 text-text-primary outline-none transition placeholder:text-text-secondary/70 focus:border-primary focus:ring-2 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60`}
-      />
-      {help && <p id={`${inputId}-hint`} className="mt-2 text-xs leading-5 text-text-secondary">{t("registerProfessional.passwordHint")}</p>}
-      {error && <p id={`${inputId}-error`} className="mt-2 text-sm text-danger">{error}</p>}
-    </div>
+    <TextField
+      id={`professional-${name}`}
+      name={name}
+      label={t(`registerProfessional.fields.${name}`)}
+      value={value}
+      onChange={onChange}
+      required={required}
+      disabled={disabled}
+      error={error}
+      hint={help ? t("registerProfessional.passwordHint") : undefined}
+      {...inputProps}
+    />
   );
 }
 
@@ -192,7 +180,7 @@ function RegisterProfessional({ role }) {
               <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-primary/10 text-2xl font-bold text-primary" aria-hidden="true">✓</div>
               <h1 className="mt-5 text-2xl font-bold sm:text-3xl">{t(`registerProfessional.success.${role}.title`)}</h1>
               <p className="mx-auto mt-3 max-w-xl leading-7 text-text-secondary">{t("registerProfessional.success.description")}</p>
-              <Link to="/login" className="mt-7 inline-flex min-h-12 items-center justify-center rounded-xl bg-primary px-6 py-3 font-semibold text-white transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{t("registerProfessional.success.login")}</Link>
+              <Link to="/login" className={buttonClasses({ size: "lg", className: "mt-7" })}>{t("registerProfessional.success.login")}</Link>
             </div>
           ) : (
             <>
@@ -200,14 +188,12 @@ function RegisterProfessional({ role }) {
                 <h1 className="text-2xl font-bold sm:text-3xl">{t(`registerProfessional.${role}.title`)}</h1>
                 <p className="mt-2 text-sm leading-6 text-text-secondary">{t("registerProfessional.description")}</p>
               </div>
-              {formError && <div role="alert" className="mb-6 rounded-xl border border-danger/20 bg-danger/10 px-4 py-3 text-sm text-danger">{formError}</div>}
+              {formError && <Alert tone="error" className="mb-6">{formError}</Alert>}
               <form onSubmit={handleSubmit} className="space-y-7" noValidate>
                 <div className="grid gap-x-5 gap-y-5 sm:grid-cols-2">
                   {fields.map((field) => <ProfessionalField key={field.name} field={field} value={form[field.name]} error={fieldErrors[field.name]} disabled={isSubmitting} onChange={handleChange} t={t} />)}
                 </div>
-                <button type="submit" disabled={isSubmitting} className="w-full rounded-xl bg-primary px-4 py-3 font-semibold text-white shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60">
-                  {isSubmitting ? t("registerProfessional.submitting") : t("registerProfessional.submit")}
-                </button>
+                <Button type="submit" size="lg" fullWidth loading={isSubmitting} loadingText={t("registerProfessional.submitting")}>{t("registerProfessional.submit")}</Button>
               </form>
               <p className="mt-7 border-t border-border pt-6 text-center text-sm text-text-secondary">
                 {t("registerProfessional.haveAccount")} {" "}

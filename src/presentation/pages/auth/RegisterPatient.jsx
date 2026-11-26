@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Alert, Button, buttonClasses, SelectField, TextField } from "@/presentation/components/ui";
 
 import LanguageToggle from "@/presentation/components/common/LanguageToggle";
 import Logo from "@/presentation/components/common/Logo";
@@ -111,74 +112,32 @@ function getBackendFieldMessage(value) {
 
 function PatientField({ field, value, error, isSubmitting, onChange, t }) {
   const { name, type, required, help, ...inputProps } = field;
-  const inputId = `patient-${name}`;
-  const descriptionIds = [];
-
-  if (help) {
-    descriptionIds.push(`${inputId}-hint`);
-  }
-
-  if (error) {
-    descriptionIds.push(`${inputId}-error`);
-  }
-
-  const commonProps = {
-    id: inputId,
+  const common = {
+    id: `patient-${name}`,
     name,
+    label: t(`registerPatient.fields.${name}`),
     value,
     onChange,
     required,
     disabled: isSubmitting,
-    "aria-invalid": Boolean(error),
-    "aria-describedby": descriptionIds.length
-      ? descriptionIds.join(" ")
-      : undefined,
-    className: `w-full rounded-xl border ${
-      error ? "border-danger" : "border-border"
-    } bg-background px-4 py-3 text-text-primary outline-none transition placeholder:text-text-secondary/70 focus:border-primary focus:ring-2 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60`,
+    error,
+    hint: help ? t("registerPatient.passwordHint") : undefined,
   };
 
-  return (
-    <div>
-      <label
-        htmlFor={inputId}
-        className="mb-2 block text-sm font-medium text-text-primary"
-      >
-        {t(`registerPatient.fields.${name}`)}
-        {required && <span aria-hidden="true"> *</span>}
-      </label>
+  if (type === "select") {
+    return (
+      <SelectField
+        {...common}
+        placeholder={t("registerPatient.fields.genderPlaceholder")}
+        options={[
+          { value: "MALE", label: t("registerPatient.fields.male") },
+          { value: "FEMALE", label: t("registerPatient.fields.female") },
+        ]}
+      />
+    );
+  }
 
-      {type === "select" ? (
-        <select {...commonProps}>
-          <option value="">{t("registerPatient.fields.genderPlaceholder")}</option>
-          <option value="MALE">{t("registerPatient.fields.male")}</option>
-          <option value="FEMALE">{t("registerPatient.fields.female")}</option>
-        </select>
-      ) : (
-        <input
-          {...commonProps}
-          type={type}
-          {...inputProps}
-          {...(name === "date_of_birth" ? { max: getTodayDateOnly() } : {})}
-        />
-      )}
-
-      {help && (
-        <p
-          id={`${inputId}-hint`}
-          className="mt-2 text-xs leading-5 text-text-secondary"
-        >
-          {t("registerPatient.passwordHint")}
-        </p>
-      )}
-
-      {error && (
-        <p id={`${inputId}-error`} className="mt-2 text-sm text-danger">
-          {error}
-        </p>
-      )}
-    </div>
-  );
+  return <TextField {...common} type={type} {...inputProps} {...(name === "date_of_birth" ? { max: getTodayDateOnly() } : {})} />;
 }
 
 function RegisterPatient() {
@@ -375,10 +334,7 @@ function RegisterPatient() {
               <p className="mx-auto mt-3 max-w-xl leading-7 text-text-secondary">
                 {t("registerPatient.success.description")}
               </p>
-              <Link
-                to="/login"
-                className="mt-7 inline-flex min-h-12 items-center justify-center rounded-xl bg-primary px-6 py-3 font-semibold text-white transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-              >
+              <Link to="/login" className={buttonClasses({ size: "lg", className: "mt-7" })}>
                 {t("registerPatient.success.login")}
               </Link>
             </div>
@@ -393,14 +349,7 @@ function RegisterPatient() {
                 </p>
               </div>
 
-              {formError && (
-                <div
-                  role="alert"
-                  className="mb-6 rounded-xl border border-danger/20 bg-danger/10 px-4 py-3 text-sm text-danger"
-                >
-                  {formError}
-                </div>
-              )}
+              {formError && <Alert tone="error" className="mb-6">{formError}</Alert>}
 
               <form onSubmit={handleSubmit} className="space-y-7" noValidate>
                 <div className="grid gap-x-5 gap-y-5 sm:grid-cols-2">
@@ -417,15 +366,7 @@ function RegisterPatient() {
                   ))}
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full rounded-xl bg-primary px-4 py-3 font-semibold text-white shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {isSubmitting
-                    ? t("registerPatient.submitting")
-                    : t("registerPatient.submit")}
-                </button>
+                <Button type="submit" size="lg" fullWidth loading={isSubmitting} loadingText={t("registerPatient.submitting")}>{t("registerPatient.submit")}</Button>
               </form>
 
               <p className="mt-7 border-t border-border pt-6 text-center text-sm text-text-secondary">

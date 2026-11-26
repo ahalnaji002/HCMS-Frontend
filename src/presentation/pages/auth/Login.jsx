@@ -12,7 +12,7 @@ import { useApplicationServices } from "@/app/useApplicationServices";
 import { normalizeApiError } from "@/presentation/utils/normalizeApiError";
 import { roleRoutes } from "@/presentation/routing/roleRoutes";
 import { consumeSessionExpired } from "@/presentation/context/sessionExpiry";
-import { Alert } from "@/presentation/components/ui";
+import { Alert, Button, TextField } from "@/presentation/components/ui";
 
 function Login() {
   const navigate = useNavigate();
@@ -193,14 +193,7 @@ function Login() {
           )}
 
           {/* Error */}
-          {error && (
-            <div
-              role="alert"
-              className="mb-5 rounded-xl border border-danger/20 bg-danger/10 px-4 py-3 text-sm text-danger"
-            >
-              {error}
-            </div>
-          )}
+          {error && <Alert tone="error" className="mb-5">{error}</Alert>}
 
           {application && (
             <section
@@ -265,80 +258,33 @@ function Login() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-            {/* Email */}
-            <div>
-              <label
-                htmlFor="email"
-                className="mb-2 block text-sm font-medium text-text-primary"
-              >
-                {t("login.email")}
-              </label>
-
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                value={email}
-                onChange={handleEmailChange}
-                placeholder={t("login.emailPlaceholder")}
-                disabled={isSubmitting}
-                aria-invalid={Boolean(fieldErrors.email)}
-                aria-describedby={
-                  fieldErrors.email ? "email-error" : undefined
-                }
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-text-primary outline-none transition placeholder:text-text-secondary/70 focus:border-primary focus:ring-2 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60"
-              />
-
-              {fieldErrors.email && (
-                <p id="email-error" className="mt-2 text-sm text-danger">
-                  {fieldErrors.email}
-                </p>
-              )}
-            </div>
-
-            {/* Password */}
-            <div>
-              <label
-                htmlFor="password"
-                className="mb-2 block text-sm font-medium text-text-primary"
-              >
-                {t("login.password")}
-              </label>
-
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={handlePasswordChange}
-                placeholder={t("login.passwordPlaceholder")}
-                disabled={isSubmitting}
-                aria-invalid={Boolean(fieldErrors.password)}
-                aria-describedby={
-                  fieldErrors.password ? "password-error" : undefined
-                }
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-text-primary outline-none transition placeholder:text-text-secondary/70 focus:border-primary focus:ring-2 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60"
-              />
-
-              {fieldErrors.password && (
-                <p id="password-error" className="mt-2 text-sm text-danger">
-                  {fieldErrors.password}
-                </p>
-              )}
-            </div>
-
-            {/* Submit */}
-            <button
-              type="submit"
+            <TextField
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              label={t("login.email")}
+              value={email}
+              onChange={handleEmailChange}
+              placeholder={t("login.emailPlaceholder")}
               disabled={isSubmitting}
-              className="w-full rounded-xl bg-primary px-4 py-3 font-semibold text-white shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isSubmitting
-                ? t("login.submitting")
-                : t("login.submit")}
-            </button>
+              error={fieldErrors.email}
+            />
+            <TextField
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              label={t("login.password")}
+              value={password}
+              onChange={handlePasswordChange}
+              placeholder={t("login.passwordPlaceholder")}
+              disabled={isSubmitting}
+              error={fieldErrors.password}
+            />
+            <Button type="submit" size="lg" fullWidth loading={isSubmitting} loadingText={t("login.submitting")}>
+              {t("login.submit")}
+            </Button>
           </form>
 
           {/* Registration */}
