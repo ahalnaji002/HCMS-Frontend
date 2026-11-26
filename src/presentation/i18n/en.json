@@ -1349,7 +1349,12 @@
     "assignmentStatusUnchanged": "The assignment already has this status.",
     "activeAssignmentRequired": "An active Doctor-Patient assignment is required to send a message.",
     "emergencyInvalidTransition": "This alert cannot move to that status from its current state. The list has been refreshed.",
-    "emergencyChangedConcurrently": "This alert was updated at the same time from somewhere else. The list has been refreshed."
+    "emergencyChangedConcurrently": "This alert was updated at the same time from somewhere else. The list has been refreshed.",
+    "ownAccountStatus": "You cannot change the status of your own account.",
+    "lastActiveAdmin": "The last active administrator cannot be deactivated.",
+    "applicantUsesJoinRequests": "This account is waiting for approval. Review it in Join Requests.",
+    "userNotFound": "The user was not found. The list has been refreshed.",
+    "userStatusUnchanged": "The account already has this status. The list has been refreshed."
   },
   "doctorEmergency": {
     "description": "Emergency alerts the administration assigned to you. Call the patient, open the location, start the response, and mark it resolved when the patient is safe.",
@@ -1380,6 +1385,65 @@
     },
     "errors": {
       "conflict": "This alert was already updated. The list has been refreshed.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "server": "Something went wrong. Try again."
+    }
+  },
+  "userManagement": {
+    "usersTab": "Users",
+    "organizationsTab": "Organizations (NGOs)",
+    "usersDescription": "Find any account by name, email, or phone. Deactivate an account to block sign-in immediately, or re-activate a deactivated one. Doctor and NGO applicants are approved on the Join Requests page.",
+    "organizationsDescription": "Registered NGOs with their account status and the assistance requests assigned to them.",
+    "searchUsers": "Search by name, email, or phone",
+    "searchOrganizations": "Search by name, registration number, or email",
+    "search": "Search",
+    "role": "Role",
+    "status": "Account status",
+    "allRoles": "All roles",
+    "allStatuses": "All statuses",
+    "roles": {
+      "PATIENT": "Patient",
+      "DOCTOR": "Doctor",
+      "NGO": "NGO",
+      "ADMIN": "Administrator"
+    },
+    "statuses": {
+      "ACTIVE": "Active",
+      "SUSPENDED": "Deactivated",
+      "INACTIVE": "Awaiting approval"
+    },
+    "loading": "Loading…",
+    "loadError": "The list could not be loaded.",
+    "retry": "Try again",
+    "empty": "No results match these filters.",
+    "total_one": "{{count}} account",
+    "total_other": "{{count}} accounts",
+    "ownAccount": "This is your account",
+    "awaitingApproval": "Review in Join Requests",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "working": "Saving…",
+    "confirmTitle": "Deactivate {{name}}?",
+    "confirmDescription": "They will be signed out on their next action and cannot sign in until re-activated.",
+    "confirmDeactivate": "Yes, deactivate",
+    "cancel": "Cancel",
+    "activated": "{{name}} was activated.",
+    "deactivated": "{{name}} was deactivated.",
+    "pagination": "Pages",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {{page}} of {{total}}",
+    "registrationNumber": "Registration number",
+    "contactPerson": "Account holder",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "counts": {
+      "assigned_requests": "Assigned requests",
+      "open_requests": "Open",
+      "completed_requests": "Completed"
+    },
+    "errors": {
       "network": "Could not reach the server. Check your connection and try again.",
       "server": "Something went wrong. Try again."
     }

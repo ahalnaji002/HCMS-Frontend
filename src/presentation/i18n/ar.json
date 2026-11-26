@@ -1354,7 +1354,12 @@
     "assignmentStatusUnchanged": "التعيين بهذه الحالة مسبقًا.",
     "activeAssignmentRequired": "يلزم وجود تعيين طبيب–مريض نشط لإرسال الرسالة.",
     "emergencyInvalidTransition": "لا يمكن نقل التنبيه إلى هذه الحالة من حالته الحالية، وتم تحديث القائمة.",
-    "emergencyChangedConcurrently": "تم تحديث هذا التنبيه في الوقت نفسه من مكان آخر، وتم تحديث القائمة."
+    "emergencyChangedConcurrently": "تم تحديث هذا التنبيه في الوقت نفسه من مكان آخر، وتم تحديث القائمة.",
+    "ownAccountStatus": "لا يمكنك تغيير حالة حسابك.",
+    "lastActiveAdmin": "لا يمكن تعطيل آخر مسؤول فعّال.",
+    "applicantUsesJoinRequests": "هذا الحساب بانتظار الاعتماد. راجعه في طلبات الانضمام.",
+    "userNotFound": "المستخدم غير موجود، وتم تحديث القائمة.",
+    "userStatusUnchanged": "للحساب هذه الحالة مسبقًا، وتم تحديث القائمة."
   },
   "doctorEmergency": {
     "description": "تنبيهات الطوارئ التي أسندتها إليك الإدارة. اتصل بالمريض، وافتح موقعه، وابدأ الاستجابة، ثم علّم التنبيه كمعالَج عندما يصبح المريض بأمان.",
@@ -1385,6 +1390,69 @@
     },
     "errors": {
       "conflict": "تم تحديث هذا التنبيه مسبقًا، وتم تحديث القائمة.",
+      "network": "تعذّر الوصول إلى الخادم. تحقق من الاتصال وحاول مجددًا.",
+      "server": "حدث خطأ ما. حاول مجددًا."
+    }
+  },
+  "userManagement": {
+    "usersTab": "المستخدمون",
+    "organizationsTab": "المؤسسات (NGOs)",
+    "usersDescription": "ابحث عن أي حساب بالاسم أو البريد أو الهاتف. عطّل الحساب لمنع الدخول فورًا، أو أعد تفعيل حساب معطّل. يتم اعتماد طلبات الأطباء والمؤسسات من صفحة طلبات الانضمام.",
+    "organizationsDescription": "المؤسسات المسجلة مع حالة حساباتها وطلبات المساعدة المسندة إليها.",
+    "searchUsers": "ابحث بالاسم أو البريد أو الهاتف",
+    "searchOrganizations": "ابحث بالاسم أو رقم التسجيل أو البريد",
+    "search": "بحث",
+    "role": "الدور",
+    "status": "حالة الحساب",
+    "allRoles": "كل الأدوار",
+    "allStatuses": "كل الحالات",
+    "roles": {
+      "PATIENT": "مريض",
+      "DOCTOR": "طبيب",
+      "NGO": "مؤسسة",
+      "ADMIN": "مسؤول"
+    },
+    "statuses": {
+      "ACTIVE": "فعّال",
+      "SUSPENDED": "معطّل",
+      "INACTIVE": "بانتظار الاعتماد"
+    },
+    "loading": "جارٍ التحميل…",
+    "loadError": "تعذّر تحميل القائمة.",
+    "retry": "إعادة المحاولة",
+    "empty": "لا توجد نتائج مطابقة.",
+    "total_zero": "لا توجد حسابات",
+    "total_one": "حساب واحد",
+    "total_two": "حسابان",
+    "total_few": "{{count}} حسابات",
+    "total_many": "{{count}} حسابًا",
+    "total_other": "{{count}} حساب",
+    "ownAccount": "هذا حسابك",
+    "awaitingApproval": "راجعه في طلبات الانضمام",
+    "activate": "تفعيل",
+    "deactivate": "تعطيل",
+    "working": "جارٍ الحفظ…",
+    "confirmTitle": "تعطيل {{name}}؟",
+    "confirmDescription": "سيتم إخراجه عند أول إجراء تالٍ، ولن يستطيع الدخول حتى يُعاد تفعيله.",
+    "confirmDeactivate": "نعم، عطّل",
+    "cancel": "إلغاء",
+    "activated": "تم تفعيل {{name}}.",
+    "deactivated": "تم تعطيل {{name}}.",
+    "pagination": "الصفحات",
+    "previous": "السابق",
+    "next": "التالي",
+    "pageOf": "صفحة {{page}} من {{total}}",
+    "registrationNumber": "رقم التسجيل",
+    "contactPerson": "صاحب الحساب",
+    "email": "البريد",
+    "phone": "الهاتف",
+    "address": "العنوان",
+    "counts": {
+      "assigned_requests": "طلبات مسندة",
+      "open_requests": "مفتوحة",
+      "completed_requests": "مكتملة"
+    },
+    "errors": {
       "network": "تعذّر الوصول إلى الخادم. تحقق من الاتصال وحاول مجددًا.",
       "server": "حدث خطأ ما. حاول مجددًا."
     }

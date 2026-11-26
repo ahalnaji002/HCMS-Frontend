@@ -40,7 +40,7 @@ const roleNavigation = {
     { label: "roleNavigation.admin.joinRequests", href: "/admin/join-requests", available: true },
     { label: "roleNavigation.admin.support", href: "/admin/support", available: true },
     { label: "roleNavigation.admin.profile" },
-    { label: "roleNavigation.admin.userManagement" },
+    { label: "roleNavigation.admin.userManagement", href: "/admin/users", available: true },
     { label: "roleNavigation.admin.assistanceRequests" },
     { label: "roleNavigation.admin.reports", href: "/admin/reports", available: true },
     { label: "roleNavigation.admin.activityLogs" },

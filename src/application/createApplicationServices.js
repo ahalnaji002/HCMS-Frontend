@@ -110,6 +110,9 @@ export function createApplicationServices(repositories) {
       resolveIntakeCorrectionRequest: execute(admin.resolveIntakeCorrectionRequest),
       listSystemSettings: execute(admin.listSystemSettings),
       updateSystemSetting: execute(admin.updateSystemSetting),
+      listUsers: execute(admin.listUsers),
+      updateUserStatus: execute(admin.updateUserStatus),
+      listNgos: execute(admin.listNgos),
     },
     adminReports: {
       getPatientReport: execute(adminReports.getPatientReport),
