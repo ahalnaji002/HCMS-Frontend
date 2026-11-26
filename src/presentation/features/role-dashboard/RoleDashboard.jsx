@@ -1,13 +1,16 @@
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/presentation/context/useAuth";
+import { ButtonLink, Card, ErrorState, LoadingState, PageHeader } from "@/presentation/components/ui";
 import useRoleDashboard from "@/presentation/features/role-dashboard/useRoleDashboard";
 import roleDashboardConfig from "@/presentation/features/role-dashboard/roleDashboardConfig";
 import DashboardMetricCard from "@/presentation/features/role-dashboard/DashboardMetricCard";
 import AttentionPanel from "@/presentation/features/role-dashboard/AttentionPanel";
 
+// Overview page of every role: one header (the greeting is the page title, so
+// there is no second "welcome" block, UX-17), what needs attention, the
+// summary metrics, and next actions.
 // `attention(dashboard)` returns the role's "needs your attention" items.
-function RoleDashboard({ role, attention }) {
+function RoleDashboard({ role, attention, eyebrow }) {
   const { t } = useTranslation();
   const { user } = useAuth();
   const config = roleDashboardConfig[role];
@@ -16,69 +19,38 @@ function RoleDashboard({ role, attention }) {
   if (!config) return null;
 
   return (
-    <section id="role-dashboard" aria-labelledby="role-dashboard-title" className="mb-8 rounded-2xl border border-border bg-surface p-5 shadow-sm sm:p-7">
-      <header>
-        <p className="text-sm font-semibold text-primary">{t("roleDashboard.eyebrow")}</p>
-        <h2 id="role-dashboard-title" className="mt-2 text-2xl font-bold">
-          {user?.full_name
-            ? t("roleDashboard.greeting", { name: user.full_name })
-            : t(`roleHome.roles.${role.toLowerCase()}.title`)}
-        </h2>
-        <p className="mt-2 max-w-3xl leading-7 text-text-secondary">
-          {t(`roleDashboard.descriptions.${role.toLowerCase()}`)}
-        </p>
-      </header>
+    <div id="role-dashboard">
+      <PageHeader
+        eyebrow={eyebrow || t("roleDashboard.eyebrow")}
+        title={user?.full_name ? t("roleDashboard.greeting", { name: user.full_name }) : t(`roleHome.roles.${role.toLowerCase()}.title`)}
+        description={t(`roleDashboard.descriptions.${role.toLowerCase()}`)}
+      />
 
-      {attention && <div className="mt-6"><AttentionPanel t={t} items={attention(dashboard)} /></div>}
+      {attention && <AttentionPanel t={t} items={attention(dashboard)} />}
 
-      <section aria-labelledby="role-dashboard-summary" className="mt-6">
-        <h3 id="role-dashboard-summary" className="text-lg font-bold">
-          {t("roleDashboard.summary")}
-        </h3>
-        {loading ? (
-          <p role="status" aria-live="polite" className="mt-4 rounded-xl border border-border bg-background p-4 text-sm text-text-secondary">
-            {t("roleDashboard.loading")}
-          </p>
-        ) : errorKind ? (
-          <DashboardLoadError errorKind={errorKind} onRetry={retry} />
-        ) : (
-          <>
-            <dl className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-              {config.metrics.map((metric) => (
-                <DashboardMetricCard
-                  key={metric}
-                  label={t(`roleDashboard.metrics.${role.toLowerCase()}.${metric}`)}
-                  value={dashboard[metric]}
-                />
-              ))}
-            </dl>
-            {!hasActivity && (
-              <p role="status" className="mt-4 rounded-xl bg-background px-4 py-3 text-sm text-text-secondary">
-                {t("roleDashboard.noActivity")}
-              </p>
+      <Card title={t("roleDashboard.summary")} className="mb-8">
+        {loading ? <LoadingState label={t("roleDashboard.loading")} />
+          : errorKind ? <ErrorState message={t(`roleDashboard.errors.${errorKind}`)} onRetry={retry} retryLabel={t("roleDashboard.retry")} />
+            : (
+              <>
+                <dl className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                  {config.metrics.map((metric) => (
+                    <DashboardMetricCard
+                      key={metric}
+                      label={t(`roleDashboard.metrics.${role.toLowerCase()}.${metric}`)}
+                      value={dashboard[metric]}
+                    />
+                  ))}
+                </dl>
+                {!hasActivity && (
+                  <p role="status" className="mt-4 rounded-xl bg-background px-4 py-3 text-sm text-text-secondary">
+                    {t("roleDashboard.noActivity")}
+                  </p>
+                )}
+              </>
             )}
-          </>
-        )}
-      </section>
-
-      <DashboardActions actions={config.actions} dashboard={dashboard} />
-    </section>
-  );
-}
-
-function DashboardLoadError({ errorKind, onRetry }) {
-  const { t } = useTranslation();
-
-  return (
-    <div role="alert" className="mt-4 rounded-xl border border-danger/30 bg-danger/5 p-4">
-      <p className="text-sm text-danger">{t(`roleDashboard.errors.${errorKind}`)}</p>
-      <button
-        type="button"
-        onClick={onRetry}
-        className="mt-3 rounded-lg border border-border px-4 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-      >
-        {t("roleDashboard.retry")}
-      </button>
+        <DashboardActions actions={config.actions} dashboard={dashboard} />
+      </Card>
     </div>
   );
 }
@@ -96,23 +68,16 @@ function DashboardActions({ actions, dashboard }) {
       </h3>
       <ul className="mt-3 flex flex-wrap gap-3">
         {visibleActions.map((action) => {
-          const waitingForPatient =
-            action.requiresMetric && dashboard?.[action.requiresMetric] === 0;
-          const unavailable = waitingForPatient;
-
+          const waitingForPatient = action.requiresMetric && dashboard?.[action.requiresMetric] === 0;
           return (
             <li key={action.label}>
-              {unavailable ? (
-                <span aria-disabled="true" className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm text-text-secondary">
+              {waitingForPatient ? (
+                <span aria-disabled="true" className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm text-text-secondary">
                   {t(`roleDashboard.actions.${action.label}`)}
-                  <span className="rounded-full bg-background px-2 py-1 text-xs">
-                    {t("roleDashboard.noAssignedPatients")}
-                  </span>
+                  <span className="rounded-full bg-background px-2 py-1 text-xs">{t("roleDashboard.noAssignedPatients")}</span>
                 </span>
               ) : (
-                <Link to={action.href} className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-                  {t(`roleDashboard.actions.${action.label}`)}
-                </Link>
+                <ButtonLink to={action.href} variant="secondary" size="sm">{t(`roleDashboard.actions.${action.label}`)}</ButtonLink>
               )}
             </li>
           );

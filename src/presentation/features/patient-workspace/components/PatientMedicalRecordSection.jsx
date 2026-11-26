@@ -1,33 +1,32 @@
+import { Button, Card, DescriptionList, EmptyState, ErrorState, LoadingState, PageHeader } from "@/presentation/components/ui";
+
+const FIELDS = ["blood_type", "allergies", "chronic_diseases", "medical_history", "previous_surgeries"];
+
 function PatientMedicalRecordSection({ t, record, loading, absent, error, onRetry }) {
-  const fields = ["blood_type", "allergies", "chronic_diseases", "medical_history", "previous_surgeries"];
-
   return (
-    <section id="patient-medical-record" className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
-      <h1 className="text-xl font-bold">{t("patientWorkspace.medicalRecord.title")}</h1>
-      <p className="mt-2 text-sm leading-6 text-text-secondary">{t("patientWorkspace.medicalRecord.description")}</p>
-
-      {loading && <p role="status" className="mt-5 text-sm text-text-secondary">{t("patientWorkspace.medicalRecord.loading")}</p>}
-
-      {!loading && error && <div role="alert" className="mt-5 rounded-xl bg-danger/10 p-4 text-sm text-danger">
-        <p>{error}</p>
-        <button type="button" onClick={onRetry} disabled={loading} className="mt-3 min-h-10 rounded-lg border border-danger px-3 py-2 font-semibold disabled:opacity-60">{t("patientWorkspace.retry")}</button>
-      </div>}
-
-      {!loading && !error && absent && <div className="mt-5 rounded-xl border border-border bg-background p-4 text-sm text-text-secondary">
-        <p>{t("patientWorkspace.medicalRecord.absent")}</p>
-        <button type="button" onClick={onRetry} disabled={loading} className="mt-3 min-h-10 rounded-lg border border-border px-3 py-2 font-semibold text-text-primary disabled:opacity-60">{t("patientWorkspace.medicalRecord.reload")}</button>
-      </div>}
-
-      {!loading && !error && record && <>
-        <dl className="mt-5 grid gap-4 sm:grid-cols-2">
-          {fields.map((field) => <div key={field} className="rounded-xl border border-border bg-background p-4">
-            <dt className="text-xs font-semibold text-text-secondary">{t(`patientWorkspace.medicalRecord.fields.${field}`)}</dt>
-            <dd className="mt-2 whitespace-pre-wrap break-words text-sm leading-6">{record[field] || t("patientWorkspace.medicalRecord.notProvided")}</dd>
-          </div>)}
-        </dl>
-        <button type="button" onClick={onRetry} disabled={loading} className="mt-5 min-h-10 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-text-primary disabled:opacity-60">{t("patientWorkspace.medicalRecord.refresh")}</button>
-      </>}
-    </section>
+    <div id="patient-medical-record">
+      <PageHeader
+        title={t("patientWorkspace.medicalRecord.title")}
+        description={t("patientWorkspace.medicalRecord.description")}
+        actions={record && !loading && !error && <Button variant="secondary" onClick={onRetry}>{t("patientWorkspace.medicalRecord.refresh")}</Button>}
+      />
+      {loading ? <LoadingState label={t("patientWorkspace.medicalRecord.loading")} />
+        : error ? <ErrorState message={error} onRetry={onRetry} retryLabel={t("patientWorkspace.retry")} />
+          : absent ? (
+            <EmptyState
+              title={t("patientWorkspace.medicalRecord.absent")}
+              action={<Button variant="secondary" size="sm" onClick={onRetry}>{t("patientWorkspace.medicalRecord.reload")}</Button>}
+            />
+          ) : record && (
+            <Card>
+              <DescriptionList
+                columns={2}
+                emptyText={t("patientWorkspace.medicalRecord.notProvided")}
+                items={FIELDS.map((field) => ({ key: field, label: t(`patientWorkspace.medicalRecord.fields.${field}`), value: record[field] }))}
+              />
+            </Card>
+          )}
+    </div>
   );
 }
 

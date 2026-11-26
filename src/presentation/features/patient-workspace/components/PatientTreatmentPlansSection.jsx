@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import { Alert, Button, Card, DescriptionList, EmptyState, ErrorState, LoadingState, PageHeader, SelectableCard, StatusBadge } from "@/presentation/components/ui";
+import { useFormatDate } from "@/presentation/hooks/useFormatDate";
 import PatientTreatmentResourceList from "@/presentation/features/patient-workspace/components/PatientTreatmentResourceList";
 
 function apiError(error, t) {
@@ -15,6 +17,7 @@ function apiError(error, t) {
 
 function PatientTreatmentPlansSection() {
   const { t } = useTranslation();
+  const { date } = useFormatDate();
   const { patientWorkspace } = useApplicationServices();
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -125,93 +128,92 @@ function PatientTreatmentPlansSection() {
     setRelatedError("");
   }
 
+  const planDates = (plan) => `${date(plan.start_date)} – ${plan.end_date ? date(plan.end_date) : t("patientTreatmentPlans.noEndDate")}`;
+
   return (
-    <section id="patient-treatment-plans" className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
-      <div>
-        <p className="text-sm font-semibold text-primary">{t("patientTreatmentPlans.eyebrow")}</p>
-        <h1 className="mt-1 text-xl font-bold">{t("patientTreatmentPlans.title")}</h1>
-        <p className="mt-2 text-sm leading-6 text-text-secondary">{t("patientTreatmentPlans.description")}</p>
-      </div>
+    <div id="patient-treatment-plans">
+      <PageHeader eyebrow={t("patientTreatmentPlans.eyebrow")} title={t("patientTreatmentPlans.title")} description={t("patientTreatmentPlans.description")} />
 
-      {listError && <div role="alert" className="mt-5 rounded-xl bg-danger/10 p-4 text-sm text-danger">
-        <p>{listError}</p>
-        <button type="button" onClick={retryPlans} disabled={loading} className="mt-3 min-h-10 rounded-lg border border-danger px-3 py-2 font-semibold disabled:opacity-60">{t("patientTreatmentPlans.retry")}</button>
-      </div>}
+      {listError ? <ErrorState message={listError} onRetry={retryPlans} retrying={loading} retryLabel={t("patientTreatmentPlans.retry")} />
+        : loading ? <LoadingState label={t("patientTreatmentPlans.loading")} />
+          : plans.length === 0 ? <EmptyState title={t("patientTreatmentPlans.empty")} />
+            : (
+              <>
+                {detailError && !selectedPlanId && <Alert tone="error" className="mb-5">{detailError}</Alert>}
+                <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+                  <Card title={t("patientTreatmentPlans.listTitle")} titleLevel={2} padding="sm">
+                    <ul className="space-y-2">
+                      {plans.map((plan) => (
+                        <li key={plan.id}>
+                          <SelectableCard
+                            title={plan.title}
+                            meta={planDates(plan)}
+                            selected={selectedPlanId === plan.id}
+                            disabled={detailLoading}
+                            onClick={() => openPlan(plan)}
+                            aside={<StatusBadge status={plan.status} labelPrefix="patientTreatmentPlans.statuses" />}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </Card>
 
-      {!loading && !listError && detailError && !selectedPlanId && <p role="alert" className="mt-5 rounded-xl bg-danger/10 p-4 text-sm text-danger">{detailError}</p>}
-
-      {loading && <p role="status" className="mt-5 text-sm text-text-secondary">{t("patientTreatmentPlans.loading")}</p>}
-      {!loading && !listError && plans.length === 0 && <p className="mt-5 rounded-xl border border-border bg-background p-4 text-sm text-text-secondary">{t("patientTreatmentPlans.empty")}</p>}
-
-      {!loading && !listError && plans.length > 0 && <div className="mt-6 grid gap-5 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <div>
-          <h3 className="font-bold">{t("patientTreatmentPlans.listTitle")}</h3>
-          <ul className="mt-4 space-y-3">{plans.map((plan) => (
-            <li key={plan.id}>
-              <button type="button" onClick={() => openPlan(plan)} disabled={detailLoading} aria-current={selectedPlanId === plan.id ? "true" : undefined} className={`w-full rounded-xl border p-4 text-start focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-wait disabled:opacity-70 ${selectedPlanId === plan.id ? "border-primary bg-primary/5" : "border-border bg-background"}`}>
-                <span className="block font-semibold">{plan.title}</span>
-                <span className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-text-secondary">
-                  <span>{t("patientTreatmentPlans.status")}: {t(`patientTreatmentPlans.statuses.${plan.status}`, { defaultValue: plan.status })}</span>
-                  <span>{plan.start_date}{plan.end_date ? ` – ${plan.end_date}` : ` – ${t("patientTreatmentPlans.noEndDate")}`}</span>
-                </span>
-              </button>
-            </li>
-          ))}</ul>
-        </div>
-
-        <div className="min-w-0 rounded-xl border border-border bg-background p-5">
-          {detailError && selectedPlanId && <div role="alert" className="rounded-xl bg-danger/10 p-4 text-sm text-danger">
-            <p>{detailError}</p>
-            {plans.some((plan) => plan.id === selectedPlanId) && <button type="button" onClick={() => openPlan(plans.find((plan) => plan.id === selectedPlanId))} disabled={detailLoading} className="mt-3 min-h-10 rounded-lg border border-danger px-3 py-2 font-semibold disabled:opacity-60">{t("patientTreatmentPlans.retry")}</button>}
-          </div>}
-          {detailLoading && <p role="status" className="text-sm text-text-secondary">{t("patientTreatmentPlans.loadingDetails")}</p>}
-          {!detailLoading && !detailError && !selectedPlan && <p className="text-sm text-text-secondary">{t("patientTreatmentPlans.selectPlan")}</p>}
-          {!detailLoading && selectedPlan && <>
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <h3 className="text-lg font-bold">{selectedPlan.title}</h3>
-              <button type="button" onClick={closePlan} className="min-h-10 rounded-lg border border-border px-3 py-2 text-sm font-semibold">{t("patientTreatmentPlans.backToList")}</button>
-            </div>
-            <dl className="mt-5 grid gap-3 sm:grid-cols-2">
-              <ReadOnlyField label={t("patientTreatmentPlans.status")} value={t(`patientTreatmentPlans.statuses.${selectedPlan.status}`, { defaultValue: selectedPlan.status })} />
-              <ReadOnlyField label={t("patientTreatmentPlans.dates")} value={`${selectedPlan.start_date}${selectedPlan.end_date ? ` – ${selectedPlan.end_date}` : ` – ${t("patientTreatmentPlans.noEndDate")}`}`} />
-              <div className="rounded-xl border border-border bg-surface p-4 sm:col-span-2">
-                <dt className="text-xs font-semibold text-text-secondary">{t("patientTreatmentPlans.instructions")}</dt>
-                <dd className="mt-2 whitespace-pre-wrap break-words text-sm leading-6">{selectedPlan.general_instructions || t("patientTreatmentPlans.noInstructions")}</dd>
-              </div>
-            </dl>
-
-            <div className="mt-6">
-              <h4 className="font-bold">{t("patientTreatmentPlans.relatedTitle")}</h4>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <button type="button" onClick={() => openRelated("medications")} aria-pressed={relatedType === "medications"} className="min-h-10 rounded-lg border border-primary px-3 py-2 text-sm font-semibold text-primary">{t("patientTreatmentPlans.viewMedications")}</button>
-                <button type="button" onClick={() => openRelated("appointments")} aria-pressed={relatedType === "appointments"} className="min-h-10 rounded-lg border border-primary px-3 py-2 text-sm font-semibold text-primary">{t("patientTreatmentPlans.viewAppointments")}</button>
-              </div>
-              {relatedType && <RelatedItems
-                t={t}
-                type={relatedType}
-                items={relatedItems}
-                loading={relatedLoading}
-                error={relatedError}
-                onRetry={() => openRelated(relatedType)}
-              />}
-            </div>
-          </>}
-        </div>
-      </div>}
-    </section>
+                  <Card padding="sm" className="min-w-0">
+                    {detailError && selectedPlanId ? (
+                      <ErrorState
+                        message={detailError}
+                        onRetry={plans.some((plan) => plan.id === selectedPlanId) ? () => openPlan(plans.find((plan) => plan.id === selectedPlanId)) : undefined}
+                        retrying={detailLoading}
+                        retryLabel={t("patientTreatmentPlans.retry")}
+                      />
+                    ) : detailLoading ? <LoadingState label={t("patientTreatmentPlans.loadingDetails")} />
+                      : !selectedPlan ? <p className="text-sm text-text-secondary">{t("patientTreatmentPlans.selectPlan")}</p>
+                        : (
+                          <>
+                            <div className="flex flex-wrap items-start justify-between gap-3">
+                              <h3 className="text-lg font-bold">{selectedPlan.title}</h3>
+                              <Button variant="secondary" size="sm" onClick={closePlan}>{t("patientTreatmentPlans.backToList")}</Button>
+                            </div>
+                            <DescriptionList
+                              className="mt-5"
+                              columns={2}
+                              items={[
+                                { label: t("patientTreatmentPlans.status"), value: t(`patientTreatmentPlans.statuses.${selectedPlan.status}`, { defaultValue: selectedPlan.status }) },
+                                { label: t("patientTreatmentPlans.dates"), value: planDates(selectedPlan) },
+                                { label: t("patientTreatmentPlans.instructions"), value: selectedPlan.general_instructions || t("patientTreatmentPlans.noInstructions"), wide: true },
+                              ]}
+                            />
+                            <div className="mt-6">
+                              <h4 className="font-bold">{t("patientTreatmentPlans.relatedTitle")}</h4>
+                              <div className="mt-3 flex flex-wrap gap-2">
+                                <Button variant={relatedType === "medications" ? "primary" : "secondary"} size="sm" aria-pressed={relatedType === "medications"} onClick={() => openRelated("medications")}>
+                                  {t("patientTreatmentPlans.viewMedications")}
+                                </Button>
+                                <Button variant={relatedType === "appointments" ? "primary" : "secondary"} size="sm" aria-pressed={relatedType === "appointments"} onClick={() => openRelated("appointments")}>
+                                  {t("patientTreatmentPlans.viewAppointments")}
+                                </Button>
+                              </div>
+                              {relatedType && (
+                                <div className="mt-4">
+                                  <RelatedItems t={t} type={relatedType} items={relatedItems} loading={relatedLoading} error={relatedError} onRetry={() => openRelated(relatedType)} />
+                                </div>
+                              )}
+                            </div>
+                          </>
+                        )}
+                  </Card>
+                </div>
+              </>
+            )}
+    </div>
   );
-}
-
-function ReadOnlyField({ label, value }) {
-  return <div className="rounded-xl border border-border bg-surface p-4"><dt className="text-xs font-semibold text-text-secondary">{label}</dt><dd className="mt-2 break-words text-sm">{value}</dd></div>;
 }
 
 function RelatedItems({ t, type, items, loading, error, onRetry }) {
   const title = type === "medications" ? t("patientTreatmentPlans.medications") : t("patientTreatmentPlans.appointments");
-  if (loading) return <p role="status" className="mt-4 text-sm text-text-secondary">{t("patientTreatmentPlans.relatedLoading", { resource: title })}</p>;
-  if (error) return <div role="alert" className="mt-4 rounded-xl bg-danger/10 p-4 text-sm text-danger"><p>{error}</p><button type="button" onClick={onRetry} className="mt-3 min-h-10 rounded-lg border border-danger px-3 py-2 font-semibold">{t("patientTreatmentPlans.retry")}</button></div>;
-  if (items.length === 0) return <p className="mt-4 rounded-xl border border-border bg-surface p-4 text-sm text-text-secondary">{t("patientTreatmentPlans.relatedEmpty", { resource: title })}</p>;
-
+  if (loading) return <LoadingState label={t("patientTreatmentPlans.relatedLoading", { resource: title })} />;
+  if (error) return <ErrorState message={error} onRetry={onRetry} retryLabel={t("patientTreatmentPlans.retry")} />;
+  if (items.length === 0) return <EmptyState title={t("patientTreatmentPlans.relatedEmpty", { resource: title })} />;
   return <PatientTreatmentResourceList items={items} type={type} t={t} />;
 }
 

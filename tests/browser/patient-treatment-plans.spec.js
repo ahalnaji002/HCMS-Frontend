@@ -87,7 +87,7 @@ test("patient can review an own plan and follow its medication and appointment r
   await expect(section.getByRole("button", { name: /Recovery plan/ })).toBeVisible();
   await section.getByRole("button", { name: /Recovery plan/ }).click();
   await expect(section.getByText("Take medication with food.")).toBeVisible();
-  await expect(section.getByRole("definition").filter({ hasText: "2026-10-01 – No end date" })).toBeVisible();
+  await expect(section.getByRole("definition").filter({ hasText: "1 Oct 2026 – No end date" })).toBeVisible();
   expect(listMethod).toBe("GET");
   expect(detailPath).toBe(`/api/patient/treatment-plans/${plan.id}`);
 
@@ -107,7 +107,7 @@ test("patient can review an own plan and follow its medication and appointment r
   });
   await section.getByRole("button", { name: "View appointments" }).click();
   await expect(section.getByText("Follow-up visit")).toBeVisible();
-  await expect(section.getByText("2026-11-20 14:30:00")).toBeVisible();
+  await expect(section.getByText("20 Nov 2026, 14:30")).toBeVisible();
   expect(appointmentPath).toBe(`/api/patient/treatment-plans/${plan.id}/appointments`);
   await expect(section.locator("form, input, textarea, select")).toHaveCount(0);
 });

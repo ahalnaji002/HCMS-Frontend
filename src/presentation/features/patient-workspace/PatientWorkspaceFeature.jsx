@@ -16,15 +16,15 @@ import usePatientWorkspace from "@/presentation/features/patient-workspace/usePa
 
 function PatientWorkspaceFeature() {
   const {
-    t, intake, form, isLoading, isSaving, error, notice,
-    profile, profileLoading, profileError, profileNotice, profileForm, profileFieldErrors,
+    t, intake, form, isLoading, isSaving, error,
+    profile, profileLoading, profileError, profileForm, profileFieldErrors,
     profileEditing, profileSaving, alerts, alertsLoading, alertsError,
-    alertCancelError, alertCancelNotice, cancellingAlertId,
+    cancellingAlertId,
     medicalRecord, medicalRecordLoading, medicalRecordAbsent, medicalRecordError,
     assignmentsLoading, assignmentsError, diagnosesLoading, diagnosesError,
     assignments, diagnoses, alertForm, setAlertForm, alertNotice, alertError,
     isAlertSubmitting, isAlertDialogOpen, openAlertDialog, closeAlertDialog, correctionRequests, correctionMessage, setCorrectionMessage,
-    correctionNotice, correctionError, isCorrectionSubmitting, canEdit, statusLabel,
+    isCorrectionSubmitting, canEdit,
     updateField, handleSubmit, handleAlertSubmit, handleCancelPatientAlert, handleCorrectionSubmit,
     retryProfile, retryAlerts, retryAssignments, retryDiagnoses, retryMedicalRecord,
     updateProfileField, cancelProfileEdit, handleProfileSubmit, setProfileEditing,
@@ -53,12 +53,7 @@ function PatientWorkspaceFeature() {
   const pages = {
     overview: (
       <>
-        <div className="mb-8">
-          <p className="text-sm font-semibold text-primary">{t("patientWorkspace.eyebrow")}</p>
-          <h1 className="mt-2 text-3xl font-bold">{t("patientWorkspace.title")}</h1>
-          <p className="mt-3 max-w-3xl leading-7 text-text-secondary">{t("patientWorkspace.intro")}</p>
-        </div>
-        <RoleDashboard role="PATIENT" attention={patientAttention} />
+        <RoleDashboard role="PATIENT" attention={patientAttention} eyebrow={t("patientWorkspace.eyebrow")} />
         <PatientCareSummary
           t={t}
           assignments={assignments}
@@ -81,11 +76,7 @@ function PatientWorkspaceFeature() {
         isLoading={isLoading}
         isSaving={isSaving}
         error={error}
-        notice={notice}
         canEdit={canEdit}
-        statusLabel={statusLabel}
-        correctionError={correctionError}
-        correctionNotice={correctionNotice}
         correctionRequests={correctionRequests}
         correctionMessage={correctionMessage}
         isCorrectionSubmitting={isCorrectionSubmitting}
@@ -111,7 +102,6 @@ function PatientWorkspaceFeature() {
         profile={profile}
         loading={profileLoading}
         error={profileError}
-        notice={profileNotice}
         form={profileForm}
         fieldErrors={profileFieldErrors}
         editing={profileEditing}
@@ -131,8 +121,6 @@ function PatientWorkspaceFeature() {
         alertsError={alertsError}
         onRetryAlerts={retryAlerts}
         onOpenDialog={openAlertDialog}
-        cancelError={alertCancelError}
-        cancelNotice={alertCancelNotice}
         cancellingAlertId={cancellingAlertId}
         onCancelAlert={handleCancelPatientAlert}
       />
@@ -156,8 +144,6 @@ function PatientWorkspaceFeature() {
         <Route path="reminders" element={<PatientRemindersFeature />} />
         <Route path="*" element={<Navigate to="/patient" replace />} />
       </Routes>
-      {/* Keeps the last section clear of the floating emergency button. */}
-      <div aria-hidden="true" className="h-20" />
       <PatientEmergencyButton t={t} onClick={openAlertDialog} />
       <PatientEmergencyDialog
         t={t}

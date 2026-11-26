@@ -41,8 +41,7 @@ function AdminWorkspaceFeature() {
           index
           element={(
             <>
-              <PageHeader eyebrow={t("attention.admin.overviewEyebrow")} title={t("attention.admin.overviewTitle")} description={t("attention.admin.overviewDescription")} />
-              <RoleDashboard role="ADMIN" attention={adminAttention} />
+              <RoleDashboard role="ADMIN" attention={adminAttention} eyebrow={t("attention.admin.overviewEyebrow")} />
             </>
           )}
         />

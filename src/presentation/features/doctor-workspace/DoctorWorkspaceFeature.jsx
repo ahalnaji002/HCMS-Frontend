@@ -36,8 +36,7 @@ function DoctorWorkspaceFeature() {
 
   const overview = (
     <>
-      <PageHeader eyebrow={t("doctorWorkspace.eyebrow")} title={t("doctorWorkspace.title")} />
-      <RoleDashboard role="DOCTOR" attention={doctorAttention} />
+      <RoleDashboard role="DOCTOR" attention={doctorAttention} eyebrow={t("doctorWorkspace.eyebrow")} />
     </>
   );
 

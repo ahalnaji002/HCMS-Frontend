@@ -22,9 +22,9 @@ export function Field({ label, hint, error, required, optionalLabel, className, 
 
   return (
     <div className={cx("flex flex-col gap-2", className)}>
-      <label htmlFor={id} className="text-sm font-semibold text-text-primary">
+      {/* The required star is drawn with CSS so it is never part of the label text. */}
+      <label htmlFor={id} className={cx("text-sm font-semibold text-text-primary", required && "after:ms-1 after:text-danger after:content-['*']")}>
         {label}
-        {required && <span aria-hidden="true" className="ms-1 text-danger">*</span>}
         {!required && optionalLabel && <>{" "}<span className="font-normal text-text-secondary">({optionalLabel})</span></>}
       </label>
       {children(control)}
