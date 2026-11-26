@@ -1,15 +1,35 @@
-import MedicalInfoField from "@/presentation/features/doctor-workspace/components/MedicalInfoField";
+import { Button, Card, DescriptionList, EmptyState, TextareaField } from "@/presentation/components/ui";
+import { useFormatDate } from "@/presentation/hooks/useFormatDate";
 
 function PatientDiagnosesSection({ t, diagnoses, value, onChange, isSaving, onSubmit }) {
+  const { dateTime } = useFormatDate();
   return (
-    <section id="doctor-diagnoses" className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
-      <h2 className="text-xl font-bold">{t("doctorWorkspace.diagnosesTitle")}</h2>
-      <form onSubmit={onSubmit} className="mt-5 space-y-4">
-        <label className="block space-y-2 text-sm font-semibold">{t("doctorWorkspace.diagnosisLabel")}<textarea required rows={4} maxLength={10000} value={value} onChange={(event) => onChange(event.target.value)} className="w-full rounded-xl border border-border bg-background px-4 py-3 font-normal" /></label>
-        <button type="submit" disabled={isSaving || !value.trim()} className="rounded-xl bg-primary px-6 py-3 font-semibold text-white disabled:opacity-60">{isSaving ? t("doctorWorkspace.saving") : t("doctorWorkspace.saveDiagnosis")}</button>
+    <Card id="doctor-diagnoses" title={t("doctorWorkspace.diagnosesTitle")}>
+      <form onSubmit={onSubmit} className="space-y-4">
+        <TextareaField
+          label={t("doctorWorkspace.diagnosisLabel")}
+          required
+          rows={4}
+          maxLength={10000}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+        />
+        <Button type="submit" disabled={!value.trim()} loading={isSaving} loadingText={t("doctorWorkspace.saving")}>
+          {t("doctorWorkspace.saveDiagnosis")}
+        </Button>
       </form>
-      <div className="mt-6 space-y-3">{diagnoses.length ? diagnoses.map((diagnosis) => <MedicalInfoField key={diagnosis.id} label={`${diagnosis.doctor_name} · ${diagnosis.specialization} · ${new Date(diagnosis.documented_at).toLocaleString()}`} value={diagnosis.diagnosis} />) : <p className="text-sm text-text-secondary">{t("doctorWorkspace.noDiagnoses")}</p>}</div>
-    </section>
+      <div className="mt-6">
+        {diagnoses.length ? (
+          <DescriptionList
+            items={diagnoses.map((diagnosis) => ({
+              key: diagnosis.id,
+              label: [diagnosis.doctor_name, diagnosis.specialization, dateTime(diagnosis.documented_at)].filter(Boolean).join(" · "),
+              value: diagnosis.diagnosis,
+            }))}
+          />
+        ) : <EmptyState title={t("doctorWorkspace.noDiagnoses")} />}
+      </div>
+    </Card>
   );
 }
 

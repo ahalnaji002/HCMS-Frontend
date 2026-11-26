@@ -1,27 +1,30 @@
-import MedicalInfoField from "@/presentation/features/doctor-workspace/components/MedicalInfoField";
-
-function PatientIntakeSummary({ t, patient, intake }) {
-  return (
-    <section id="doctor-medical-record" className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
-      <h2 className="text-xl font-bold">{patient.full_name}</h2>
-      <p className="mt-1 text-sm text-text-secondary">{patient.email}</p>
-      <h3 className="mt-6 font-bold">{t("doctorWorkspace.patientReport")}</h3>
-      {intake ? <div className="mt-4 grid gap-4 md:grid-cols-2">
-        <MedicalInfoField label={t("patientWorkspace.currentProblem")} value={intake.current_problem} />
-        <MedicalInfoField label={t("patientWorkspace.symptoms")} value={intake.symptoms} />
-        <MedicalInfoField label={t("patientWorkspace.onset")} value={intake.symptom_onset} />
-        <MedicalInfoField label={t("patientWorkspace.chronicConditions")} value={answerText(t, intake.chronic_conditions_answer, intake.chronic_conditions_details)} />
-        <MedicalInfoField label={t("patientWorkspace.medications")} value={answerText(t, intake.medications_answer, intake.medications_details)} />
-        <MedicalInfoField label={t("patientWorkspace.allergies")} value={answerText(t, intake.allergies_answer, intake.allergies_details)} />
-        {intake.additional_information && <MedicalInfoField label={t("patientWorkspace.additionalInformation")} value={intake.additional_information} />}
-      </div> : <p className="mt-3 text-sm text-text-secondary">{t("doctorWorkspace.noIntake")}</p>}
-    </section>
-  );
-}
+import { Card, DescriptionList, EmptyState } from "@/presentation/components/ui";
 
 function answerText(t, answer, details) {
   const label = t(`patientWorkspace.answers.${answer}`);
   return answer === "YES" && details ? `${label} — ${details}` : label;
+}
+
+// The patient's own health report (not a diagnosis), first tab of the file.
+function PatientIntakeSummary({ t, intake }) {
+  return (
+    <Card id="doctor-intake-summary" title={t("doctorWorkspace.patientReport")}>
+      {intake ? (
+        <DescriptionList
+          columns={2}
+          items={[
+            { label: t("patientWorkspace.currentProblem"), value: intake.current_problem },
+            { label: t("patientWorkspace.symptoms"), value: intake.symptoms },
+            { label: t("patientWorkspace.onset"), value: intake.symptom_onset },
+            { label: t("patientWorkspace.chronicConditions"), value: answerText(t, intake.chronic_conditions_answer, intake.chronic_conditions_details) },
+            { label: t("patientWorkspace.medications"), value: answerText(t, intake.medications_answer, intake.medications_details) },
+            { label: t("patientWorkspace.allergies"), value: answerText(t, intake.allergies_answer, intake.allergies_details) },
+            { label: t("patientWorkspace.additionalInformation"), value: intake.additional_information, wide: true },
+          ]}
+        />
+      ) : <EmptyState title={t("doctorWorkspace.noIntake")} />}
+    </Card>
+  );
 }
 
 export default PatientIntakeSummary;

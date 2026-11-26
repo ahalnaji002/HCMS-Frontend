@@ -1,20 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import { useToast } from "@/presentation/components/ui";
 
-function messageForRequestError(error, t, fallbackKey) {
+function errorKey(error, fallbackKey) {
   const status = error.response?.status;
 
-  if (status === 403) return t("doctorWorkspace.accessDenied");
-  if (status >= 500) return t("doctorWorkspace.serverError");
-  if (!error.response) return t("doctorWorkspace.networkError");
+  if (status === 403) return "doctorWorkspace.accessDenied";
+  if (status >= 500) return "doctorWorkspace.serverError";
+  if (!error.response) return "doctorWorkspace.networkError";
 
-  return t(fallbackKey);
+  return fallbackKey;
 }
 
 export default function useDoctorWorkspace() {
   const { t } = useTranslation();
   const { doctorWorkspace } = useApplicationServices();
+  // Action results go to the shared toast; a failed patient-list load is shown in place.
+  const toast = useToast();
   const [patients, setPatients] = useState([]);
   const [selectedPatientId, setSelectedPatientId] = useState("");
   const [intake, setIntake] = useState(null);
@@ -25,8 +28,7 @@ export default function useDoctorWorkspace() {
   const [loading, setLoading] = useState(true);
   const [detailLoading, setDetailLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
+  const [loadError, setLoadError] = useState("");
   const [medicalRecord, setMedicalRecord] = useState(null);
 
   const clearPatientData = useCallback(() => {
@@ -68,7 +70,7 @@ export default function useDoctorWorkspace() {
         clearPatientData();
         setPatients([]);
         setSelectedPatientId("");
-        setError(messageForRequestError(requestError, t, "doctorWorkspace.loadError"));
+        setLoadError(errorKey(requestError, "doctorWorkspace.loadError"));
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -77,7 +79,7 @@ export default function useDoctorWorkspace() {
     return () => {
       active = false;
     };
-  }, [clearPatientData, doctorWorkspace, t]);
+  }, [clearPatientData, doctorWorkspace]);
 
   useEffect(() => {
     if (!selectedPatientId) return undefined;
@@ -104,7 +106,7 @@ export default function useDoctorWorkspace() {
 
         clearPatientData();
         setSelectedPatientId("");
-        setError(messageForRequestError(requestError, t, "doctorWorkspace.detailError"));
+        toast.error({ key: errorKey(requestError, "doctorWorkspace.detailError") });
       })
       .finally(() => {
         if (active) setDetailLoading(false);
@@ -113,14 +115,12 @@ export default function useDoctorWorkspace() {
     return () => {
       active = false;
     };
-  }, [clearPatientData, doctorWorkspace, selectedPatientId, t]);
+  }, [clearPatientData, doctorWorkspace, selectedPatientId, toast]);
 
   function selectPatient(patientId) {
     if (String(patientId) === String(selectedPatientId)) return;
 
     clearPatientData();
-    setError("");
-    setNotice("");
     setDetailLoading(true);
     setSelectedPatientId(String(patientId));
   }
@@ -135,15 +135,13 @@ export default function useDoctorWorkspace() {
   const handleAssistanceAccessLoss = useCallback(() => {
     clearPatientData();
     setSelectedPatientId("");
-    setError(t("doctorWorkspace.accessDenied"));
-  }, [clearPatientData, t]);
+    toast.error({ key: "doctorWorkspace.accessDenied" });
+  }, [clearPatientData, toast]);
 
   async function handleNoteSubmit(event) {
     event.preventDefault();
     if (!selectedPatientId) return;
     setSaving(true);
-    setError("");
-    setNotice("");
 
     try {
       try {
@@ -157,18 +155,19 @@ export default function useDoctorWorkspace() {
       });
       await refreshPatientData(selectedPatientId);
       setNoteForm({ note: "" });
-      setNotice(t("doctorWorkspace.saved"));
+      toast.success({ key: "doctorWorkspace.saved" });
     } catch (requestError) {
       handlePatientAccessLoss(requestError);
-      setError(messageForRequestError(requestError, t, "doctorWorkspace.saveError"));
+      toast.error({ key: errorKey(requestError, "doctorWorkspace.saveError") });
     } finally {
       setSaving(false);
     }
   }
 
+  // Returns true when saved, so the form can treat the values as stored.
   async function saveMedicalRecord(payload) {
-    if (!selectedPatientId) return;
-    setSaving(true); setError(""); setNotice("");
+    if (!selectedPatientId) return false;
+    setSaving(true);
     try {
       let record;
       try {
@@ -179,10 +178,12 @@ export default function useDoctorWorkspace() {
       }
       const response = await doctorWorkspace.updatePatientMedicalRecord(selectedPatientId, payload);
       setMedicalRecord(response.data.medical_record || record.data.medical_record);
-      setNotice(t("doctorWorkspace.recordSaved"));
+      toast.success({ key: "doctorWorkspace.recordSaved" });
+      return true;
     } catch (requestError) {
       handlePatientAccessLoss(requestError);
-      setError(messageForRequestError(requestError, t, "doctorWorkspace.saveError"));
+      toast.error({ key: errorKey(requestError, "doctorWorkspace.saveError") });
+      return false;
     } finally { setSaving(false); }
   }
 
@@ -190,17 +191,15 @@ export default function useDoctorWorkspace() {
     event.preventDefault();
     if (!selectedPatientId || !diagnosisText.trim()) return;
     setSaving(true);
-    setError("");
-    setNotice("");
 
     try {
       await doctorWorkspace.createPatientDiagnosis(selectedPatientId, diagnosisText.trim());
       await refreshPatientData(selectedPatientId);
       setDiagnosisText("");
-      setNotice(t("doctorWorkspace.diagnosisSaved"));
+      toast.success({ key: "doctorWorkspace.diagnosisSaved" });
     } catch (requestError) {
       handlePatientAccessLoss(requestError);
-      setError(messageForRequestError(requestError, t, "doctorWorkspace.saveError"));
+      toast.error({ key: errorKey(requestError, "doctorWorkspace.saveError") });
     } finally {
       setSaving(false);
     }
@@ -211,7 +210,7 @@ export default function useDoctorWorkspace() {
   return {
     t, patients, selectedPatientId, selectPatient, intake, notes, diagnoses, medicalRecord,
     diagnosisText, setDiagnosisText, noteForm, setNoteForm, loading, detailLoading,
-    saving, error, setError, notice, currentPatient,
+    saving, loadError, currentPatient,
     handleNoteSubmit, handleDiagnosisSubmit, saveMedicalRecord, handleAssistanceAccessLoss,
   };
 }

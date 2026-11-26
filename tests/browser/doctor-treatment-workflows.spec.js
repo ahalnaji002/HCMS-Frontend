@@ -95,6 +95,8 @@ test("assigned Doctor creates a treatment plan, medication, and appointment and 
   });
 
   await page.goto("/doctor/patients");
+  // The patient file is split into tabs.
+  await page.getByRole("tab", { name: "Treatment plans" }).click();
   await expect(page.locator('a[href="/doctor/patients"][aria-current="page"]')).toHaveCount(1);
   const plans = page.locator("#doctor-treatment-plans");
   await expect(plans.getByText("This patient has no treatment plans yet.")).toBeVisible();
@@ -104,7 +106,7 @@ test("assigned Doctor creates a treatment plan, medication, and appointment and 
   await plans.getByLabel("General instructions").fill("Rest and stay hydrated.");
   await plans.getByRole("button", { name: "Create treatment plan" }).last().click();
 
-  await expect(plans.getByText("Treatment plan created.")).toBeVisible();
+  await expect(page.getByRole("status").filter({ hasText: "Treatment plan created." })).toBeVisible();
   await expect(plans.getByRole("button", { name: /Recovery plan/ })).toBeVisible();
   await expect(plans.getByText("No medications have been added to this plan.")).toBeVisible();
   expect(planListCalls).toBeGreaterThanOrEqual(2);
@@ -117,7 +119,7 @@ test("assigned Doctor creates a treatment plan, medication, and appointment and 
   await resources.getByLabel("Frequency").fill("Once daily");
   await resources.getByLabel("Instructions").fill("Take after breakfast.");
   await resources.getByRole("button", { name: "Save medication" }).click();
-  await expect(resources.getByText("Medication added.")).toBeVisible();
+  await expect(page.getByRole("status").filter({ hasText: "Medication added." })).toBeVisible();
   await expect(resources.getByText("Vitamin D")).toBeVisible();
   expect(medicationListCalls).toBeGreaterThanOrEqual(2);
   expect(medicationPayload).toEqual({ medication_name: "Vitamin D", dosage: "1000 IU", frequency: "Once daily", instructions: "Take after breakfast." });
@@ -127,8 +129,9 @@ test("assigned Doctor creates a treatment plan, medication, and appointment and 
   await resources.getByLabel("Purpose").fill("Follow-up");
   await resources.getByLabel("Location").fill("Clinic A");
   await resources.getByRole("button", { name: "Save appointment" }).click();
-  await expect(resources.getByText("Appointment added.")).toBeVisible();
-  await expect(resources.getByText("2026-12-05 09:15:00")).toBeVisible();
+  await expect(page.getByRole("status").filter({ hasText: "Appointment added." })).toBeVisible();
+  // Shown in the unified date format; sent as the same wall-clock value.
+  await expect(resources.getByText("5 Dec 2026, 9:15")).toBeVisible();
   expect(appointmentListCalls).toBeGreaterThanOrEqual(2);
   expect(appointmentPayload).toEqual({ appointment_date: "2026-12-05 09:15:00", purpose: "Follow-up", location: "Clinic A" });
   await expect(resources.locator("form")).toHaveCount(0);
@@ -142,12 +145,14 @@ test("Doctor keeps the plan draft and shows backend validation feedback", async 
     return route.fulfill({ status: 400, json: { success: false, message: "Validation failed", errors: { title: ["Required"] } } });
   });
   await page.goto("/doctor/patients");
+  // The patient file is split into tabs.
+  await page.getByRole("tab", { name: "Treatment plans" }).click();
   const plans = page.locator("#doctor-treatment-plans");
   await plans.getByRole("button", { name: "Create treatment plan" }).click();
   await plans.getByLabel("Plan title").fill("Draft plan");
   await plans.getByLabel("Start date").fill("2026-12-01");
   await plans.getByRole("button", { name: "Create treatment plan" }).last().click();
-  await expect(plans.getByRole("alert")).toContainText("Check the plan fields and try again.");
+  await expect(page.getByRole("alert")).toContainText("Check the plan fields and try again.");
   await expect(plans.getByLabel("Plan title")).toHaveValue("Draft plan");
   await expect(plans.locator("form")).toBeVisible();
 });
@@ -159,12 +164,14 @@ test("Doctor plan management clears plan details when assignment access is lost"
     return reply(route, {}, 403);
   });
   await page.goto("/doctor/patients");
+  // The patient file is split into tabs.
+  await page.getByRole("tab", { name: "Treatment plans" }).click();
   const plans = page.locator("#doctor-treatment-plans");
   await plans.getByRole("button", { name: "Create treatment plan" }).click();
   await plans.getByLabel("Plan title").fill("Unassigned plan");
   await plans.getByLabel("Start date").fill("2026-12-01");
   await plans.getByRole("button", { name: "Create treatment plan" }).last().click();
-  await expect(plans.getByRole("alert")).toContainText("You no longer have access to this patient's treatment plans.");
+  await expect(page.getByRole("alert")).toContainText("You no longer have access to this patient's treatment plans.");
   await expect(plans.getByLabel("Plan title")).toHaveCount(0);
   await expect(plans.getByText("This patient has no treatment plans yet.")).toBeVisible();
 });

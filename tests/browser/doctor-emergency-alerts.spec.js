@@ -82,7 +82,7 @@ test("doctor starts and resolves an alert", async ({ page }) => {
   await expect(sara.getByRole("heading", { name: "Sara Ahmad" })).toBeVisible();
 
   await sara.getByRole("button", { name: "Mark resolved" }).click();
-  await expect(sara.getByRole("heading", { name: "Mark this emergency as resolved?" })).toBeVisible();
+  await expect(sara.getByRole("group", { name: "Mark this emergency as resolved?" })).toBeVisible();
   await sara.getByRole("button", { name: "Yes, resolved" }).click();
   await expect(page.getByRole("status").filter({ hasText: "marked resolved" })).toBeVisible();
 
