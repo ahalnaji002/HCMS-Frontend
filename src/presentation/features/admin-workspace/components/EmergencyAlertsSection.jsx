@@ -4,7 +4,7 @@ function EmergencyAlertsSection({ t, alerts, doctors, selectedDoctorIds, busyId,
   const eligibleDoctors = doctors.filter((doctor) => ["General Medicine", "Emergency Medicine"].includes(doctor.specialization));
   return (
     <section id="admin-emergencies" className="mt-8 rounded-2xl border border-danger/30 bg-surface p-6 sm:p-8">
-      <h2 className="text-xl font-bold text-danger">{t("adminIntakes.emergencyTitle")}</h2>
+      <h1 className="text-xl font-bold text-danger">{t("adminIntakes.emergencyTitle")}</h1>
       <p className="mt-2 text-sm leading-6 text-text-secondary">{t("adminIntakes.emergencyDescription")}</p>
       {loading ? <p role="status" className="mt-5 text-sm text-text-secondary">{t("adminIntakes.emergencyLoading")}</p> : loadError ? (
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-danger/30 bg-danger/5 p-4">

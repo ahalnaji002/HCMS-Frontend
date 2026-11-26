@@ -1,7 +1,7 @@
 function DoctorWorkloadSection({ t, doctors, drafts, onDraftChange, busyId, onSave }) {
   return (
     <section id="admin-workload" className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
-      <h2 className="text-xl font-bold">{t("adminIntakes.workloadTitle")}</h2>
+      <h1 className="text-xl font-bold">{t("adminIntakes.workloadTitle")}</h1>
       <p className="mt-2 text-sm leading-6 text-text-secondary">{t("adminIntakes.workloadDescription")}</p>
       {doctors.length === 0 ? <p className="mt-5 text-sm text-text-secondary">{t("adminIntakes.noDoctors")}</p> : (
         <div className="mt-5 grid gap-4 lg:grid-cols-2">

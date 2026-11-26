@@ -11,7 +11,7 @@ function PatientProfileSection({
     <section id="patient-profile" className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold">{t("patientWorkspace.profile")}</h2>
+          <h1 className="text-xl font-bold">{t("patientWorkspace.profile")}</h1>
           <p className="mt-2 text-sm text-text-secondary">{t("patientWorkspace.profileHelp")}</p>
         </div>
         {profile && !editing && <button type="button" onClick={onEdit} className="min-h-10 rounded-lg border border-primary px-4 py-2 text-sm font-semibold text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{t("patientWorkspace.editProfile")}</button>}

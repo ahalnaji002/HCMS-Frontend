@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import StatusToast from "@/presentation/components/common/StatusToast";
+import { PageHeader } from "@/presentation/components/ui";
 import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard";
 import CorrectionRequestsSection from "@/presentation/features/admin-workspace/components/CorrectionRequestsSection";
 import DoctorWorkloadSection from "@/presentation/features/admin-workspace/components/DoctorWorkloadSection";
@@ -62,6 +63,12 @@ function AdminWorkspaceFeature() {
         <Route
           path="patient-intakes"
           element={(
+            <>
+            <PageHeader
+              eyebrow={t("adminIntakes.eyebrow")}
+              title={t("roleNavigation.admin.patientIntakes")}
+              description={t("adminIntakes.description")}
+            />
             <PatientIntakeQueue
               t={t}
               loading={loading}
@@ -75,6 +82,7 @@ function AdminWorkspaceFeature() {
               onStartReview={handleStartReview}
               onAssign={handleAssign}
             />
+            </>
           )}
         />
         <Route path="assignments" element={<DoctorPatientAssignmentsSection />} />

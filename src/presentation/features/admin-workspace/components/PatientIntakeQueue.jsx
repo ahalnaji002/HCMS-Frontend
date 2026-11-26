@@ -6,7 +6,7 @@ function PatientIntakeQueue({
   if (intakes.length === 0) return <p id="admin-intakes" className="mt-8 rounded-xl border border-border bg-surface p-6 text-text-secondary">{t("adminIntakes.empty")}</p>;
 
   return (
-    <div id="admin-intakes" className="mt-8 space-y-6">
+    <div id="admin-intakes" className="space-y-6">
       {intakes.map((intake) => <article key={intake.id} className="rounded-2xl border border-border bg-surface p-6 shadow-sm sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4"><div><h2 className="text-xl font-bold">{intake.patient_name}</h2><p className="mt-1 text-sm text-text-secondary">{intake.patient_email}</p></div><span className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">{t(`patientWorkspace.status.${intake.status}`)}</span></div>
         <div className="mt-6 grid gap-4 md:grid-cols-2">

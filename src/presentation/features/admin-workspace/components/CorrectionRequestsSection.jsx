@@ -1,7 +1,7 @@
 function CorrectionRequestsSection({ t, requests, responses, onResponseChange, busyId, onResolve }) {
   return (
     <section id="admin-support" className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
-      <h2 className="text-xl font-bold">{t("adminIntakes.correctionsTitle")}</h2>
+      <h1 className="text-xl font-bold">{t("adminIntakes.correctionsTitle")}</h1>
       <p className="mt-2 text-sm leading-6 text-text-secondary">{t("adminIntakes.correctionsDescription")}</p>
       {requests.length === 0 ? <p className="mt-5 text-sm text-text-secondary">{t("adminIntakes.noCorrections")}</p> : <div className="mt-5 space-y-4">
         {requests.map((request) => <article key={request.id} className="rounded-xl border border-border bg-background p-5">

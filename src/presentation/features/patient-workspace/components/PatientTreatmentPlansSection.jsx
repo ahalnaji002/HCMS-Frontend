@@ -129,7 +129,7 @@ function PatientTreatmentPlansSection() {
     <section id="patient-treatment-plans" className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
       <div>
         <p className="text-sm font-semibold text-primary">{t("patientTreatmentPlans.eyebrow")}</p>
-        <h2 className="mt-1 text-xl font-bold">{t("patientTreatmentPlans.title")}</h2>
+        <h1 className="mt-1 text-xl font-bold">{t("patientTreatmentPlans.title")}</h1>
         <p className="mt-2 text-sm leading-6 text-text-secondary">{t("patientTreatmentPlans.description")}</p>
       </div>
 

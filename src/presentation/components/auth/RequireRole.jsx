@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/presentation/context/useAuth";
 import { roleRoutes } from "@/presentation/routing/roleRoutes";
@@ -6,6 +6,7 @@ import { roleRoutes } from "@/presentation/routing/roleRoutes";
 function RequireRole({ role, children }) {
   const { t } = useTranslation();
   const { user, isLoading } = useAuth();
+  const location = useLocation();
 
   if (isLoading) {
     return (
@@ -19,7 +20,8 @@ function RequireRole({ role, children }) {
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    // Remember the page so signing in again returns here.
+    return <Navigate to="/login" replace state={{ from: `${location.pathname}${location.search}` }} />;
   }
 
   if (user.role !== role) {

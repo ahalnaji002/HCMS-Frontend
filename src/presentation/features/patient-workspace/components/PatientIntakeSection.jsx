@@ -7,7 +7,7 @@ function PatientIntakeSection({
   return (
     <section id="patient-intake" className="rounded-2xl border border-border bg-surface p-6 shadow-lg shadow-primary/5 sm:p-8">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-xl font-bold">{t("patientWorkspace.formTitle")}</h2>
+        <h1 className="text-xl font-bold">{t("patientWorkspace.formTitle")}</h1>
         <span className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">{statusLabel}</span>
       </div>
       <div className="mb-6 rounded-xl border border-border bg-background p-4 text-sm leading-6 text-text-secondary">
