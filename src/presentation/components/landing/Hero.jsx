@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import hcmsMarkWhite from "@/assets/brand/hcms-mark-white.svg";
 import RegistrationRolePicker from "@/presentation/components/landing/RegistrationRolePicker";
 
-function Hero() {
+function Hero({ onEmergency }) {
   const { t } = useTranslation();
   return (
     <section className="relative overflow-hidden bg-background">
@@ -32,7 +32,22 @@ function Hero() {
             {t("landing.heroDescription")}
           </p>
 
-          <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-8">
+          <div className="mt-6 rounded-2xl border border-danger/40 bg-danger/5 p-4 sm:mt-8">
+            <p className="text-sm font-semibold leading-6 text-text-primary">{t("publicEmergency.heroTitle")}</p>
+            <p className="mt-1 text-sm leading-6 text-text-secondary">{t("publicEmergency.heroDescription")}</p>
+            <button
+              type="button"
+              onClick={onEmergency}
+              className="mt-3 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-danger px-6 text-sm font-bold text-white shadow-sm transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-danger"
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
+              </svg>
+              {t("publicEmergency.heroButton")}
+            </button>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center gap-3">
             <RegistrationRolePicker className="inline-flex min-h-12 items-center justify-center rounded-xl bg-primary px-6 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" />
 
             <a

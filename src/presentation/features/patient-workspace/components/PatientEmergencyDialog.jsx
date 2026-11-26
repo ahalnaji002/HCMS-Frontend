@@ -5,7 +5,8 @@ import {
 
 // Emergency alert form in a native modal dialog. It is opened from the floating
 // emergency button (always visible) or from the "My recent alerts" section.
-function PatientEmergencyDialog({ t, open, onClose, form, setForm, error, notice, isSubmitting, onSubmit }) {
+// The landing page reuses it for visitors with its own `hint`, `phoneError`, and `footer`.
+function PatientEmergencyDialog({ t, open, onClose, form, setForm, error, notice, isSubmitting, onSubmit, hint, phoneError, footer }) {
   const dialogRef = useRef(null);
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState("");
@@ -59,10 +60,11 @@ function PatientEmergencyDialog({ t, open, onClose, form, setForm, error, notice
           </div>
         ) : (
           <form onSubmit={onSubmit} className="mt-4 grid gap-4">
-            <p className="text-sm leading-6 text-text-secondary">{t("patientWorkspace.emergencyDialogHint")}</p>
+            <p className="text-sm leading-6 text-text-secondary">{hint ?? t("patientWorkspace.emergencyDialogHint")}</p>
             {error && <p role="alert" className="rounded-xl bg-danger/10 p-4 text-sm text-danger">{error}</p>}
             <label className="space-y-2 text-sm font-semibold">{t("patientWorkspace.alertPhone")}
-              <input required maxLength={30} inputMode="tel" autoComplete="tel" value={form.phone} onChange={update("phone")} className={inputClass} />
+              <input required maxLength={30} inputMode="tel" autoComplete="tel" value={form.phone} onChange={update("phone")} aria-invalid={phoneError ? "true" : undefined} aria-describedby={phoneError ? "emergency-phone-error" : undefined} className={inputClass} />
+              {phoneError && <span id="emergency-phone-error" className="block text-sm font-normal text-danger">{phoneError}</span>}
             </label>
             <div className="space-y-2">
               <label className="block space-y-2 text-sm font-semibold">{t("patientWorkspace.alertLocation")}
@@ -87,6 +89,7 @@ function PatientEmergencyDialog({ t, open, onClose, form, setForm, error, notice
             <button type="submit" disabled={isSubmitting} className="min-h-12 w-full rounded-xl bg-danger px-6 py-3 text-base font-bold text-white disabled:opacity-60">
               {isSubmitting ? t("patientWorkspace.saving") : t("patientWorkspace.sendAlert")}
             </button>
+            {footer}
           </form>
         )}
       </div>
