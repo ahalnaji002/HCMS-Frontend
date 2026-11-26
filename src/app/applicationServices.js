@@ -6,6 +6,7 @@ import * as dashboard from "@/infrastructure/repositories/roleDashboardRepositor
 import * as doctorWorkspace from "@/infrastructure/repositories/doctorWorkspaceRepository";
 import * as ngoWorkspace from "@/infrastructure/repositories/ngoWorkspaceRepository";
 import * as patientIntake from "@/infrastructure/repositories/patientIntakeRepository";
+import * as publicEmergency from "@/infrastructure/repositories/publicEmergencyRepository";
 import * as patientWorkspace from "@/infrastructure/repositories/patientWorkspaceRepository";
 import * as reminders from "@/infrastructure/repositories/remindersRepository";
 import * as messaging from "@/infrastructure/repositories/messagingRepository";
@@ -21,6 +22,7 @@ const applicationServices = createApplicationServices({
   ngoWorkspace,
   patientIntake,
   patientWorkspace,
+  publicEmergency,
   reminders,
   messaging,
   notifications,

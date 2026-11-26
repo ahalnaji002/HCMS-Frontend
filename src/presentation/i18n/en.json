@@ -1447,5 +1447,20 @@
       "network": "Could not reach the server. Check your connection and try again.",
       "server": "Something went wrong. Try again."
     }
+  },
+  "publicEmergency": {
+    "heroTitle": "Medical emergency and no account?",
+    "heroDescription": "Send your phone number and location. The administration is alerted immediately and assigns an available doctor to contact you.",
+    "heroButton": "Send an emergency alert",
+    "hint": "No account needed. Enter a number we can call you back on; the administration is alerted immediately and assigns an available doctor.",
+    "accountHint": "Patients with an account can also track their alerts after signing in.",
+    "sent": "Your emergency alert was sent. Keep your phone nearby: a doctor or the administration will call you.",
+    "errors": {
+      "phoneInvalid": "Enter a phone number we can call, for example 0591234567.",
+      "rateLimited": "Too many alerts were sent from this connection. Wait a few minutes and try again.",
+      "validation": "Check the entered information and try again.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "server": "Could not send the alert. Try again."
+    }
   }
 }

@@ -5,7 +5,7 @@ function execute(repositoryOperation) {
 }
 
 export function createApplicationServices(repositories) {
-  const { admin, adminReports, auth, dashboard, doctorWorkspace, ngoWorkspace, patientIntake, patientWorkspace, messaging, notifications, reminders, session } = repositories;
+  const { admin, adminReports, auth, dashboard, doctorWorkspace, ngoWorkspace, patientIntake, patientWorkspace, publicEmergency, messaging, notifications, reminders, session } = repositories;
 
   return {
     session,
@@ -86,6 +86,9 @@ export function createApplicationServices(repositories) {
       listNotifications: execute(notifications.listNotifications),
       markNotificationRead: execute(notifications.markNotificationRead),
       markAllNotificationsRead: execute(notifications.markAllNotificationsRead),
+    },
+    publicEmergency: {
+      createAlert: execute(publicEmergency.createPublicEmergencyAlert),
     },
     reminders: {
       listOwnReminders: execute(reminders.listOwnReminders),
