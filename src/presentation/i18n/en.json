@@ -1462,5 +1462,11 @@
       "network": "Could not reach the server. Check your connection and try again.",
       "server": "Could not send the alert. Try again."
     }
+  },
+  "ui": {
+    "loading": "Loading…",
+    "loadError": "This could not be loaded.",
+    "retry": "Try again",
+    "cancel": "Cancel"
   }
 }
