@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
-import { translateServerMessage } from "@/presentation/utils/serverMessages";
+import { useToast } from "@/presentation/components/ui";
 
 export default function useAdminWorkspace() {
   const { t } = useTranslation();
   const { admin } = useApplicationServices();
+  // Feedback goes through the shared toast: messages are translation
+  // descriptors, so they follow language changes and clear on page change.
+  const toast = useToast();
   const [intakes, setIntakes] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [reasons, setReasons] = useState({});
@@ -13,8 +16,6 @@ export default function useAdminWorkspace() {
   const [workloadDrafts, setWorkloadDrafts] = useState({});
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState(null);
-  const [error, setError] = useState(null);
-  const [notice, setNotice] = useState(null);
   const [correctionRequests, setCorrectionRequests] = useState([]);
   const [correctionResponses, setCorrectionResponses] = useState({});
   const [emergencyAlerts, setEmergencyAlerts] = useState([]);
@@ -60,7 +61,7 @@ export default function useAdminWorkspace() {
         }])));
       })
       .catch(() => {
-        if (active) setError({ key: "adminIntakes.loadError" });
+        if (active) toast.error({ key: "adminIntakes.loadError" });
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -79,7 +80,7 @@ export default function useAdminWorkspace() {
         if (active) setEmergencyLoading(false);
       });
     return () => { active = false; };
-  }, [admin, t]);
+  }, [admin, toast]);
 
   async function handleRefreshEmergencyAlerts() {
     setEmergencyLoading(true);
@@ -94,14 +95,12 @@ export default function useAdminWorkspace() {
 
   async function handleStartReview(intakeId) {
     setBusyId(intakeId);
-    setError(null);
-    setNotice(null);
     try {
       await admin.startPatientIntakeReview(intakeId);
       await refresh();
-      setNotice({ key: "adminIntakes.reviewStarted" });
+      toast.success({ key: "adminIntakes.reviewStarted" });
     } catch (requestError) {
-      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
+      toast.error({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
@@ -111,12 +110,10 @@ export default function useAdminWorkspace() {
     const doctorId = selectedDoctors[intake.id];
     const assignmentReason = reasons[intake.id]?.trim();
     if (!doctorId || !assignmentReason) {
-      setError({ key: "adminIntakes.assignmentRequired" });
+      toast.error({ key: "adminIntakes.assignmentRequired" });
       return;
     }
     setBusyId(intake.id);
-    setError(null);
-    setNotice(null);
     try {
       await admin.assignDoctorToPatient({
         doctor_id: doctorId,
@@ -125,9 +122,9 @@ export default function useAdminWorkspace() {
       });
       setReasons((current) => ({ ...current, [intake.id]: "" }));
       await refresh();
-      setNotice({ key: "adminIntakes.assignmentSaved" });
+      toast.success({ key: "adminIntakes.assignmentSaved" });
     } catch (requestError) {
-      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
+      toast.error({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
@@ -136,12 +133,10 @@ export default function useAdminWorkspace() {
   async function handleEmergencyAssign(alert) {
     const doctorId = emergencyDoctors[alert.id];
     if (!doctorId) {
-      setError({ key: "adminIntakes.emergencyDoctorRequired" });
+      toast.error({ key: "adminIntakes.emergencyDoctorRequired" });
       return;
     }
     setBusyId(`emergency-${alert.id}`);
-    setError(null);
-    setNotice(null);
     try {
       await admin.assignDoctorToEmergencyAlert(alert.id, Number(doctorId));
       setEmergencyDoctors((current) => {
@@ -149,12 +144,11 @@ export default function useAdminWorkspace() {
         delete next[alert.id];
         return next;
       });
-      setNotice({ key: "adminIntakes.emergencyAssigned" });
+      toast.success({ key: "adminIntakes.emergencyAssigned" });
       try {
         await refreshEmergencyAlerts();
       } catch {
-        setNotice(null);
-        setError({ key: "adminIntakes.emergencyRefreshError" });
+        toast.error({ key: "adminIntakes.emergencyRefreshError" });
       }
     } catch (requestError) {
       const status = requestError.response?.status;
@@ -166,7 +160,7 @@ export default function useAdminWorkspace() {
       if (status === 404 || status === 409) {
         await handleRefreshEmergencyAlerts();
       }
-      setError({
+      toast.error({
         server: requestError.response?.data?.message,
         key: status === 403
           ? "adminIntakes.emergencyForbidden"
@@ -185,17 +179,15 @@ export default function useAdminWorkspace() {
     const draft = workloadDrafts[doctor.id];
     if (!draft) return;
     setBusyId(`doctor-${doctor.id}`);
-    setError(null);
-    setNotice(null);
     try {
       await admin.updateDoctorWorkload(doctor.id, {
         availability: draft.availability,
         capacity_limit: draft.capacity_limit === "" ? null : Number(draft.capacity_limit),
       });
       await refresh();
-      setNotice({ key: "adminIntakes.workloadSaved" });
+      toast.success({ key: "adminIntakes.workloadSaved" });
     } catch (requestError) {
-      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
+      toast.error({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
@@ -203,36 +195,20 @@ export default function useAdminWorkspace() {
 
   async function handleResolveCorrection(request) {
     setBusyId(`correction-${request.id}`);
-    setError(null);
-    setNotice(null);
     try {
       await admin.resolveIntakeCorrectionRequest(request.id, correctionResponses[request.id] || "");
       await refresh();
-      setNotice({ key: "adminIntakes.correctionResolved" });
+      toast.success({ key: "adminIntakes.correctionResolved" });
     } catch (requestError) {
-      setError({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
+      toast.error({ server: requestError.response?.data?.message, key: "adminIntakes.actionError" });
     } finally {
       setBusyId(null);
     }
   }
 
-
-  // Messages are kept as translation keys (or server text) and translated on
-  // render, so they follow language changes.
-  const translate = (message) => {
-    if (!message) return "";
-    if (message.server) return translateServerMessage(t, message.server, message.key);
-    return message.key ? t(message.key) : message.text;
-  };
-  const clearMessages = useCallback(() => {
-    setError(null);
-    setNotice(null);
-  }, []);
-
   return {
     t, intakes, doctors, reasons, setReasons, selectedDoctors, setSelectedDoctors,
     workloadDrafts, setWorkloadDrafts, loading, busyId,
-    error: translate(error), notice: translate(notice), clearMessages,
     correctionRequests, correctionResponses, setCorrectionResponses, emergencyAlerts,
     emergencyDoctors, setEmergencyDoctors, emergencyLoading, emergencyLoadError,
     handleRefreshEmergencyAlerts, handleStartReview, handleAssign,

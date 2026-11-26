@@ -1,7 +1,5 @@
-import { useEffect } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import StatusToast from "@/presentation/components/common/StatusToast";
-import { PageHeader } from "@/presentation/components/ui";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { Button, PageHeader } from "@/presentation/components/ui";
 import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard";
 import CorrectionRequestsSection from "@/presentation/features/admin-workspace/components/CorrectionRequestsSection";
 import DoctorWorkloadSection from "@/presentation/features/admin-workspace/components/DoctorWorkloadSection";
@@ -18,13 +16,12 @@ import useAdminWorkspace from "@/presentation/features/admin-workspace/useAdminW
 function AdminWorkspaceFeature() {
   const {
     t, intakes, doctors, reasons, setReasons, selectedDoctors, setSelectedDoctors,
-    workloadDrafts, setWorkloadDrafts, loading, busyId, error, notice, clearMessages,
+    workloadDrafts, setWorkloadDrafts, loading, busyId,
     correctionRequests, correctionResponses, setCorrectionResponses, emergencyAlerts,
     emergencyDoctors, setEmergencyDoctors, emergencyLoading, emergencyLoadError,
     handleRefreshEmergencyAlerts, handleStartReview, handleAssign,
     handleEmergencyAssign, handleSaveWorkload, handleResolveCorrection,
   } = useAdminWorkspace();
-  const { pathname } = useLocation();
 
   const count = (list, predicate) => list.filter(predicate).length;
   const adminAttention = (dashboard) => (loading ? [] : [
@@ -36,30 +33,28 @@ function AdminWorkspaceFeature() {
     { id: "doctors", tone: "info", count: count(doctors, (doctor) => doctor.availability === "UNAVAILABLE" || doctor.capacity_warning), title: t("attention.admin.doctors"), description: t("attention.admin.doctorsHint"), href: "/admin/doctor-workload", actionLabel: t("attention.admin.viewAction") },
   ]);
 
-  // A message belongs to the page where the action happened.
-  useEffect(() => {
-    clearMessages();
-  }, [pathname, clearMessages]);
-
   // Workspace data is loaded once here and shared by every administrator page.
   return (
     <>
-      <StatusToast error={error} notice={notice} onDismiss={clearMessages} dismissLabel={t("roleHome.dismissMessage")} />
       <Routes>
         <Route
           index
           element={(
             <>
-              <div className="mb-8">
-                <p className="text-sm font-semibold text-primary">{t("attention.admin.overviewEyebrow")}</p>
-                <h1 className="mt-2 text-3xl font-bold">{t("attention.admin.overviewTitle")}</h1>
-                <p className="mt-3 max-w-3xl leading-7 text-text-secondary">{t("attention.admin.overviewDescription")}</p>
-              </div>
+              <PageHeader eyebrow={t("attention.admin.overviewEyebrow")} title={t("attention.admin.overviewTitle")} description={t("attention.admin.overviewDescription")} />
               <RoleDashboard role="ADMIN" attention={adminAttention} />
             </>
           )}
         />
-        <Route path="join-requests" element={<JoinRequestsSection />} />
+        <Route
+          path="join-requests"
+          element={(
+            <>
+              <PageHeader eyebrow={t("adminJoinRequests.eyebrow")} title={t("roleNavigation.admin.joinRequests")} description={t("adminJoinRequests.description")} />
+              <JoinRequestsSection />
+            </>
+          )}
+        />
         <Route
           path="patient-intakes"
           element={(
@@ -85,10 +80,20 @@ function AdminWorkspaceFeature() {
             </>
           )}
         />
-        <Route path="assignments" element={<DoctorPatientAssignmentsSection />} />
+        <Route
+          path="assignments"
+          element={(
+            <>
+              <PageHeader eyebrow={t("adminAssignments.eyebrow")} title={t("adminAssignments.title")} description={t("adminAssignments.description")} />
+              <DoctorPatientAssignmentsSection />
+            </>
+          )}
+        />
         <Route
           path="doctor-workload"
           element={(
+            <>
+            <PageHeader title={t("adminIntakes.workloadTitle")} description={t("adminIntakes.workloadDescription")} />
             <DoctorWorkloadSection
               t={t}
               doctors={doctors}
@@ -97,11 +102,18 @@ function AdminWorkspaceFeature() {
               busyId={busyId}
               onSave={handleSaveWorkload}
             />
+            </>
           )}
         />
         <Route
           path="emergency-alerts"
           element={(
+            <>
+            <PageHeader
+              title={t("adminIntakes.emergencyTitle")}
+              description={t("adminIntakes.emergencyDescription")}
+              actions={<Button variant="secondary" onClick={handleRefreshEmergencyAlerts} disabled={emergencyLoading}>{t("ui.refresh")}</Button>}
+            />
             <EmergencyAlertsSection
               t={t}
               alerts={emergencyAlerts}
@@ -114,11 +126,14 @@ function AdminWorkspaceFeature() {
               busyId={busyId}
               onAssign={handleEmergencyAssign}
             />
+            </>
           )}
         />
         <Route
           path="support"
           element={(
+            <>
+            <PageHeader title={t("adminIntakes.correctionsTitle")} description={t("adminIntakes.correctionsDescription")} />
             <CorrectionRequestsSection
               t={t}
               requests={correctionRequests}
@@ -127,6 +142,7 @@ function AdminWorkspaceFeature() {
               busyId={busyId}
               onResolve={handleResolveCorrection}
             />
+            </>
           )}
         />
         <Route path="notifications" element={<NotificationsFeature role="ADMIN" />} />

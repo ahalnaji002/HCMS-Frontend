@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import { Button, EmptyState, ErrorState, LoadingState, PageHeader, SelectField, Tabs } from "@/presentation/components/ui";
+import { useFormatDate } from "@/presentation/hooks/useFormatDate";
 
 const REPORTS = [
   { id: "patients", titleKey: "patients", service: "getPatientReport", columns: ["id", "user_id", "full_name", "created_at"] },
@@ -9,6 +11,8 @@ const REPORTS = [
 ];
 const PAGE_SIZES = [10, 20, 50, 100];
 const ASSISTANCE_STATUSES = ["PENDING", "UNDER_REVIEW", "APPROVED", "REJECTED", "COMPLETED"];
+const DATE_COLUMNS = new Set(["start_date", "end_date"]);
+const DATE_TIME_COLUMNS = new Set(["created_at", "updated_at"]);
 
 function errorKind(error) {
   if (!error.response) return "network";
@@ -21,6 +25,7 @@ function errorKind(error) {
 function AdminReportsFeature() {
   const { t, i18n } = useTranslation();
   const { adminReports } = useApplicationServices();
+  const { date, dateTime } = useFormatDate();
   const [reportId, setReportId] = useState("patients");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
@@ -70,78 +75,86 @@ function AdminReportsFeature() {
     const value = item[column];
     if (value === null || value === undefined || value === "") return t("adminReports.notAvailable");
     if (column === "status") return t(`adminReports.statuses.${value}`, { defaultValue: value });
+    if (DATE_COLUMNS.has(column)) return date(value) || String(value);
+    if (DATE_TIME_COLUMNS.has(column)) return dateTime(value) || String(value);
     return String(value);
   }
 
   const formatNumber = (value) => new Intl.NumberFormat(i18n.language || undefined).format(value);
 
-  return (
-    <section aria-labelledby="admin-reports-title" className="mx-auto max-w-7xl">
-      <header className="mb-7">
-        <p className="text-sm font-semibold text-primary">{t("adminReports.eyebrow")}</p>
-        <h1 id="admin-reports-title" className="mt-2 text-3xl font-bold">{t("roleNavigation.admin.reports")}</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-text-secondary">{t("adminReports.description")}</p>
-      </header>
-
-      <div role="tablist" aria-label={t("adminReports.reportTypes")} className="mb-6 flex flex-wrap gap-2 border-b border-border">
-        {REPORTS.map((item) => <button
-          key={item.id}
-          id={`report-tab-${item.id}`}
-          type="button"
-          role="tab"
-          aria-selected={report.id === item.id}
-          aria-controls="admin-report-panel"
-          onClick={() => selectReport(item.id)}
-          className={`min-h-11 border-b-2 px-4 py-2 text-sm font-semibold ${report.id === item.id ? "border-primary text-primary" : "border-transparent text-text-secondary"}`}
-        >{t(`adminReports.types.${item.titleKey}`)}</button>)}
+  const panel = (
+    <>
+      <div className="mb-5 flex flex-col gap-4 rounded-2xl border border-border bg-surface p-4 sm:flex-row sm:items-end sm:justify-between sm:p-5">
+        <div>
+          <h2 className="text-xl font-bold">{t(`adminReports.types.${report.titleKey}`)}</h2>
+          <p className="mt-1 text-sm text-text-secondary">{t("adminReports.totalRecords", { count: formatNumber(state.total) })}</p>
+        </div>
+        <div className="flex flex-wrap items-end gap-3">
+          {report.filter && (
+            <SelectField
+              label={t("adminReports.statusFilter")}
+              value={status}
+              onChange={(event) => { setStatus(event.target.value); setPage(1); }}
+              disabled={loading}
+              placeholder={t("adminReports.allStatuses")}
+              options={ASSISTANCE_STATUSES.map((value) => ({ value, label: t(`adminReports.statuses.${value}`) }))}
+              className="min-w-44"
+            />
+          )}
+          <SelectField
+            label={t("adminReports.pageSize")}
+            value={limit}
+            onChange={(event) => { setLimit(Number(event.target.value)); setPage(1); }}
+            disabled={loading}
+            options={PAGE_SIZES.map((size) => ({ value: size, label: String(size) }))}
+            className="min-w-24"
+          />
+        </div>
       </div>
 
-      <div id="admin-report-panel" role="tabpanel" aria-labelledby={`report-tab-${report.id}`}>
-        <div className="mb-5 flex flex-col gap-4 rounded-2xl border border-border bg-surface p-4 sm:flex-row sm:items-end sm:justify-between sm:p-5">
-          <div>
-            <h2 className="text-xl font-bold">{t(`adminReports.types.${report.titleKey}`)}</h2>
-              <p className="mt-1 text-sm text-text-secondary">{t("adminReports.totalRecords", { count: formatNumber(state.total) })}</p>
-          </div>
-          <div className="flex flex-wrap items-end gap-3">
-            {report.filter && <label className="text-sm font-semibold">{t("adminReports.statusFilter")}
-              <select value={status} onChange={(event) => { setStatus(event.target.value); setPage(1); }} disabled={loading} className="mt-1 block min-h-10 min-w-44 rounded-lg border border-border bg-background px-3 py-2 font-normal">
-                <option value="">{t("adminReports.allStatuses")}</option>
-                {ASSISTANCE_STATUSES.map((value) => <option key={value} value={value}>{t(`adminReports.statuses.${value}`)}</option>)}
-              </select>
-            </label>}
-            <label className="text-sm font-semibold">{t("adminReports.pageSize")}
-              <select value={limit} onChange={(event) => { setLimit(Number(event.target.value)); setPage(1); }} disabled={loading} className="mt-1 block min-h-10 min-w-24 rounded-lg border border-border bg-background px-3 py-2 font-normal">
-                {PAGE_SIZES.map((size) => <option key={size} value={size}>{size}</option>)}
-              </select>
-            </label>
-          </div>
-        </div>
-
-        {loading ? <p role="status" className="rounded-2xl border border-border bg-surface p-6 text-sm text-text-secondary">{t("adminReports.loading")}</p>
-          : visibleError ? <div role="alert" className="rounded-2xl border border-danger/30 bg-danger/5 p-6 text-sm text-danger">
-            <p>{t(`adminReports.errors.${visibleError}`)}</p>
-            <button type="button" onClick={retry} className="mt-4 min-h-10 rounded-lg border border-current px-4 py-2 font-semibold">{t("adminReports.retry")}</button>
-          </div>
-            : state.items.length === 0 ? <p role="status" className="rounded-2xl border border-border bg-surface p-6 text-sm text-text-secondary">{t("adminReports.empty")}</p>
-              : <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
+      {loading ? <LoadingState label={t("adminReports.loading")} />
+        : visibleError ? <ErrorState message={t(`adminReports.errors.${visibleError}`)} onRetry={retry} retryLabel={t("adminReports.retry")} />
+          : state.items.length === 0 ? <EmptyState title={t("adminReports.empty")} />
+            : (
+              <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
                 <table className="w-full min-w-max border-collapse text-start text-sm">
                   <caption className="sr-only">{t("adminReports.tableCaption", { report: t(`adminReports.types.${report.titleKey}`) })}</caption>
-                  <thead className="bg-background text-start"><tr>{report.columns.map((column) => <th key={column} scope="col" className="whitespace-nowrap border-b border-border px-4 py-3 text-start font-semibold">{t(`adminReports.columns.${column}`)}</th>)}</tr></thead>
-                  <tbody className="divide-y divide-border">{state.items.map((item, rowIndex) => <tr key={item.id ?? rowIndex}>
-                    {report.columns.map((column) => <td key={column} className="whitespace-nowrap px-4 py-3 text-text-secondary">{cellValue(item, column)}</td>)}
-                  </tr>)}</tbody>
+                  <thead className="bg-background text-start">
+                    <tr>{report.columns.map((column) => <th key={column} scope="col" className="whitespace-nowrap border-b border-border px-4 py-3 text-start font-semibold">{t(`adminReports.columns.${column}`)}</th>)}</tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {state.items.map((item, rowIndex) => (
+                      <tr key={item.id ?? rowIndex} className="transition-colors hover:bg-background">
+                        {report.columns.map((column) => <td key={column} className="whitespace-nowrap px-4 py-3 text-text-secondary">{cellValue(item, column)}</td>)}
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
-              </div>}
+              </div>
+            )}
 
-        {!loading && !visibleError && state.total > 0 && <nav aria-label={t("adminReports.pagination")} className="mt-5 flex flex-wrap items-center justify-between gap-3">
+      {!loading && !visibleError && state.total > 0 && (
+        <nav aria-label={t("adminReports.pagination")} className="mt-5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-text-secondary">{t("adminReports.pageOf", { page: formatNumber(state.page), totalPages: formatNumber(state.totalPages) })}</p>
           <div className="flex gap-2">
-            <button type="button" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={page <= 1 || loading} className="min-h-10 rounded-lg border border-border px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50">{t("adminReports.previous")}</button>
-            <button type="button" onClick={() => setPage((current) => Math.min(state.totalPages, current + 1))} disabled={page >= state.totalPages || loading} className="min-h-10 rounded-lg border border-border px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50">{t("adminReports.next")}</button>
+            <Button variant="secondary" size="sm" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={page <= 1 || loading}>{t("adminReports.previous")}</Button>
+            <Button variant="secondary" size="sm" onClick={() => setPage((current) => Math.min(state.totalPages, current + 1))} disabled={page >= state.totalPages || loading}>{t("adminReports.next")}</Button>
           </div>
-        </nav>}
-      </div>
-    </section>
+        </nav>
+      )}
+    </>
+  );
+
+  return (
+    <div className="mx-auto max-w-7xl">
+      <PageHeader eyebrow={t("adminReports.eyebrow")} title={t("roleNavigation.admin.reports")} description={t("adminReports.description")} />
+      <Tabs
+        label={t("adminReports.reportTypes")}
+        value={report.id}
+        onChange={selectReport}
+        tabs={REPORTS.map((item) => ({ id: item.id, label: t(`adminReports.types.${item.titleKey}`), content: panel }))}
+      />
+    </div>
   );
 }
 

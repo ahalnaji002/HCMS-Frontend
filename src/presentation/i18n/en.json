@@ -1466,6 +1466,7 @@
     }
   },
   "ui": {
+    "refresh": "Refresh",
     "loading": "Loading…",
     "loadError": "This could not be loaded.",
     "retry": "Try again",
