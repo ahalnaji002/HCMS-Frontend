@@ -8,14 +8,16 @@ const tabClass = (active) => cx(
   active ? "bg-primary text-white" : "text-text-secondary hover:bg-primary/10 hover:text-primary",
 );
 
-const listClass = "flex gap-1 overflow-x-auto rounded-xl border border-border bg-surface p-1";
+// Tabs wrap onto a new line on narrow screens, so none hides off-screen.
+const listClass = "flex flex-wrap gap-1 rounded-xl border border-border bg-surface p-1";
 
 /**
  * In-page tabs with keyboard support (arrows follow the reading direction,
- * Home/End). Panels stay mounted only while active.
+ * Home/End). Only the active panel is mounted, unless `keepMounted` is set:
+ * then inactive panels are hidden but keep their state (typed drafts, loaded data).
  * <Tabs label="Patient file" tabs={[{ id: "summary", label: "Summary", content: <…/> }, …]} />
  */
-function Tabs({ label, tabs, value, defaultValue, onChange, className }) {
+function Tabs({ label, tabs, value, defaultValue, onChange, keepMounted = false, className }) {
   const baseId = useId();
   const [internal, setInternal] = useState(defaultValue ?? tabs[0]?.id);
   const active = value ?? internal;
@@ -62,11 +64,19 @@ function Tabs({ label, tabs, value, defaultValue, onChange, className }) {
           </button>
         ))}
       </div>
-      {current && (
-        <div role="tabpanel" id={`${baseId}-panel-${current.id}`} aria-labelledby={`${baseId}-tab-${current.id}`} tabIndex={0} className="mt-6 focus-visible:outline-none">
-          {current.content}
+      {(keepMounted ? tabs : [current].filter(Boolean)).map((tab) => (
+        <div
+          key={tab.id}
+          role="tabpanel"
+          id={`${baseId}-panel-${tab.id}`}
+          aria-labelledby={`${baseId}-tab-${tab.id}`}
+          hidden={tab.id !== active}
+          tabIndex={0}
+          className="mt-6 focus-visible:outline-none"
+        >
+          {tab.content}
         </div>
-      )}
+      ))}
     </div>
   );
 }

@@ -940,6 +940,16 @@
     "errors": { "validation": "Check the assignment status and try again.", "forbidden": "You do not have permission to change assignment status.", "notFound": "This assignment no longer exists.", "conflict": "The assignment status changed. Refresh and try again.", "server": "Could not update the assignment. Try again." }
   },
   "doctorWorkspace": {
+    "tabs": {
+      "label": "Patient file",
+      "summary": "Health report",
+      "record": "Medical record",
+      "diagnoses": "Diagnoses",
+      "notes": "Notes",
+      "plans": "Treatment plans",
+      "assistance": "Assistance request"
+    },
+    "noRecordChanges": "Nothing to save yet: edit a field first.",
     "eyebrow": "Doctor workspace",
     "title": "Assigned patients and care follow-up",
     "loading": "Loading assigned patients...",

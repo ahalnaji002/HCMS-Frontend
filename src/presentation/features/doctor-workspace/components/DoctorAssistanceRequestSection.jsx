@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import { Button, Card, DescriptionList, TextareaField, TextField, useToast } from "@/presentation/components/ui";
 
-function errorMessage(error, t) {
+function errorKey(error) {
   const status = error.response?.status;
-  if (status === 400) return t("doctorAssistanceRequest.errors.validation");
-  if (status === 401) return t("doctorAssistanceRequest.errors.unauthorized");
-  if (status === 404) return t("doctorAssistanceRequest.errors.notFound");
-  if (status === 409) return t("doctorAssistanceRequest.errors.conflict");
-  if (status >= 500) return t("doctorAssistanceRequest.errors.server");
-  if (!error.response) return t("doctorAssistanceRequest.errors.network");
-  return t("doctorAssistanceRequest.errors.unknown");
+  if (status === 400) return "doctorAssistanceRequest.errors.validation";
+  if (status === 401) return "doctorAssistanceRequest.errors.unauthorized";
+  if (status === 404) return "doctorAssistanceRequest.errors.notFound";
+  if (status === 409) return "doctorAssistanceRequest.errors.conflict";
+  if (status >= 500) return "doctorAssistanceRequest.errors.server";
+  if (!error.response) return "doctorAssistanceRequest.errors.network";
+  return "doctorAssistanceRequest.errors.unknown";
 }
 
 function validationMessage(field, message, t) {
@@ -33,10 +34,9 @@ function validationMessage(field, message, t) {
 function DoctorAssistanceRequestSection({ patient, onAccessDenied }) {
   const { t } = useTranslation();
   const { doctorWorkspace } = useApplicationServices();
+  const toast = useToast();
   const [form, setForm] = useState({ request_type: "", description: "" });
   const [fieldErrors, setFieldErrors] = useState({});
-  const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
   const [createdRequest, setCreatedRequest] = useState(null);
   const [saving, setSaving] = useState(false);
 
@@ -44,8 +44,6 @@ function DoctorAssistanceRequestSection({ patient, onAccessDenied }) {
     const { name, value } = event.target;
     setForm((current) => ({ ...current, [name]: value }));
     setFieldErrors((current) => ({ ...current, [name]: "" }));
-    setError("");
-    setNotice("");
   }
 
   async function submit(event) {
@@ -66,14 +64,12 @@ function DoctorAssistanceRequestSection({ patient, onAccessDenied }) {
 
     setSaving(true);
     setFieldErrors({});
-    setError("");
-    setNotice("");
     try {
       const response = await doctorWorkspace.createPatientAssistanceRequest(patient.id, payload);
       const request = response.data.assistance_request;
       setCreatedRequest(request);
       setForm({ request_type: "", description: "" });
-      setNotice(t("doctorAssistanceRequest.created"));
+      toast.success({ key: "doctorAssistanceRequest.created" });
     } catch (requestError) {
       if (requestError.response?.status === 403) {
         onAccessDenied();
@@ -88,45 +84,57 @@ function DoctorAssistanceRequestSection({ patient, onAccessDenied }) {
         }
         setFieldErrors(nextErrors);
       }
-      setError(errorMessage(requestError, t));
+      toast.error({ key: errorKey(requestError) });
     } finally {
       setSaving(false);
     }
   }
 
   return (
-    <section id="doctor-assistance-request" className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
-      <h2 className="text-xl font-bold">{t("doctorAssistanceRequest.title")}</h2>
-      <p className="mt-2 text-sm leading-6 text-text-secondary">{t("doctorAssistanceRequest.description", { patientName: patient.full_name })}</p>
-
-      {error && <p role="alert" className="mt-5 rounded-xl bg-danger/10 p-4 text-sm text-danger">{error}</p>}
-      {notice && <p role="status" className="mt-5 rounded-xl bg-primary/10 p-4 text-sm text-primary">{notice}</p>}
-
-      <form onSubmit={submit} className="mt-5 space-y-4" noValidate>
-        <label className="block text-sm font-semibold">
-          {t("doctorAssistanceRequest.fields.requestType")}
-          <input name="request_type" required maxLength={100} value={form.request_type} onChange={updateField} aria-invalid={Boolean(fieldErrors.request_type)} aria-describedby={fieldErrors.request_type ? "assistance-request-type-error" : undefined} className="mt-2 min-h-11 w-full rounded-lg border border-border bg-background px-3 py-2 font-normal" />
-          {fieldErrors.request_type && <span id="assistance-request-type-error" className="mt-1 block text-xs font-normal text-danger">{fieldErrors.request_type}</span>}
-        </label>
-        <label className="block text-sm font-semibold">
-          {t("doctorAssistanceRequest.fields.description")}
-          <textarea name="description" required rows={4} value={form.description} onChange={updateField} aria-invalid={Boolean(fieldErrors.description)} aria-describedby={fieldErrors.description ? "assistance-request-description-error" : undefined} className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 font-normal" />
-          {fieldErrors.description && <span id="assistance-request-description-error" className="mt-1 block text-xs font-normal text-danger">{fieldErrors.description}</span>}
-        </label>
-        <button type="submit" disabled={saving} className="min-h-11 rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-white disabled:cursor-wait disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-          {saving ? t("doctorAssistanceRequest.submitting") : t("doctorAssistanceRequest.submit")}
-        </button>
+    <Card
+      id="doctor-assistance-request"
+      title={t("doctorAssistanceRequest.title")}
+      description={t("doctorAssistanceRequest.description", { patientName: patient.full_name })}
+    >
+      <form onSubmit={submit} className="space-y-4" noValidate>
+        <TextField
+          label={t("doctorAssistanceRequest.fields.requestType")}
+          name="request_type"
+          required
+          maxLength={100}
+          value={form.request_type}
+          onChange={updateField}
+          error={fieldErrors.request_type}
+        />
+        <TextareaField
+          label={t("doctorAssistanceRequest.fields.description")}
+          name="description"
+          required
+          rows={4}
+          value={form.description}
+          onChange={updateField}
+          error={fieldErrors.description}
+        />
+        <Button type="submit" loading={saving} loadingText={t("doctorAssistanceRequest.submitting")}>
+          {t("doctorAssistanceRequest.submit")}
+        </Button>
       </form>
 
-      {createdRequest && <div className="mt-6 rounded-xl border border-border bg-background p-4" aria-live="polite">
-        <h3 className="font-bold">{t("doctorAssistanceRequest.latestRequest")}</h3>
-        <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
-          <div><dt className="font-semibold">{t("doctorAssistanceRequest.fields.requestType")}</dt><dd className="mt-1 text-text-secondary">{createdRequest.request_type}</dd></div>
-          <div><dt className="font-semibold">{t("doctorAssistanceRequest.status")}</dt><dd className="mt-1 text-text-secondary">{t(`doctorAssistanceRequest.statuses.${createdRequest.status}`, { defaultValue: createdRequest.status })}</dd></div>
-          <div className="sm:col-span-2"><dt className="font-semibold">{t("doctorAssistanceRequest.fields.description")}</dt><dd className="mt-1 whitespace-pre-wrap text-text-secondary">{createdRequest.description}</dd></div>
-        </dl>
-      </div>}
-    </section>
+      {createdRequest && (
+        <div className="mt-6 border-t border-border pt-5" aria-live="polite">
+          <h3 className="font-bold">{t("doctorAssistanceRequest.latestRequest")}</h3>
+          <DescriptionList
+            className="mt-3"
+            columns={2}
+            items={[
+              { label: t("doctorAssistanceRequest.fields.requestType"), value: createdRequest.request_type },
+              { label: t("doctorAssistanceRequest.status"), value: t(`doctorAssistanceRequest.statuses.${createdRequest.status}`, { defaultValue: createdRequest.status }) },
+              { label: t("doctorAssistanceRequest.fields.description"), value: createdRequest.description, wide: true },
+            ]}
+          />
+        </div>
+      )}
+    </Card>
   );
 }
 

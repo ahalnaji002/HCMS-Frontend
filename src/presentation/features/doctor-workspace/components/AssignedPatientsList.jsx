@@ -1,20 +1,21 @@
+import { Card, SelectableCard } from "@/presentation/components/ui";
+
+// Compact list that sticks beside the patient file on wide screens instead of
+// stretching to the height of the whole page (UX-14).
 function AssignedPatientsList({ t, patients, selectedPatientId, onSelect }) {
   return (
-    <aside className="rounded-2xl border border-border bg-surface p-5">
-      <h2 className="font-bold">{t("doctorWorkspace.patients")}</h2>
-      <div className="mt-4 space-y-2">
+    <Card as="aside" padding="sm" title={t("doctorWorkspace.patients")} className="self-start lg:sticky lg:top-24">
+      <div className="space-y-2">
         {patients.map((patient) => (
-          <button
+          <SelectableCard
             key={patient.id}
-            type="button"
+            title={patient.full_name}
+            selected={String(patient.id) === String(selectedPatientId)}
             onClick={() => onSelect(String(patient.id))}
-            className={`w-full rounded-xl px-4 py-3 text-start text-sm font-semibold ${String(patient.id) === String(selectedPatientId) ? "bg-primary text-white" : "bg-background hover:bg-primary/10"}`}
-          >
-            {patient.full_name}
-          </button>
+          />
         ))}
       </div>
-    </aside>
+    </Card>
   );
 }
 

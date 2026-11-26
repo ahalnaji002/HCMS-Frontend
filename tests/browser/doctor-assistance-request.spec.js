@@ -24,6 +24,8 @@ async function openDoctorWorkspace(page) {
   await page.route(`**/api/doctor/patients/${patient.id}/medical-record`, (route) => reply(route, {}, 404));
   await page.route(`**/api/doctor/patients/${patient.id}/treatment-plans`, (route) => reply(route, { treatment_plans: [] }));
   await page.goto("/doctor/patients");
+  // The patient file is split into tabs.
+  await page.getByRole("tab", { name: "Assistance request" }).click();
   await expect(page.locator("#doctor-assistance-request")).toBeVisible();
 }
 
@@ -59,7 +61,7 @@ test("Doctor submits only approved assistance request fields and sees the create
   await expect(section.getByRole("button", { name: "Submitting..." })).toBeDisabled();
   allowCreate();
 
-  await expect(section.getByRole("status")).toHaveText("The assistance request was submitted successfully.");
+  await expect(page.getByRole("status").filter({ hasText: "The assistance request was submitted successfully." })).toBeVisible();
   await expect(section).toContainText("Wheelchair needed");
   await expect(section).toContainText("Pending");
   expect(submittedPayload).toEqual({ request_type: "Medical supplies", description: "Wheelchair needed" });
@@ -96,7 +98,7 @@ test("Doctor sees localized field feedback from Backend validation errors", asyn
   await section.getByLabel("Describe the assistance needed").fill("A description");
   await section.getByRole("button", { name: "Submit assistance request" }).click();
 
-  await expect(section.getByRole("alert")).toHaveText("Check the request fields and try again.");
+  await expect(page.getByRole("alert").filter({ hasText: "Check the request fields and try again." })).toBeVisible();
   await expect(section.getByText("Request type must be 100 characters or fewer.")).toBeVisible();
   await expect(section.getByText("Describe the assistance needed.")).toBeVisible();
   await expect(section.getByLabel("Request type")).toHaveValue("Supplies");
@@ -118,7 +120,7 @@ for (const [name, status, message] of [
       await expect(page.getByRole("alert")).toContainText("no longer have access");
       await expect(section).toHaveCount(0);
     } else {
-      await expect(section.getByRole("alert")).toHaveText(message);
+      await expect(page.getByRole("alert").filter({ hasText: message })).toBeVisible();
       await expect(section.getByLabel("Request type")).toHaveValue("Medical supplies");
     }
   });
@@ -131,6 +133,6 @@ test("Doctor sees a safe not-found error when the patient record is missing", as
   await section.getByLabel("Request type").fill("Medical supplies");
   await section.getByLabel("Describe the assistance needed").fill("Wheelchair needed");
   await section.getByRole("button", { name: "Submit assistance request" }).click();
-  await expect(section.getByRole("alert")).toHaveText("The patient or doctor profile could not be found.");
+  await expect(page.getByRole("alert").filter({ hasText: "The patient or doctor profile could not be found." })).toBeVisible();
   await expect(section.getByLabel("Request type")).toHaveValue("Medical supplies");
 });

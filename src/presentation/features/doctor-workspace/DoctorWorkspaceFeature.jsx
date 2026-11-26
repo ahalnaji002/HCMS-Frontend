@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { Card, EmptyState, ErrorState, LoadingState, PageHeader, Tabs } from "@/presentation/components/ui";
 import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard";
 import AssignedPatientsList from "@/presentation/features/doctor-workspace/components/AssignedPatientsList";
 import PatientDiagnosesSection from "@/presentation/features/doctor-workspace/components/PatientDiagnosesSection";
@@ -16,7 +17,7 @@ function DoctorWorkspaceFeature() {
   const {
     t, patients, selectedPatientId, selectPatient, intake, notes, diagnoses, medicalRecord,
     diagnosisText, setDiagnosisText, noteForm, setNoteForm, loading, detailLoading,
-    saving, error, notice, currentPatient,
+    saving, loadError, currentPatient,
     handleNoteSubmit, handleDiagnosisSubmit, saveMedicalRecord, handleAssistanceAccessLoss,
   } = useDoctorWorkspace();
 
@@ -35,55 +36,64 @@ function DoctorWorkspaceFeature() {
 
   const overview = (
     <>
-      <div className="mb-8">
-        <p className="text-sm font-semibold text-primary">{t("doctorWorkspace.eyebrow")}</p>
-        <h1 className="mt-2 text-3xl font-bold">{t("doctorWorkspace.title")}</h1>
-      </div>
+      <PageHeader eyebrow={t("doctorWorkspace.eyebrow")} title={t("doctorWorkspace.title")} />
       <RoleDashboard role="DOCTOR" attention={doctorAttention} />
     </>
   );
 
+  // The patient file: one tab per kind of work instead of a three-screen page
+  // (UX-13). Panels stay mounted so a half-typed form survives a tab switch;
+  // the tabs reset to the summary when another patient is opened.
+  const patientFile = currentPatient && (
+    <Card title={currentPatient.full_name} description={currentPatient.email} padding="sm">
+      <Tabs
+        key={selectedPatientId}
+        keepMounted
+        label={t("doctorWorkspace.tabs.label")}
+        tabs={[
+          { id: "summary", label: t("doctorWorkspace.tabs.summary"), content: <PatientIntakeSummary t={t} intake={intake} /> },
+          {
+            id: "record",
+            label: t("doctorWorkspace.tabs.record"),
+            content: <PatientMedicalRecordSection key={`${selectedPatientId}-${medicalRecord?.id || "new"}`} t={t} record={medicalRecord} isSaving={saving} onSave={saveMedicalRecord} />,
+          },
+          {
+            id: "diagnoses",
+            label: t("doctorWorkspace.tabs.diagnoses"),
+            count: diagnoses.length || undefined,
+            content: <PatientDiagnosesSection t={t} diagnoses={diagnoses} value={diagnosisText} onChange={setDiagnosisText} isSaving={saving} onSubmit={handleDiagnosisSubmit} />,
+          },
+          {
+            id: "notes",
+            label: t("doctorWorkspace.tabs.notes"),
+            count: notes.length || undefined,
+            content: <PatientMedicalNotesSection t={t} notes={notes} value={noteForm.note} onChange={(note) => setNoteForm({ note })} isSaving={saving} onSubmit={handleNoteSubmit} />,
+          },
+          { id: "plans", label: t("doctorWorkspace.tabs.plans"), content: <DoctorTreatmentPlansSection key={`plans-${selectedPatientId}`} patientId={selectedPatientId} /> },
+          {
+            id: "assistance",
+            label: t("doctorWorkspace.tabs.assistance"),
+            content: <DoctorAssistanceRequestSection key={`assistance-${selectedPatientId}`} patient={currentPatient} onAccessDenied={handleAssistanceAccessLoss} />,
+          },
+        ]}
+      />
+    </Card>
+  );
+
   const patientsPage = (
     <>
-      <h1 id="doctor-patients" className="mb-8 text-3xl font-bold">{t("roleNavigation.doctor.patients")}</h1>
-      {error && <p role="alert" className="mt-6 rounded-xl bg-danger/10 p-4 text-sm text-danger">{error}</p>}
-      {notice && <p role="status" className="mt-6 rounded-xl bg-primary/10 p-4 text-sm text-primary">{notice}</p>}
-      {loading ? <p className="py-12 text-center text-text-secondary">{t("doctorWorkspace.loading")}</p> : patients.length === 0 ? (
-        <p className="mt-8 rounded-xl border border-border bg-surface p-6 text-text-secondary">{t("doctorWorkspace.empty")}</p>
-      ) : (
-        <div className="mt-8 grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
-          <AssignedPatientsList
-            t={t}
-            patients={patients}
-            selectedPatientId={selectedPatientId}
-            onSelect={selectPatient}
-          />
-          <div className="space-y-6">
-            {detailLoading ? <p className="py-12 text-center text-text-secondary">{t("doctorWorkspace.loadingDetails")}</p> : currentPatient && <>
-              <PatientIntakeSummary t={t} patient={currentPatient} intake={intake} />
-              <DoctorAssistanceRequestSection key={`assistance-${selectedPatientId}`} patient={currentPatient} onAccessDenied={handleAssistanceAccessLoss} />
-              <PatientMedicalRecordSection key={`${selectedPatientId}-${medicalRecord?.id || "new"}`} t={t} record={medicalRecord} isSaving={saving} onSave={saveMedicalRecord} />
-              <DoctorTreatmentPlansSection key={`plans-${selectedPatientId}`} patientId={selectedPatientId} />
-              <PatientDiagnosesSection
-                t={t}
-                diagnoses={diagnoses}
-                value={diagnosisText}
-                onChange={setDiagnosisText}
-                isSaving={saving}
-                onSubmit={handleDiagnosisSubmit}
-              />
-              <PatientMedicalNotesSection
-                t={t}
-                notes={notes}
-                value={noteForm.note}
-                onChange={(note) => setNoteForm({ note })}
-                isSaving={saving}
-                onSubmit={handleNoteSubmit}
-              />
-            </>}
-          </div>
-        </div>
-      )}
+      <PageHeader id="doctor-patients" title={t("roleNavigation.doctor.patients")} />
+      {loading ? <LoadingState label={t("doctorWorkspace.loading")} />
+        : loadError ? <ErrorState message={t(loadError)} />
+          : patients.length === 0 ? <EmptyState title={t("doctorWorkspace.empty")} />
+            : (
+              <div className="grid items-start gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
+                <AssignedPatientsList t={t} patients={patients} selectedPatientId={selectedPatientId} onSelect={selectPatient} />
+                <div className="min-w-0">
+                  {detailLoading ? <LoadingState label={t("doctorWorkspace.loadingDetails")} /> : patientFile}
+                </div>
+              </div>
+            )}
     </>
   );
 
