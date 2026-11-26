@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { translateServerMessage } from "@/presentation/utils/serverMessages";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import { useToast } from "@/presentation/components/ui";
 
 const EMPTY_FORM = {
   current_problem: "",
@@ -40,6 +40,14 @@ function requestErrorMessage(error, t, fallback) {
   if (status >= 500) return t("patientWorkspace.errors.server");
   if (!error.response) return t("patientWorkspace.errors.network");
   return t(fallback);
+}
+
+function requestErrorKey(error, fallback) {
+  const status = error.response?.status;
+  if (status === 403) return "patientWorkspace.errors.forbidden";
+  if (status >= 500) return "patientWorkspace.errors.server";
+  if (!error.response) return "patientWorkspace.errors.network";
+  return fallback;
 }
 
 function isValidDateOnly(value) {
@@ -83,16 +91,17 @@ function formFromIntake(intake) {
 export default function usePatientWorkspace() {
   const { t } = useTranslation();
   const { patientIntake, patientWorkspace } = useApplicationServices();
+  // Results of actions go to the shared toast; failed loads stay in their
+  // section with a retry; the emergency dialog keeps its own messages.
+  const toast = useToast();
   const [intake, setIntake] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
   const [profile, setProfile] = useState(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [profileError, setProfileError] = useState("");
-  const [profileNotice, setProfileNotice] = useState("");
   const [profileForm, setProfileForm] = useState(EMPTY_PROFILE_FORM);
   const [profileFieldErrors, setProfileFieldErrors] = useState({});
   const [profileEditing, setProfileEditing] = useState(false);
@@ -104,8 +113,6 @@ export default function usePatientWorkspace() {
   const [alerts, setAlerts] = useState([]);
   const [alertsLoading, setAlertsLoading] = useState(true);
   const [alertsError, setAlertsError] = useState("");
-  const [alertCancelError, setAlertCancelError] = useState("");
-  const [alertCancelNotice, setAlertCancelNotice] = useState("");
   const [cancellingAlertId, setCancellingAlertId] = useState(null);
   const [assignments, setAssignments] = useState([]);
   const [assignmentsLoading, setAssignmentsLoading] = useState(true);
@@ -120,8 +127,6 @@ export default function usePatientWorkspace() {
   const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
   const [correctionRequests, setCorrectionRequests] = useState([]);
   const [correctionMessage, setCorrectionMessage] = useState("");
-  const [correctionNotice, setCorrectionNotice] = useState("");
-  const [correctionError, setCorrectionError] = useState("");
   const [isCorrectionSubmitting, setIsCorrectionSubmitting] = useState(false);
 
   const loadProfile = useCallback(async () => {
@@ -244,8 +249,6 @@ export default function usePatientWorkspace() {
       delete nextErrors[name];
       return nextErrors;
     });
-    setProfileError("");
-    setProfileNotice("");
   }
 
   function retryProfile() {
@@ -290,8 +293,6 @@ export default function usePatientWorkspace() {
     event.preventDefault();
     const validationErrors = validateProfile(profileForm, t);
     setProfileFieldErrors(validationErrors);
-    setProfileError("");
-    setProfileNotice("");
     if (Object.keys(validationErrors).length) return;
 
     setProfileSaving(true);
@@ -309,14 +310,14 @@ export default function usePatientWorkspace() {
       setProfileForm(profileFormFrom(updatedProfile));
       setProfileEditing(false);
       setProfileFieldErrors({});
-      setProfileNotice(t("patientWorkspace.profileSaved"));
+      toast.success({ key: "patientWorkspace.profileSaved" });
     } catch (requestError) {
       if (requestError.response?.status === 403) {
         setProfile(null);
         setProfileForm(EMPTY_PROFILE_FORM);
         setProfileEditing(false);
       }
-      setProfileError(requestErrorMessage(requestError, t, "patientWorkspace.profileSaveError"));
+      toast.error({ key: requestErrorKey(requestError, "patientWorkspace.profileSaveError") });
       setProfileFieldErrors(serverProfileFieldErrors(requestError, t));
     } finally {
       setProfileSaving(false);
@@ -326,25 +327,19 @@ export default function usePatientWorkspace() {
   function updateField(event) {
     const { name, value } = event.target;
     setForm((current) => ({ ...current, [name]: value }));
-    setError("");
-    setNotice("");
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
     setIsSaving(true);
-    setError("");
-    setNotice("");
     try {
       const request = intake ? patientIntake.updatePatientIntake : patientIntake.submitPatientIntake;
       const response = await request(form);
       setIntake(response.data.intake);
       setForm(formFromIntake(response.data.intake));
-      setNotice(t(intake ? "patientWorkspace.updated" : "patientWorkspace.submitted"));
+      toast.success({ key: intake ? "patientWorkspace.updated" : "patientWorkspace.submitted" });
     } catch (requestError) {
-      setError(requestError.response?.status === 409
-        ? t("patientWorkspace.lockedError")
-        : t("patientWorkspace.saveError"));
+      toast.error({ key: requestError.response?.status === 409 ? "patientWorkspace.lockedError" : "patientWorkspace.saveError" });
     } finally {
       setIsSaving(false);
     }
@@ -368,24 +363,22 @@ export default function usePatientWorkspace() {
   }
 
   async function handleCancelPatientAlert(alertId) {
-    setAlertCancelError("");
-    setAlertCancelNotice("");
     setCancellingAlertId(alertId);
     try {
       await patientWorkspace.cancelPatientAlert(alertId);
-      setAlertCancelNotice(t("patientWorkspace.alertCancelled"));
+      toast.success({ key: "patientWorkspace.alertCancelled" });
       await loadAlerts();
     } catch (requestError) {
       const status = requestError.response?.status;
       if (status === 400 || status === 409) {
-        setAlertCancelError(t("patientWorkspace.alertCancelConflict"));
+        toast.error({ key: "patientWorkspace.alertCancelConflict" });
         await loadAlerts();
       } else if (status === 403) {
-        setAlertCancelError(t("patientWorkspace.errors.forbidden"));
+        toast.error({ key: "patientWorkspace.errors.forbidden" });
       } else if (status >= 500 || !requestError.response) {
-        setAlertCancelError(t("patientWorkspace.errors.server"));
+        toast.error({ key: "patientWorkspace.errors.server" });
       } else {
-        setAlertCancelError(t("patientWorkspace.alertCancelError"));
+        toast.error({ key: "patientWorkspace.alertCancelError" });
       }
     } finally {
       setCancellingAlertId(null);
@@ -408,15 +401,13 @@ export default function usePatientWorkspace() {
   async function handleCorrectionSubmit(event) {
     event.preventDefault();
     setIsCorrectionSubmitting(true);
-    setCorrectionError("");
-    setCorrectionNotice("");
     try {
       const response = await patientWorkspace.createPatientIntakeCorrectionRequest(correctionMessage);
       setCorrectionRequests((current) => [response.data.request, ...current]);
       setCorrectionMessage("");
-      setCorrectionNotice(t("patientWorkspace.correctionSent"));
+      toast.success({ key: "patientWorkspace.correctionSent" });
     } catch (requestError) {
-      setCorrectionError(translateServerMessage(t, requestError.response?.data?.message, "patientWorkspace.correctionError"));
+      toast.error({ server: requestError.response?.data?.message, key: "patientWorkspace.correctionError" });
     } finally {
       setIsCorrectionSubmitting(false);
     }
@@ -428,15 +419,15 @@ export default function usePatientWorkspace() {
     : t("patientWorkspace.status.NOT_SUBMITTED");
 
   return {
-    t, intake, form, isLoading, isSaving, error, notice,
-    profile, profileLoading, profileError, profileNotice, profileForm, profileFieldErrors,
+    t, intake, form, isLoading, isSaving, error,
+    profile, profileLoading, profileError, profileForm, profileFieldErrors,
     profileEditing, profileSaving, alerts, alertsLoading, alertsError,
-    alertCancelError, alertCancelNotice, cancellingAlertId,
+    cancellingAlertId,
     medicalRecord, medicalRecordLoading, medicalRecordAbsent, medicalRecordError,
     assignments, assignmentsLoading, assignmentsError, diagnoses, diagnosesLoading, diagnosesError,
     alertForm, setAlertForm, alertNotice, alertError,
     isAlertSubmitting, isAlertDialogOpen, openAlertDialog, closeAlertDialog, correctionRequests, correctionMessage, setCorrectionMessage,
-    correctionNotice, correctionError, isCorrectionSubmitting, canEdit, statusLabel,
+    isCorrectionSubmitting, canEdit, statusLabel,
     updateField, handleSubmit, handleAlertSubmit, handleCancelPatientAlert, handleCorrectionSubmit,
     retryProfile, retryAlerts, retryAssignments, retryDiagnoses, retryMedicalRecord,
     updateProfileField, cancelProfileEdit, handleProfileSubmit, setProfileEditing,

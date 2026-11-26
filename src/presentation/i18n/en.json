@@ -600,6 +600,8 @@
     }
   },
   "patientWorkspace": {
+    "detailsLabel": "{{field}}: details",
+    "correctionLabel": "What should be corrected?",
     "sections": "Patient workspace navigation",
     "profile": "My profile",
     "profileLoading": "Loading profile details...",
@@ -1206,9 +1208,9 @@
   },
   "reminders": {
     "eyebrow": "Medication and appointment follow-up",
-    "description": "Schedule reminders for medications or appointments in your treatment plans. Times use your local clock.",
+    "description": "Get reminded about the medications and appointments in your treatment plans.",
     "createTitle": "Schedule a reminder",
-    "localTimeHelp": "Choose a future local date and time. The time is sent as entered, without timezone conversion.",
+    "localTimeHelp": "Pick the medication or appointment and when you want to be reminded.",
     "typeLabel": "Reminder for",
     "types": {
       "MEDICATION": "Medication",

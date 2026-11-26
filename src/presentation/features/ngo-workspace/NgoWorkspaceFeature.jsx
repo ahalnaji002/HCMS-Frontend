@@ -209,7 +209,7 @@ function formatDate(value, locale) {
 
 function NgoWorkspaceFeature() {
   const { t } = useTranslation();
-  const overview = <><div className="mb-8"><p className="text-sm font-semibold text-primary">{t("ngoAssistance.eyebrow")}</p><h1 className="mt-2 text-3xl font-bold">{t("roleHome.roles.ngo.title")}</h1></div><RoleDashboard role="NGO" /></>;
+  const overview = <RoleDashboard role="NGO" eyebrow={t("ngoAssistance.eyebrow")} />;
   return <Routes>
     <Route index element={overview} />
     <Route path="assistance-requests" element={<RequestList />} />

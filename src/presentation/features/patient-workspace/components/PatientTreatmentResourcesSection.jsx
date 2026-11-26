@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import { Card, EmptyState, ErrorState, LoadingState, PageHeader } from "@/presentation/components/ui";
 import PatientTreatmentResourceList from "@/presentation/features/patient-workspace/components/PatientTreatmentResourceList";
 
 function currentHebronWallClock() {
@@ -88,44 +89,36 @@ function PatientTreatmentResourcesSection() {
   const appointmentGroups = splitAppointmentsByTime(appointments);
 
   return (
-    <section id="patient-medications-appointments" className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
-      <div>
-        <p className="text-sm font-semibold text-primary">{t("patientTreatmentResources.eyebrow")}</p>
-        <h1 className="mt-1 text-xl font-bold">{t("patientTreatmentResources.title")}</h1>
-        <p className="mt-2 text-sm leading-6 text-text-secondary">{t("patientTreatmentResources.description")}</p>
-      </div>
+    <div id="patient-medications-appointments">
+      <PageHeader eyebrow={t("patientTreatmentResources.eyebrow")} title={t("patientTreatmentResources.title")} description={t("patientTreatmentResources.description")} />
 
-      {loading && <p role="status" className="mt-5 text-sm text-text-secondary">{t("patientTreatmentResources.loading")}</p>}
-      {!loading && error && <div role="alert" className="mt-5 rounded-xl bg-danger/10 p-4 text-sm text-danger">
-        <p>{error}</p>
-        <button type="button" onClick={retry} disabled={loading} className="mt-3 min-h-10 rounded-lg border border-danger px-3 py-2 font-semibold disabled:opacity-60">{t("patientTreatmentResources.retry")}</button>
-      </div>}
+      {loading ? <LoadingState label={t("patientTreatmentResources.loading")} />
+        : error ? <ErrorState message={error} onRetry={retry} retryLabel={t("patientTreatmentResources.retry")} />
+          : (
+            <div className="grid items-start gap-8 xl:grid-cols-2">
+              <Card title={t("patientTreatmentResources.medications")} id="patient-medications">
+                {medications.length === 0
+                  ? <EmptyState title={t("patientTreatmentResources.emptyMedications")} />
+                  : <PatientTreatmentResourceList items={medications} type="medications" t={t} />}
+              </Card>
 
-      {!loading && !error && <div className="mt-6 grid gap-8 xl:grid-cols-2">
-        <section aria-labelledby="patient-medications-heading">
-          <h3 id="patient-medications-heading" className="text-lg font-bold">{t("patientTreatmentResources.medications")}</h3>
-          {medications.length === 0
-            ? <p className="mt-4 rounded-xl border border-border bg-background p-4 text-sm text-text-secondary">{t("patientTreatmentResources.emptyMedications")}</p>
-            : <PatientTreatmentResourceList items={medications} type="medications" t={t} />}
-        </section>
-
-        <section aria-labelledby="patient-appointments-heading">
-          <h3 id="patient-appointments-heading" className="text-lg font-bold">{t("patientTreatmentResources.appointments")}</h3>
-          <div className="mt-5">
-            <h4 className="font-semibold">{t("patientTreatmentResources.upcoming")}</h4>
-            {appointmentGroups.upcoming.length === 0
-              ? <p className="mt-3 rounded-xl border border-border bg-background p-4 text-sm text-text-secondary">{t("patientTreatmentResources.emptyUpcoming")}</p>
-              : <PatientTreatmentResourceList items={appointmentGroups.upcoming} type="appointments" t={t} />}
-          </div>
-          <div className="mt-6">
-            <h4 className="font-semibold">{t("patientTreatmentResources.past")}</h4>
-            {appointmentGroups.past.length === 0
-              ? <p className="mt-3 rounded-xl border border-border bg-background p-4 text-sm text-text-secondary">{t("patientTreatmentResources.emptyPast")}</p>
-              : <PatientTreatmentResourceList items={appointmentGroups.past} type="appointments" t={t} />}
-          </div>
-        </section>
-      </div>}
-    </section>
+              <Card title={t("patientTreatmentResources.appointments")} id="patient-appointments">
+                <h3 className="font-semibold">{t("patientTreatmentResources.upcoming")}</h3>
+                <div className="mt-3">
+                  {appointmentGroups.upcoming.length === 0
+                    ? <EmptyState title={t("patientTreatmentResources.emptyUpcoming")} />
+                    : <PatientTreatmentResourceList items={appointmentGroups.upcoming} type="appointments" t={t} />}
+                </div>
+                <h3 className="mt-6 font-semibold">{t("patientTreatmentResources.past")}</h3>
+                <div className="mt-3">
+                  {appointmentGroups.past.length === 0
+                    ? <EmptyState title={t("patientTreatmentResources.emptyPast")} />
+                    : <PatientTreatmentResourceList items={appointmentGroups.past} type="appointments" t={t} />}
+                </div>
+              </Card>
+            </div>
+          )}
+    </div>
   );
 }
 

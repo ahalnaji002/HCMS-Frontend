@@ -97,10 +97,11 @@ test("patient sees medication details and appointments grouped without shifting 
   await expect(section.getByText("Continuing care").first()).toBeVisible();
   await expect(section.getByRole("heading", { name: "Upcoming" })).toBeVisible();
   await expect(section.getByText("Midnight follow-up")).toBeVisible();
-  await expect(section.getByText("2030-01-02 00:15:00", { exact: true })).toBeVisible();
+  // Unified format, same wall-clock time as sent by the server (no timezone shift).
+  await expect(section.getByText("2 Jan 2030, 0:15", { exact: true })).toBeVisible();
   await expect(section.getByRole("heading", { name: "Past" })).toBeVisible();
   await expect(section.getByText("Previous review")).toBeVisible();
-  await expect(section.getByText("2020-02-03 09:30:00", { exact: true })).toBeVisible();
+  await expect(section.getByText("3 Feb 2020, 9:30", { exact: true })).toBeVisible();
   await expect(section.locator("form, input, textarea, select")).toHaveCount(0);
 });
 

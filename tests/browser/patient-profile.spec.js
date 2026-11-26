@@ -61,7 +61,7 @@ test("patient can edit approved fields while email and National ID stay read-onl
   await section.getByLabel("Date of birth").fill("1998-04-13");
   await section.getByLabel("Address").fill("Ramallah");
   await section.getByRole("button", { name: "Save profile" }).click();
-  await expect(section.getByRole("status")).toContainText("profile was updated");
+  await expect(page.getByRole("status").filter({ hasText: "profile was updated" })).toBeVisible();
   expect(savedPayload).toEqual({
     full_name: "Lina Updated",
     phone: "0561234567",
@@ -144,7 +144,7 @@ for (const resource of [
       await page.reload();
       const section = resource.section
         ? page.locator(resource.section)
-        : page.getByRole("heading", { name: resource.heading }).locator("..");
+        : page.getByRole("region", { name: resource.heading });
       const expectedError = failure === "403" ? "no longer have access"
         : failure === "500" ? "server could not load" : "Unable to connect to the server";
       await expect(section.getByRole("alert")).toContainText(expectedError);
@@ -172,7 +172,8 @@ test("profile access loss after loading clears the previously visible profile", 
   await section.getByRole("button", { name: "Edit profile" }).click();
   await section.getByLabel("Full name").fill("Should not remain visible");
   await section.getByRole("button", { name: "Save profile" }).click();
-  await expect(section.getByRole("alert")).toContainText("no longer have access");
+  // The save result shows in the page toast; the profile itself is cleared.
+  await expect(page.getByRole("alert").filter({ hasText: "no longer have access" })).toBeVisible();
   await expect(section.getByText("123456789")).toHaveCount(0);
   await expect(section.getByText("Should not remain visible")).toHaveCount(0);
 });
