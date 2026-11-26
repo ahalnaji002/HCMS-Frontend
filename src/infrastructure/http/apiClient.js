@@ -14,6 +14,10 @@ export function clearAuthToken() {
   localStorage.removeItem(TOKEN_STORAGE_KEY);
 }
 
+// Fired when a signed-in request is rejected with 401 (the token expired or
+// was revoked). AuthProvider listens and ends the session in the UI.
+export const SESSION_EXPIRED_EVENT = "hcms:session-expired";
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
@@ -34,8 +38,9 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 && !error.config?.skipAuth) {
+    if (error.response?.status === 401 && !error.config?.skipAuth && getAuthToken()) {
       clearAuthToken();
+      window.dispatchEvent(new Event(SESSION_EXPIRED_EVENT));
     }
 
     return Promise.reject(error);

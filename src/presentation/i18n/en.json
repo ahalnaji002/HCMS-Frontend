@@ -155,6 +155,8 @@
     }
   },
   "login": {
+    "sessionExpiredTitle": "Your session has ended",
+    "sessionExpiredDescription": "For your security you are signed out after an hour. Sign in again to continue where you were.",
     "title": "Log in",
     "description": "Log in to access the Healthcare Conflict Management System.",
     "email": "Email address",

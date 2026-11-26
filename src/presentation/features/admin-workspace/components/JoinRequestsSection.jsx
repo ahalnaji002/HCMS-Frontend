@@ -62,7 +62,7 @@ function JoinRequestsSection() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-sm font-semibold text-primary">{t("adminJoinRequests.eyebrow")}</p>
-          <h2 className="mt-1 text-xl font-bold">{t("adminJoinRequests.title")}</h2>
+          <h1 className="mt-1 text-xl font-bold">{t("adminJoinRequests.title")}</h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-text-secondary">{t("adminJoinRequests.description")}</p>
         </div>
         <button type="button" onClick={refresh} className="min-h-11 rounded-lg border border-border px-4 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">

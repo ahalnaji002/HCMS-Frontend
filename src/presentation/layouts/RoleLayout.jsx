@@ -53,8 +53,10 @@ function RoleLayout({ children, mainClassName, role }) {
 
   return (
     <div className="min-h-screen bg-background text-text-primary">
-      <header className="border-b border-border bg-surface">
-        <div className="mx-auto flex min-h-[72px] max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-3 sm:px-6 lg:px-8">
+      {/* Sticky, one row on every screen size: 64px on phones, 72px from md up
+          (the sidebar sticks right below it). */}
+      <header className="sticky top-0 z-40 border-b border-border bg-surface">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:px-6 md:h-[72px] lg:px-8">
           <Link
             to="/"
             className="shrink-0 rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
@@ -63,20 +65,11 @@ function RoleLayout({ children, mainClassName, role }) {
             <Logo
               variant="logo"
               appearance={theme === "dark" ? "dark" : "light"}
-              className="h-auto w-24 sm:h-11 sm:w-auto"
+              className="h-auto w-20 sm:h-11 sm:w-auto"
               alt={t("accessibility.logoAlt")}
             />
           </Link>
-          <button
-            type="button"
-            aria-expanded={isNavigationOpen}
-            aria-controls="role-navigation"
-            onClick={() => setIsNavigationOpen((isOpen) => !isOpen)}
-            className="min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-semibold text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary md:hidden"
-          >
-            {t(isNavigationOpen ? "roleNavigation.close" : "roleNavigation.open")}
-          </button>
-          <div className="flex w-full items-center justify-end gap-2 md:w-auto md:gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <LanguageToggle />
             <ThemeToggle />
             <div className="relative" ref={accountMenuRef}>
@@ -86,16 +79,16 @@ function RoleLayout({ children, mainClassName, role }) {
                 aria-controls="account-menu"
                 aria-label={t("roleHome.accountMenuLabel", { name: accountName, role: accountRole })}
                 onClick={() => setIsAccountMenuOpen((isOpen) => !isOpen)}
-                className="flex min-h-11 items-center gap-3 rounded-xl border border-border px-3 py-2 text-start transition hover:bg-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="flex min-h-11 items-center gap-3 rounded-xl border border-border px-2 py-1.5 text-start transition hover:bg-background sm:px-3 sm:py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary" aria-hidden="true">
                   {accountName.trim().charAt(0).toLocaleUpperCase()}
                 </span>
-                <span className="grid min-w-0">
+                <span className="hidden min-w-0 sm:grid">
                   <span className="max-w-44 truncate text-sm font-semibold text-text-primary">{accountName}</span>
                   <span className="text-xs text-text-secondary">{accountRole}</span>
                 </span>
-                <svg aria-hidden="true" className={`size-4 text-text-secondary transition-transform ${isAccountMenuOpen ? "rotate-180" : ""}`} viewBox="0 0 20 20" fill="currentColor">
+                <svg aria-hidden="true" className={`hidden size-4 text-text-secondary transition-transform sm:block ${isAccountMenuOpen ? "rotate-180" : ""}`} viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M5.22 7.47a.75.75 0 0 1 1.06 0L10 11.19l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 8.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                 </svg>
               </button>
@@ -115,6 +108,18 @@ function RoleLayout({ children, mainClassName, role }) {
                 </div>
               )}
             </div>
+            <button
+              type="button"
+              aria-expanded={isNavigationOpen}
+              aria-controls="role-navigation"
+              onClick={() => setIsNavigationOpen((isOpen) => !isOpen)}
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 py-2 text-xs font-semibold text-text-primary transition-colors hover:bg-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary md:hidden"
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                {isNavigationOpen ? <path d="M6 6l12 12M18 6 6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+              </svg>
+              <span className="sr-only sm:not-sr-only">{t(isNavigationOpen ? "roleNavigation.close" : "roleNavigation.open")}</span>
+            </button>
           </div>
         </div>
       </header>
@@ -123,7 +128,7 @@ function RoleLayout({ children, mainClassName, role }) {
           <nav
             id="role-navigation"
             aria-label={t("roleNavigation.label")}
-            className={`${isNavigationOpen ? "block" : "hidden"} max-h-[calc(100vh-10rem)] overflow-y-auto px-5 py-4 sm:px-6 md:sticky md:top-[72px] md:block md:max-h-[calc(100vh-72px)] md:px-0 md:py-0`}
+            className={`${isNavigationOpen ? "block" : "hidden"} fixed inset-x-0 top-16 z-[60] max-h-[calc(100vh-4rem)] overflow-y-auto px-4 py-3 shadow-xl sm:px-6 md:sticky md:inset-x-auto md:top-[72px] md:z-auto md:block md:max-h-[calc(100vh-72px)] md:px-0 md:py-0 md:shadow-none`}
           >
             <ul className="space-y-1 rounded-xl border border-border bg-surface p-3 md:space-y-1 md:rounded-none md:border-0 md:bg-transparent md:px-3 md:py-5">
               {navigationItems.map((item) => {
@@ -149,7 +154,7 @@ function RoleLayout({ children, mainClassName, role }) {
             </ul>
           </nav>
         </aside>
-        <main className={`${mainClassName || ""} min-w-0 flex-1 px-5 pb-6 pt-4 sm:px-6 lg:px-8`}>{children}</main>
+        <main className={`${mainClassName || ""} min-w-0 flex-1 px-4 pt-6 sm:px-6 lg:px-8 ${role === "PATIENT" ? "pb-28" : "pb-10"}`}>{children}</main>
       </div>
     </div>
   );

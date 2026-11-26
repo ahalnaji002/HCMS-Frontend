@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import Logo from "@/presentation/components/common/Logo";
@@ -11,10 +11,16 @@ import { useTheme } from "@/presentation/context/ThemeContext";
 import { useApplicationServices } from "@/app/useApplicationServices";
 import { normalizeApiError } from "@/presentation/utils/normalizeApiError";
 import { roleRoutes } from "@/presentation/routing/roleRoutes";
+import { consumeSessionExpired } from "@/presentation/context/sessionExpiry";
+import { Alert } from "@/presentation/components/ui";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t, i18n } = useTranslation();
+  // Read once: shown after an expired session redirected here.
+  const [sessionExpired] = useState(consumeSessionExpired);
+  const returnTo = typeof location.state?.from === "string" ? location.state.from : null;
 
   const { startSession } = useAuth();
   const { auth } = useApplicationServices();
@@ -66,7 +72,9 @@ function Login() {
       }
 
       startSession(token, user);
-      navigate(destination, { replace: true });
+      // Back to the page the session expired on, if it belongs to this role.
+      const canReturn = returnTo && (returnTo === destination || returnTo.startsWith(`${destination}/`));
+      navigate(canReturn ? returnTo : destination, { replace: true });
     } catch (requestError) {
       const { type, application: applicantStatus } =
         normalizeApiError(requestError);
@@ -177,6 +185,12 @@ function Login() {
               {t("login.description")}
             </p>
           </div>
+
+          {sessionExpired && !error && (
+            <Alert tone="info" title={t("login.sessionExpiredTitle")} className="mb-5">
+              {t("login.sessionExpiredDescription")}
+            </Alert>
+          )}
 
           {/* Error */}
           {error && (

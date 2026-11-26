@@ -48,7 +48,7 @@ function DoctorPatientAssignmentsSection() {
 
   return <section id="admin-assignments" className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
     <p className="text-sm font-semibold text-primary">{t("adminAssignments.eyebrow")}</p>
-    <h2 className="mt-1 text-xl font-bold">{t("adminAssignments.title")}</h2>
+    <h1 className="mt-1 text-xl font-bold">{t("adminAssignments.title")}</h1>
     <p className="mt-2 text-sm text-text-secondary">{t("adminAssignments.description")}</p>
     {error && <p role="alert" className="mt-5 rounded-xl bg-danger/10 p-4 text-sm text-danger">{error}</p>}
     {notice && <p role="status" className="mt-5 rounded-xl bg-primary/10 p-4 text-sm text-primary">{notice}</p>}

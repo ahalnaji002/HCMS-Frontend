@@ -7,7 +7,7 @@ function PatientEmergencyAlertsSection({ t, alerts, alertsLoading, alertsError, 
     <section id="emergency-alerts" className="mt-8 rounded-2xl border border-danger/30 bg-surface p-6 sm:p-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-danger">{t("patientWorkspace.emergency")}</h2>
+          <h1 className="text-xl font-bold text-danger">{t("patientWorkspace.emergency")}</h1>
           <p className="mt-2 text-sm leading-6 text-text-secondary">{t("patientWorkspace.emergencyHint")}</p>
         </div>
         <button type="button" onClick={onOpenDialog} className="min-h-11 rounded-xl bg-danger px-5 py-2 font-semibold text-white">{t("patientWorkspace.sendAlert")}</button>

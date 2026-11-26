@@ -59,6 +59,8 @@ body,
 
 html {
   font-family: var(--font-ui);
+  /* Keep anchors and focused fields clear of the sticky workspace header. */
+  scroll-padding-top: 5.5rem;
   background-color: var(--hcms-background);
   scroll-behavior: smooth;
 }

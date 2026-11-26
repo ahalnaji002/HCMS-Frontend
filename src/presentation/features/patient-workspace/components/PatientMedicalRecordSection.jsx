@@ -3,7 +3,7 @@ function PatientMedicalRecordSection({ t, record, loading, absent, error, onRetr
 
   return (
     <section id="patient-medical-record" className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
-      <h2 className="text-xl font-bold">{t("patientWorkspace.medicalRecord.title")}</h2>
+      <h1 className="text-xl font-bold">{t("patientWorkspace.medicalRecord.title")}</h1>
       <p className="mt-2 text-sm leading-6 text-text-secondary">{t("patientWorkspace.medicalRecord.description")}</p>
 
       {loading && <p role="status" className="mt-5 text-sm text-text-secondary">{t("patientWorkspace.medicalRecord.loading")}</p>}
