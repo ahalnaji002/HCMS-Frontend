@@ -29,7 +29,7 @@ export function Field({ label, hint, error, required, optionalLabel, className, 
       </label>
       {children(control)}
       {hint && <p id={hintId} className="text-xs leading-5 text-text-secondary">{hint}</p>}
-      {error && <p id={errorId} className="text-sm text-danger">{error}</p>}
+      {error && <p id={errorId} role="alert" className="text-sm text-danger">{error}</p>}
     </div>
   );
 }

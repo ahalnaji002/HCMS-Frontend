@@ -85,14 +85,15 @@ test("administrator reviews pending Doctor and NGO applications", async ({ page 
 
   await page.goto("/admin/join-requests");
   const section = page.locator("#admin-join-requests");
-  await expect(section.getByRole("heading", { name: "Doctor and NGO applications" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Doctor and NGO applications", level: 1 })).toBeVisible();
   await expect(section.getByText("Dr. Rami Saleh")).toBeVisible();
   await expect(section.getByText("Hope Care Organization")).toBeVisible();
 
   await section.locator("article").filter({ hasText: "Dr. Rami Saleh" }).getByRole("button", { name: "View details" }).click();
   await expect(section).toContainText("Cardiology");
   await section.getByRole("button", { name: "Approve application" }).click();
-  await expect(section.getByRole("status")).toContainText("approved");
+  // Results show in the page toast.
+  await expect(page.getByRole("status").filter({ hasText: "approved" })).toBeVisible();
   await expect(section.getByText("Dr. Rami Saleh")).toHaveCount(0);
 
   await section.locator("article").filter({ hasText: "Hope Care Organization" }).first().getByRole("button", { name: "View details" }).click();
@@ -101,6 +102,7 @@ test("administrator reviews pending Doctor and NGO applications", async ({ page 
   await expect(section).toContainText("Enter a rejection reason.");
   await section.getByLabel("Rejection reason").fill("Registration number needs verification.");
   await section.getByRole("button", { name: "Confirm rejection" }).click();
-  await expect(section.getByRole("status")).toContainText("rejected");
+  // Results show in the page toast.
+  await expect(page.getByRole("status").filter({ hasText: "rejected" })).toBeVisible();
   await expect(section).toContainText("There are no pending applications.");
 });

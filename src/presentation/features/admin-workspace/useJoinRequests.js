@@ -2,20 +2,23 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
 import { normalizeApiError } from "@/presentation/utils/normalizeApiError";
+import { useToast } from "@/presentation/components/ui";
 
-function messageForError(error, t) {
+function errorKey(error) {
   const status = error.response?.status;
 
-  if (status === 404) return t("adminJoinRequests.errors.notFound");
-  if (status === 409) return t("adminJoinRequests.errors.conflict");
+  if (status === 404) return "adminJoinRequests.errors.notFound";
+  if (status === 409) return "adminJoinRequests.errors.conflict";
 
   const { type } = normalizeApiError(error);
-  return t(`adminJoinRequests.errors.${type}`);
+  return `adminJoinRequests.errors.${type}`;
 }
 
 export default function useJoinRequests() {
   const { t } = useTranslation();
   const { admin } = useApplicationServices();
+  // Action results go to the shared toast; a failed list load is shown in place.
+  const toast = useToast();
   const [requests, setRequests] = useState([]);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -24,8 +27,7 @@ export default function useJoinRequests() {
   const [activeRejectionId, setActiveRejectionId] = useState(null);
   const [rejectionDrafts, setRejectionDrafts] = useState({});
   const [rejectionError, setRejectionError] = useState("");
-  const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
+  const [loadError, setLoadError] = useState("");
 
   const loadRequests = useCallback(async () => {
     const response = await admin.listJoinRequests();
@@ -51,7 +53,7 @@ export default function useJoinRequests() {
       .catch((requestError) => {
         if (active) {
           clearRestrictedData(requestError);
-          setError(messageForError(requestError, t));
+          setLoadError(errorKey(requestError));
         }
       })
       .finally(() => {
@@ -61,15 +63,15 @@ export default function useJoinRequests() {
     return () => {
       active = false;
     };
-  }, [admin, t]);
+  }, [admin]);
 
   async function refresh() {
-    setError("");
+    setLoadError("");
     try {
       await loadRequests();
     } catch (requestError) {
       clearRestrictedData(requestError);
-      setError(messageForError(requestError, t));
+      setLoadError(errorKey(requestError));
     }
   }
 
@@ -77,7 +79,6 @@ export default function useJoinRequests() {
     setSelectedRequest(request);
     setActiveRejectionId(null);
     setRejectionError("");
-    setError("");
     setDetailLoading(true);
 
     try {
@@ -85,7 +86,7 @@ export default function useJoinRequests() {
       setSelectedRequest(response.data.join_request);
     } catch (requestError) {
       clearRestrictedData(requestError);
-      setError(messageForError(requestError, t));
+      toast.error({ key: errorKey(requestError) });
     } finally {
       setDetailLoading(false);
     }
@@ -93,17 +94,15 @@ export default function useJoinRequests() {
 
   async function approve(request) {
     setBusyId(request.id);
-    setError("");
-    setNotice("");
 
     try {
       await admin.approveJoinRequest(request.id);
       setSelectedRequest(null);
       await loadRequests();
-      setNotice(t("adminJoinRequests.approved"));
+      toast.success({ key: "adminJoinRequests.approved" });
     } catch (requestError) {
       clearRestrictedData(requestError);
-      setError(messageForError(requestError, t));
+      toast.error({ key: errorKey(requestError) });
     } finally {
       setBusyId(null);
     }
@@ -123,8 +122,6 @@ export default function useJoinRequests() {
     }
 
     setBusyId(request.id);
-    setError("");
-    setNotice("");
     setRejectionError("");
 
     try {
@@ -133,10 +130,10 @@ export default function useJoinRequests() {
       setActiveRejectionId(null);
       setRejectionDrafts((current) => ({ ...current, [request.id]: "" }));
       await loadRequests();
-      setNotice(t("adminJoinRequests.rejected"));
+      toast.success({ key: "adminJoinRequests.rejected" });
     } catch (requestError) {
       clearRestrictedData(requestError);
-      setError(messageForError(requestError, t));
+      toast.error({ key: errorKey(requestError) });
     } finally {
       setBusyId(null);
     }
@@ -156,8 +153,7 @@ export default function useJoinRequests() {
     activeRejectionId,
     rejectionDrafts,
     rejectionError,
-    error,
-    notice,
+    loadError,
     refresh,
     selectRequest,
     approve,

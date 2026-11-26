@@ -16,7 +16,7 @@ export function LoadingState({ label, className }) {
 /** Nothing to show yet, with an optional next step. */
 export function EmptyState({ title, description, action, className }) {
   return (
-    <div className={cx("rounded-2xl border border-dashed border-border bg-surface px-6 py-10 text-center", className)}>
+    <div role="status" className={cx("rounded-2xl border border-dashed border-border bg-surface px-6 py-10 text-center", className)}>
       <p className="font-semibold">{title}</p>
       {description && <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-text-secondary">{description}</p>}
       {action && <div className="mt-5 flex justify-center">{action}</div>}
@@ -25,14 +25,14 @@ export function EmptyState({ title, description, action, className }) {
 }
 
 /** A load failed; offer a retry. */
-export function ErrorState({ message, onRetry, retrying = false, className }) {
+export function ErrorState({ message, onRetry, retrying = false, retryLabel, className }) {
   const { t } = useTranslation();
   return (
     <div className={cx("flex flex-wrap items-center justify-between gap-3 rounded-xl border border-danger/30 bg-danger/5 p-4", className)}>
       <p role="alert" className="text-sm text-danger">{message || t("ui.loadError")}</p>
       {onRetry && (
         <Button variant="secondary" size="sm" onClick={onRetry} loading={retrying}>
-          {t("ui.retry")}
+          {retryLabel || t("ui.retry")}
         </Button>
       )}
     </div>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import { Button, Card, ErrorState, LoadingState, PageHeader, TextField, useToast } from "@/presentation/components/ui";
+import { useFormatDate } from "@/presentation/hooks/useFormatDate";
 
 const SETTING_FIELDS = [
   { key: "system_name", kind: "name" },
@@ -58,24 +60,17 @@ function validateValue(field, value, t) {
   return "";
 }
 
-function formatUpdatedAt(value, locale) {
-  if (!value) return "";
-  const date = new Date(value);
-  return Number.isNaN(date.getTime())
-    ? value
-    : new Intl.DateTimeFormat(locale || undefined, { dateStyle: "medium", timeStyle: "short" }).format(date);
-}
-
 function SystemSettingsFeature() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { admin } = useApplicationServices();
+  const toast = useToast();
+  const { dateTime } = useFormatDate();
   const [settings, setSettings] = useState({});
   const [values, setValues] = useState({});
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
   const [savingKey, setSavingKey] = useState("");
   const [formErrors, setFormErrors] = useState({});
-  const [notice, setNotice] = useState("");
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
@@ -110,7 +105,6 @@ function SystemSettingsFeature() {
   function changeValue(key, value) {
     setValues((current) => ({ ...current, [key]: value }));
     setFormErrors((current) => ({ ...current, [key]: "" }));
-    setNotice("");
   }
 
   async function save(field) {
@@ -118,13 +112,11 @@ function SystemSettingsFeature() {
     const validationError = validateValue(field, value, t);
     if (validationError) {
       setFormErrors((current) => ({ ...current, [field.key]: validationError }));
-      setNotice("");
       return;
     }
 
     setSavingKey(field.key);
     setFormErrors((current) => ({ ...current, [field.key]: "" }));
-    setNotice("");
     try {
       const response = await admin.updateSystemSetting(field.key, normalizedValue(field, value));
       const updated = response?.data?.setting;
@@ -132,7 +124,7 @@ function SystemSettingsFeature() {
         setSettings((current) => ({ ...current, [field.key]: updated }));
         setValues((current) => ({ ...current, [field.key]: updated.setting_value ?? "" }));
       }
-      setNotice("saved");
+      toast.success({ key: "systemSettings.notices.saved" });
     } catch (error) {
       setFormErrors((current) => ({ ...current, [field.key]: t(`systemSettings.errors.${errorKind(error)}`) }));
     } finally {
@@ -141,55 +133,42 @@ function SystemSettingsFeature() {
   }
 
   return (
-    <section aria-labelledby="system-settings-title" className="mx-auto max-w-4xl">
-      <header className="mb-7">
-        <p className="text-sm font-semibold text-primary">{t("systemSettings.eyebrow")}</p>
-        <h1 id="system-settings-title" className="mt-2 text-3xl font-bold">{t("roleNavigation.admin.settings")}</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-text-secondary">{t("systemSettings.description")}</p>
-      </header>
+    <div className="mx-auto max-w-4xl">
+      <PageHeader eyebrow={t("systemSettings.eyebrow")} title={t("roleNavigation.admin.settings")} description={t("systemSettings.description")} />
 
-      {notice && <p role="status" className="mb-5 rounded-xl bg-primary/10 p-4 text-sm text-primary">{t(`systemSettings.notices.${notice}`)}</p>}
-
-      {loading ? <p role="status" className="rounded-2xl border border-border bg-surface p-6 text-sm text-text-secondary">{t("systemSettings.loading")}</p>
-        : loadError ? <div role="alert" className="rounded-2xl border border-danger/30 bg-danger/5 p-6 text-sm text-danger">
-          <p>{t(`systemSettings.errors.${loadError}`)}</p>
-          <button type="button" onClick={retry} className="mt-4 min-h-10 rounded-lg border border-current px-4 py-2 font-semibold">{t("systemSettings.retry")}</button>
-        </div>
-          : <div className="grid gap-5">{SETTING_FIELDS.map((field) => {
-            const setting = settings[field.key];
-            const unavailable = !setting;
-            const error = formErrors[field.key];
-            const id = `system-setting-${field.key}`;
-            return <article key={field.key} className="rounded-2xl border border-border bg-surface p-5 sm:p-7">
-              <div className="mb-5">
-                <h2 id={`${id}-title`} className="text-lg font-bold">{t(`systemSettings.fields.${field.key}.label`)}</h2>
-                <p className="mt-1 text-sm leading-6 text-text-secondary">{t(`systemSettings.fields.${field.key}.description`)}</p>
-              </div>
-              <form noValidate onSubmit={(event) => { event.preventDefault(); save(field); }} aria-labelledby={`${id}-title`}>
-                <label htmlFor={id} className="mb-2 block text-sm font-semibold">{t("systemSettings.valueLabel")}</label>
-                <input
-                  id={id}
-                  name="setting_value"
-                  type={field.kind === "email" ? "email" : "text"}
-                  inputMode={field.kind === "phone" ? "numeric" : undefined}
-                  maxLength={field.kind === "name" ? 100 : field.kind === "email" ? 255 : 10}
-                  value={values[field.key] ?? ""}
-                  onChange={(event) => changeValue(field.key, event.target.value)}
-                  disabled={unavailable || Boolean(savingKey)}
-                  aria-invalid={Boolean(error)}
-                  aria-describedby={error ? `${id}-error` : undefined}
-                  className="min-h-12 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm disabled:opacity-60"
-                />
-                {error && <p id={`${id}-error`} role="alert" className="mt-2 text-sm text-danger">{error}</p>}
-                {setting?.updated_at && <p className="mt-3 text-xs text-text-secondary">{t("systemSettings.updatedAt", { date: formatUpdatedAt(setting.updated_at, i18n.language) })}</p>}
-                {unavailable && <p className="mt-3 text-sm text-text-secondary">{t("systemSettings.unavailable")}</p>}
-                <button type="submit" disabled={unavailable || Boolean(savingKey)} className="mt-5 min-h-11 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60">
-                  {savingKey === field.key ? t("systemSettings.saving") : t("systemSettings.save")}
-                </button>
-              </form>
-            </article>;
-          })}</div>}
-    </section>
+      {loading ? <LoadingState label={t("systemSettings.loading")} />
+        : loadError ? <ErrorState message={t(`systemSettings.errors.${loadError}`)} onRetry={retry} retryLabel={t("systemSettings.retry")} />
+          : (
+            <div className="grid gap-5">
+              {SETTING_FIELDS.map((field) => {
+                const setting = settings[field.key];
+                const unavailable = !setting;
+                return (
+                  <Card key={field.key} as="article" title={t(`systemSettings.fields.${field.key}.label`)} description={t(`systemSettings.fields.${field.key}.description`)}>
+                    <form noValidate onSubmit={(event) => { event.preventDefault(); save(field); }}>
+                      <TextField
+                        label={t("systemSettings.valueLabel")}
+                        name="setting_value"
+                        type={field.kind === "email" ? "email" : "text"}
+                        inputMode={field.kind === "phone" ? "numeric" : undefined}
+                        maxLength={field.kind === "name" ? 100 : field.kind === "email" ? 255 : 10}
+                        value={values[field.key] ?? ""}
+                        onChange={(event) => changeValue(field.key, event.target.value)}
+                        disabled={unavailable || Boolean(savingKey)}
+                        error={formErrors[field.key]}
+                        hint={setting?.updated_at ? t("systemSettings.updatedAt", { date: dateTime(setting.updated_at) }) : undefined}
+                      />
+                      {unavailable && <p className="mt-3 text-sm text-text-secondary">{t("systemSettings.unavailable")}</p>}
+                      <Button type="submit" className="mt-5" disabled={unavailable || Boolean(savingKey)} loading={savingKey === field.key} loadingText={t("systemSettings.saving")}>
+                        {t("systemSettings.save")}
+                      </Button>
+                    </form>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+    </div>
   );
 }
 

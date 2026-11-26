@@ -45,17 +45,20 @@ test("fields connect label, hint, and error for assistive technology", async ({ 
   await expect(page.getByLabel("Description (optional)", { exact: true })).toBeVisible();
 });
 
-test("success toasts close by themselves and error toasts stay until dismissed", async ({ page }) => {
+test("success toasts close by themselves, error toasts stay, and a new toast replaces the old one", async ({ page }) => {
   await page.clock.install();
   await page.getByRole("button", { name: "Show success toast" }).click();
-  await page.getByRole("button", { name: "Show error toast" }).click();
-
   await expect(page.getByRole("status").filter({ hasText: "Medical record saved." })).toBeVisible();
-  await expect(page.getByRole("alert").filter({ hasText: "Could not reach the server." })).toBeVisible();
-
   await page.clock.runFor(6500);
   await expect(page.getByText("Medical record saved.")).toBeHidden();
+
+  await page.getByRole("button", { name: "Show success toast" }).click();
+  await page.getByRole("button", { name: "Show error toast" }).click();
+  // The error replaced the success message.
+  await expect(page.getByText("Medical record saved.")).toBeHidden();
   const error = page.getByRole("alert").filter({ hasText: "Could not reach the server." });
+  await expect(error).toBeVisible();
+  await page.clock.runFor(10000);
   await expect(error).toBeVisible();
 
   await page.getByRole("button", { name: /dismiss|إغلاق/i }).first().click();
