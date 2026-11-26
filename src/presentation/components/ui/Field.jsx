@@ -8,8 +8,10 @@ import { controlClasses } from "@/presentation/components/ui/styles";
  * <Field label="Phone" hint="…" error={error}>{(control) => <input {...control} />}</Field>
  * Prefer TextField / SelectField / TextareaField below for standard controls.
  */
-export function Field({ label, hint, error, required, optionalLabel, className, children }) {
-  const id = useId();
+export function Field({ id: idProp, label, hint, error, required, optionalLabel, className, children }) {
+  const generatedId = useId();
+  // A given id (kept by existing pages and tests) is used for both label and control.
+  const id = idProp || generatedId;
   const hintId = hint ? `${id}-hint` : undefined;
   const errorId = error ? `${id}-error` : undefined;
   const control = {
@@ -38,18 +40,18 @@ function mergeClass(control, className) {
   return { ...control, className: cx(control.className, className) };
 }
 
-export const TextField = forwardRef(function TextField({ label, hint, error, required, optionalLabel, className, inputClassName, ...props }, ref) {
+export const TextField = forwardRef(function TextField({ id, label, hint, error, required, optionalLabel, className, inputClassName, ...props }, ref) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optionalLabel={optionalLabel} className={className}>
+    <Field id={id} label={label} hint={hint} error={error} required={required} optionalLabel={optionalLabel} className={className}>
       {(control) => <input ref={ref} {...mergeClass(control, inputClassName)} {...props} />}
     </Field>
   );
 });
 
 /** options: [{ value, label }] or pass <option> children. */
-export const SelectField = forwardRef(function SelectField({ label, hint, error, required, optionalLabel, className, options, placeholder, children, ...props }, ref) {
+export const SelectField = forwardRef(function SelectField({ id, label, hint, error, required, optionalLabel, className, options, placeholder, children, ...props }, ref) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optionalLabel={optionalLabel} className={className}>
+    <Field id={id} label={label} hint={hint} error={error} required={required} optionalLabel={optionalLabel} className={className}>
       {(control) => (
         <select ref={ref} {...control} {...props}>
           {placeholder !== undefined && <option value="">{placeholder}</option>}
@@ -60,9 +62,9 @@ export const SelectField = forwardRef(function SelectField({ label, hint, error,
   );
 });
 
-export const TextareaField = forwardRef(function TextareaField({ label, hint, error, required, optionalLabel, className, rows = 4, ...props }, ref) {
+export const TextareaField = forwardRef(function TextareaField({ id, label, hint, error, required, optionalLabel, className, rows = 4, ...props }, ref) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optionalLabel={optionalLabel} className={className}>
+    <Field id={id} label={label} hint={hint} error={error} required={required} optionalLabel={optionalLabel} className={className}>
       {(control) => <textarea ref={ref} rows={rows} {...mergeClass(control, "py-3 leading-6")} {...props} />}
     </Field>
   );

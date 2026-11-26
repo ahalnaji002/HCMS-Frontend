@@ -1478,6 +1478,7 @@
     }
   },
   "ui": {
+    "confirm": "Confirm",
     "refresh": "Refresh",
     "loading": "Loading…",
     "loadError": "This could not be loaded.",

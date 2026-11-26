@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import { Alert, Button, ErrorState, LoadingState, PageHeader, useToast } from "@/presentation/components/ui";
+import { useFormatDate } from "@/presentation/hooks/useFormatDate";
 import { useAuth } from "@/presentation/context/useAuth";
 import { serverMessageKey } from "@/presentation/utils/serverMessages";
 
@@ -13,20 +15,14 @@ function getErrorKind(error, action) {
   return action === "load" ? "loadFailed" : "sendFailed";
 }
 
-function formatDate(value, locale) {
-  if (!value) return "";
-  const date = new Date(value);
-  return Number.isNaN(date.getTime())
-    ? value
-    : new Intl.DateTimeFormat(locale || undefined, { dateStyle: "medium", timeStyle: "short" }).format(date);
-}
-
 function isUnreadReceivedMessage(message, userId) {
   return String(message.receiver_id) === String(userId) && (message.is_read === false || Number(message.is_read) === 0);
 }
 
 function MessagingFeature({ role }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const { dateTime } = useFormatDate();
+  const toast = useToast();
   const { messaging } = useApplicationServices();
   const { user } = useAuth();
   const [conversations, setConversations] = useState([]);
@@ -36,7 +32,6 @@ function MessagingFeature({ role }) {
   const [messageText, setMessageText] = useState("");
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState("");
-  const [sendNotice, setSendNotice] = useState(false);
   const [readOnly, setReadOnly] = useState(false);
   const [historyReloadKey, setHistoryReloadKey] = useState(0);
   const [historyState, setHistoryState] = useState({ key: "", messages: [], error: "", readWarning: false });
@@ -113,7 +108,6 @@ function MessagingFeature({ role }) {
   function selectConversation(participantId) {
     setSelectedUserId(String(participantId));
     setSendError("");
-    setSendNotice(false);
     setMessageText("");
     setReadOnly(false);
   }
@@ -133,7 +127,6 @@ function MessagingFeature({ role }) {
 
     setSending(true);
     setSendError("");
-    setSendNotice(false);
     try {
       const response = await messaging.sendMessage({
         receiver_id: selectedConversation.participant.id,
@@ -142,7 +135,7 @@ function MessagingFeature({ role }) {
       const sentMessage = response?.data?.message;
       if (sentMessage) setHistoryState((current) => ({ ...current, messages: [...current.messages, sentMessage] }));
       setMessageText("");
-      setSendNotice(true);
+      toast.success({ key: "messaging.sent" });
       retryConversations();
     } catch (error) {
       const messageKey = serverMessageKey(error.response?.data?.message);
@@ -161,19 +154,15 @@ function MessagingFeature({ role }) {
 
   return (
     <section aria-labelledby="messaging-title" className="mx-auto max-w-6xl">
-      <header className="mb-6">
-        <p className="text-sm font-semibold text-primary">{t("messaging.eyebrow")}</p>
-        <h1 id="messaging-title" className="mt-2 text-3xl font-bold">{title}</h1>
-        <p className="mt-2 max-w-3xl leading-7 text-text-secondary">{t("messaging.description")}</p>
-      </header>
+      <PageHeader id="messaging-title" eyebrow={t("messaging.eyebrow")} title={title} description={t("messaging.description")} />
 
       <div className="grid min-h-[32rem] overflow-hidden rounded-2xl border border-border bg-surface md:grid-cols-[minmax(15rem,20rem)_minmax(0,1fr)]">
         <aside aria-label={t("messaging.conversationList")} className={`${selectedUserId ? "hidden md:block" : "block"} border-b border-border md:border-b-0 md:border-e`}>
           <div className="flex items-center justify-between border-b border-border px-4 py-4">
             <h2 className="font-bold">{t("messaging.conversationList")}</h2>
-            <button type="button" onClick={retryConversations} disabled={conversationLoading} className="min-h-10 rounded-lg border border-border px-3 text-sm font-semibold disabled:opacity-60">{t("messaging.refresh")}</button>
+            <Button variant="secondary" size="sm" onClick={retryConversations} disabled={conversationLoading}>{t("messaging.refresh")}</Button>
           </div>
-          {conversationLoading ? <p role="status" className="p-5 text-sm text-text-secondary">{t("messaging.loadingConversations")}</p>
+          {conversationLoading ? <LoadingState label={t("messaging.loadingConversations")} />
             : listError ? <LoadError t={t} errorKind={listError} onRetry={retryConversations} />
               : conversations.length === 0 ? <p role="status" className="p-5 text-sm leading-6 text-text-secondary">{t("messaging.emptyConversations")}</p>
                 : <ul className="divide-y divide-border">{conversations.map((conversation) => (
@@ -186,7 +175,7 @@ function MessagingFeature({ role }) {
                     >
                       <span className="flex items-center justify-between gap-3">
                         <span className="truncate font-semibold">{conversation.participant.full_name}</span>
-                        <span className="shrink-0 text-xs text-text-secondary">{formatDate(conversation.last_message?.sent_at, i18n.language)}</span>
+                        <span className="shrink-0 text-xs text-text-secondary">{dateTime(conversation.last_message?.sent_at)}</span>
                       </span>
                       <span className="mt-1 block text-xs text-text-secondary">{t(`roleHome.roles.${conversation.participant.role.toLowerCase()}.label`)}</span>
                       <span className="mt-2 block truncate text-sm text-text-secondary">{conversation.last_message?.message_text || ""}</span>
@@ -198,10 +187,10 @@ function MessagingFeature({ role }) {
         <div className={`${selectedUserId ? "flex" : "hidden md:flex"} min-h-[32rem] min-w-0 flex-col`}>
           {selectedConversation ? <>
             <header className="flex items-center gap-3 border-b border-border px-4 py-4 sm:px-6">
-              <button type="button" onClick={() => setSelectedUserId("")} className="min-h-10 rounded-lg border border-border px-3 text-sm font-semibold md:hidden">{t("messaging.backToConversations")}</button>
+              <Button variant="secondary" size="sm" onClick={() => setSelectedUserId("")} className="md:hidden">{t("messaging.backToConversations")}</Button>
               <div className="min-w-0"><h2 className="truncate font-bold">{selectedConversation.participant.full_name}</h2><p className="mt-1 text-xs text-text-secondary">{t(`roleHome.roles.${selectedConversation.participant.role.toLowerCase()}.label`)}</p></div>
             </header>
-            {historyLoading ? <p role="status" className="flex-1 p-6 text-sm text-text-secondary">{t("messaging.loadingMessages")}</p>
+            {historyLoading ? <LoadingState className="flex-1" label={t("messaging.loadingMessages")} />
               : historyError ? <LoadError t={t} errorKind={historyError} onRetry={retryHistory} />
                 : <>
                   <div aria-live="polite" aria-label={t("messaging.messagesLabel")} className="flex-1 space-y-4 overflow-y-auto p-4 sm:p-6">
@@ -212,19 +201,18 @@ function MessagingFeature({ role }) {
                         return <article key={message.id} className={`flex ${ownMessage ? "justify-end" : "justify-start"}`}>
                           <div className={`max-w-[88%] rounded-2xl px-4 py-3 sm:max-w-[75%] ${ownMessage ? "bg-primary text-white" : "border border-border bg-background text-text-primary"}`}>
                             <p className="whitespace-pre-wrap break-words text-sm leading-6">{message.message_text}</p>
-                            <time dateTime={message.sent_at} className={`mt-2 block text-xs ${ownMessage ? "text-white/80" : "text-text-secondary"}`}>{formatDate(message.sent_at, i18n.language)}</time>
+                            <time dateTime={message.sent_at} className={`mt-2 block text-xs ${ownMessage ? "text-white/80" : "text-text-secondary"}`}>{dateTime(message.sent_at)}</time>
                           </div>
                         </article>;
                       })}
                   </div>
-                  {sendError && <p role="alert" className="mx-4 mb-3 rounded-lg bg-danger/10 p-3 text-sm text-danger sm:mx-6">{t(`messaging.errors.${sendError}`)}</p>}
-                  {sendNotice && <p role="status" className="mx-4 mb-3 rounded-lg bg-primary/10 p-3 text-sm text-primary sm:mx-6">{t("messaging.sent")}</p>}
+                  {sendError && <Alert tone="error" className="mx-4 mb-3 sm:mx-6">{t(`messaging.errors.${sendError}`)}</Alert>}
                   {readOnly && <p role="status" className="mx-4 mb-3 rounded-lg bg-background p-3 text-sm text-text-secondary sm:mx-6">{t("messaging.readOnly")}</p>}
                   <form onSubmit={handleSend} className="border-t border-border p-4 sm:p-6">
                     <label htmlFor="message-composer" className="sr-only">{t("messaging.messageLabel")}</label>
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-                      <textarea id="message-composer" rows={3} value={messageText} onChange={(event) => { setMessageText(event.target.value); setSendError(""); setSendNotice(false); }} disabled={readOnly || sending} placeholder={t("messaging.messagePlaceholder")} className="min-h-24 min-w-0 flex-1 resize-y rounded-xl border border-border bg-background px-4 py-3 text-sm focus-visible:outline-2 focus-visible:outline-primary disabled:opacity-60" />
-                      <button type="submit" disabled={readOnly || sending || !messageText.trim() || historyLoading} className="min-h-11 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60">{sending ? t("messaging.sending") : t("messaging.send")}</button>
+                      <textarea id="message-composer" rows={3} value={messageText} onChange={(event) => { setMessageText(event.target.value); setSendError(""); }} disabled={readOnly || sending} placeholder={t("messaging.messagePlaceholder")} className="min-h-24 min-w-0 flex-1 resize-y rounded-xl border border-border bg-background px-4 py-3 text-sm focus-visible:outline-2 focus-visible:outline-primary disabled:opacity-60" />
+                      <Button type="submit" disabled={readOnly || !messageText.trim() || historyLoading} loading={sending} loadingText={t("messaging.sending")}>{t("messaging.send")}</Button>
                     </div>
                   </form>
                 </>}
@@ -236,10 +224,7 @@ function MessagingFeature({ role }) {
 }
 
 function LoadError({ t, errorKind, onRetry }) {
-  return <div role="alert" className="m-4 rounded-xl border border-danger/30 bg-danger/5 p-4">
-    <p className="text-sm text-danger">{t(`messaging.errors.${errorKind}`)}</p>
-    <button type="button" onClick={onRetry} className="mt-3 min-h-10 rounded-lg border border-border px-3 py-2 text-sm font-semibold">{t("messaging.retry")}</button>
-  </div>;
+  return <ErrorState className="m-4" message={t(`messaging.errors.${errorKind}`)} onRetry={onRetry} retryLabel={t("messaging.retry")} />;
 }
 
 export default MessagingFeature;

@@ -51,10 +51,11 @@ test("NGO sees assigned requests and opens the request detail page with valid re
 
   await expect(page).toHaveURL(/\/ngo\/assistance-requests\/52$/);
   await expect(page.getByRole("heading", { name: "Assistance request #52" })).toBeVisible();
-  await expect(page.getByText("Patient reference")).toBeVisible();
-  await expect(page.getByText("101", { exact: true })).toBeVisible();
-  await expect(page.getByText("Submitting doctor reference")).toBeVisible();
-  await expect(page.getByText("7", { exact: true })).toBeVisible();
+  // UX-16: the NGO sees the case number only, never the patient's or doctor's internal IDs.
+  await expect(page.getByText("Patient reference")).toHaveCount(0);
+  await expect(page.getByText("101", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Submitting doctor reference")).toHaveCount(0);
+  await expect(page.getByText("7", { exact: true })).toHaveCount(0);
   await expect(page.locator("form")).toHaveCount(0);
   await expect(page.locator("article").getByRole("button", { name: "Approve request" })).toBeVisible();
   await expect(page.locator("article").getByRole("button", { name: "Reject request" })).toBeVisible();
@@ -153,13 +154,13 @@ test("NGO can start review after confirmation and sees refreshed request details
     currentRequest = { ...currentRequest, status: route.request().postDataJSON().status };
     return reply(route, { assistance_request: currentRequest });
   });
-  page.on("dialog", (dialog) => dialog.accept());
 
   await page.goto(`/ngo/assistance-requests/${assistanceRequest.id}`);
   await expect(page.getByRole("button", { name: "Start review" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Approve request" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Reject request" })).toHaveCount(0);
   await page.getByRole("button", { name: "Start review" }).click();
+  await page.getByRole("button", { name: "Confirm" }).click();
 
   await expect(page.getByText("Under review")).toBeVisible();
   await expect(page.getByText("The request status was updated.")).toBeVisible();
@@ -190,10 +191,10 @@ test("dismissing an NGO status confirmation does not send a status update", asyn
     updateCount += 1;
     return reply(route, {});
   });
-  page.on("dialog", (dialog) => dialog.dismiss());
 
   await page.goto(`/ngo/assistance-requests/${assistanceRequest.id}`);
   await page.getByRole("button", { name: "Start review" }).click();
+  await page.getByRole("button", { name: "Cancel" }).click();
   await expect(page.getByText("Pending", { exact: true })).toBeVisible();
   expect(updateCount).toBe(0);
 });
@@ -230,10 +231,10 @@ test("approved request with an allocation can be completed and details reload", 
     currentRequest = { ...currentRequest, status: body.status };
     return reply(route, { assistance_request: currentRequest });
   });
-  page.on("dialog", (dialog) => dialog.accept());
 
   await page.goto(`/ngo/assistance-requests/${assistanceRequest.id}`);
   await page.getByRole("button", { name: "Mark as completed" }).click();
+  await page.getByRole("button", { name: "Confirm" }).click();
   await expect(page.getByText("Completed", { exact: true })).toBeVisible();
   expect(updates).toEqual([{ status: "COMPLETED" }]);
   expect(detailLoads).toBeGreaterThanOrEqual(2);
@@ -251,10 +252,10 @@ test("status conflict shows a friendly message and reloads the latest request", 
     latestStatus = "UNDER_REVIEW";
     return reply(route, { message: "Raw backend conflict detail" }, 409);
   });
-  page.on("dialog", (dialog) => dialog.accept());
 
   await page.goto(`/ngo/assistance-requests/${assistanceRequest.id}`);
   await page.getByRole("button", { name: "Start review" }).click();
+  await page.getByRole("button", { name: "Confirm" }).click();
   await expect(page.getByText("The request changed or this status transition is no longer valid. The latest details have been loaded.")).toBeVisible();
   await expect(page.getByText("Under review", { exact: true })).toBeVisible();
   await expect(page.getByText("Raw backend conflict detail")).toHaveCount(0);
@@ -386,10 +387,10 @@ test("NGO confirms allocation deletion and sees the refreshed empty state", asyn
   await page.route(`**/api/ngo/assistance-requests/${assistanceRequest.id}/resources`, (route) => reply(route, {
     resource_allocations: allocations,
   }));
-  page.on("dialog", (dialog) => dialog.accept());
 
   await page.goto(`/ngo/assistance-requests/${assistanceRequest.id}`);
   await page.getByRole("button", { name: "Delete" }).click();
+  await page.getByRole("button", { name: "Confirm" }).click();
   await expect(page.getByText("No resources have been allocated to this request yet.")).toBeVisible();
   await expect(page.getByText("The resource allocation was deleted.")).toBeVisible();
   expect(deleteCount).toBe(1);

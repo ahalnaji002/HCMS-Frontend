@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link, Navigate, Route, Routes, useParams } from "react-router-dom";
+import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
-import StatusToast from "@/presentation/components/common/StatusToast";
+import { ButtonLink, Card, ConfirmAction, DescriptionList, EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge, useToast } from "@/presentation/components/ui";
+import { useFormatDate } from "@/presentation/hooks/useFormatDate";
 import RoleDashboard from "@/presentation/features/role-dashboard/RoleDashboard";
 import NotificationsFeature from "@/presentation/features/notifications/NotificationsFeature";
 import NgoResourceAllocationsSection from "@/presentation/features/ngo-workspace/NgoResourceAllocationsSection";
@@ -21,96 +22,84 @@ const STATUS_ACTION_KEYS = {
   COMPLETED: "complete",
 };
 
+// UX-16: an NGO sees the case number (the request number) only, never the
+// patient's or doctor's internal IDs. Patient details may be added later.
 function RequestList() {
   const { t } = useTranslation();
   const { requests, loading, errorKind, retry } = useNgoAssistanceRequests();
 
   return (
     <section aria-labelledby="ngo-assistance-requests-title">
-      <header className="mb-6">
-        <p className="text-sm font-semibold text-primary">{t("ngoAssistance.eyebrow")}</p>
-        <h1 id="ngo-assistance-requests-title" className="mt-2 text-3xl font-bold">
-          {t("roleNavigation.ngo.assistanceRequests")}
-        </h1>
-        <p className="mt-2 max-w-3xl leading-7 text-text-secondary">{t("ngoAssistance.description")}</p>
-      </header>
+      <PageHeader id="ngo-assistance-requests-title" eyebrow={t("ngoAssistance.eyebrow")} title={t("roleNavigation.ngo.assistanceRequests")} description={t("ngoAssistance.description")} />
 
-      {loading ? <p role="status" aria-live="polite" className="rounded-xl border border-border bg-surface p-5 text-text-secondary">{t("ngoAssistance.loading")}</p>
-        : errorKind ? <LoadError errorKind={errorKind} onRetry={retry} />
-          : requests.length === 0 ? <p role="status" className="rounded-xl border border-border bg-surface p-5 text-text-secondary">{t("ngoAssistance.empty")}</p>
-            : <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {requests.map((item) => <li key={item.id}>
-                <RequestCard request={item} />
-              </li>)}
-            </ul>}
+      {loading ? <LoadingState label={t("ngoAssistance.loading")} />
+        : errorKind ? <ErrorState message={t(`ngoAssistance.errors.${errorKind}`)} onRetry={retry} retryLabel={t("ngoAssistance.retry")} />
+          : requests.length === 0 ? <EmptyState title={t("ngoAssistance.empty")} />
+            : (
+              <ul className="grid items-start gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {requests.map((item) => <li key={item.id}><RequestCard request={item} /></li>)}
+              </ul>
+            )}
     </section>
   );
 }
 
 function RequestCard({ request }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const { dateTime } = useFormatDate();
   return (
-    <article className="h-full rounded-2xl border border-border bg-surface p-5 shadow-sm">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <h2 className="text-lg font-bold">{t("ngoAssistance.requestNumber", { id: request.id })}</h2>
-        <StatusBadge status={request.status} />
-      </div>
-      <dl className="mt-4 space-y-2 text-sm">
-        <Metadata label={t("ngoAssistance.requestType")} value={request.request_type} />
-        <Metadata label={t("ngoAssistance.patientReference")} value={request.patient_id} />
-        <Metadata label={t("ngoAssistance.doctorReference")} value={request.doctor_id} />
-        <Metadata label={t("ngoAssistance.submittedAt")} value={formatDate(request.submitted_at, i18n.language)} />
-      </dl>
+    <Card
+      as="article"
+      padding="sm"
+      title={t("ngoAssistance.requestNumber", { id: request.id })}
+      actions={<StatusBadge status={request.status} labelPrefix="ngoAssistance.statuses" />}
+    >
+      <DescriptionList
+        items={[
+          { label: t("ngoAssistance.requestType"), value: request.request_type },
+          { label: t("ngoAssistance.submittedAt"), value: dateTime(request.submitted_at) },
+        ]}
+      />
       <p className="mt-4 line-clamp-3 whitespace-pre-wrap text-sm leading-6 text-text-secondary">{request.description}</p>
-      <Link to={`/ngo/assistance-requests/${request.id}`} className="mt-5 inline-flex min-h-11 items-center rounded-lg border border-primary px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-        {t("ngoAssistance.viewDetails")}
-      </Link>
-    </article>
+      <ButtonLink to={`/ngo/assistance-requests/${request.id}`} className="mt-5">{t("ngoAssistance.viewDetails")}</ButtonLink>
+    </Card>
   );
 }
 
 function RequestDetail() {
   const { requestId } = useParams();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const { dateTime } = useFormatDate();
   const { ngoWorkspace } = useApplicationServices();
+  const toast = useToast();
   const { request, resources, resourceErrorKind, loading, errorKind, retry } = useNgoAssistanceRequests(requestId);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [actionError, setActionError] = useState("");
-  const [actionNotice, setActionNotice] = useState("");
 
-  if (loading) return <p role="status" aria-live="polite" className="rounded-xl border border-border bg-surface p-5 text-text-secondary">{t("ngoAssistance.loading")}</p>;
-  if (errorKind) return <LoadError errorKind={errorKind} onRetry={retry} />;
-  if (!request) return <LoadError errorKind="notFound" onRetry={retry} />;
+  const back = <ButtonLink to="/ngo/assistance-requests" variant="ghost" size="sm" className="mb-4">{t("ngoAssistance.backToList")}</ButtonLink>;
+  if (loading) return <>{back}<LoadingState label={t("ngoAssistance.loading")} /></>;
+  if (errorKind || !request) return <>{back}<ErrorState message={t(`ngoAssistance.errors.${errorKind || "notFound"}`)} onRetry={retry} retryLabel={t("ngoAssistance.retry")} /></>;
 
   const availableTransitions = (STATUS_TRANSITIONS[request.status] ?? []).filter(
     (status) => status !== "COMPLETED" || (!resourceErrorKind && resources.length > 0),
   );
 
   async function updateStatus(nextStatus) {
-    if (!window.confirm(t(`ngoAssistance.confirm.${nextStatus}`))) return;
-
     setIsUpdating(true);
-    setActionError("");
-    setActionNotice("");
     try {
       await ngoWorkspace.updateAssistanceRequestStatus(request.id, nextStatus);
-      setActionNotice(t("ngoAssistance.statusUpdated"));
+      toast.success({ key: "ngoAssistance.statusUpdated" });
       retry();
     } catch (error) {
       const statusCode = error.response?.status;
       const serverMessage = error.response?.data?.message;
       const messageKey = serverMessage === "At least one resource allocation is required before completing the assistance request."
         ? "completionNeedsAllocation"
-        : statusCode === 400
-          ? "statusValidation"
-          : statusCode === 403
-            ? "statusForbidden"
-            : statusCode === 404
-              ? "statusNotFound"
-              : statusCode === 409
-                ? "statusConflict"
+        : statusCode === 400 ? "statusValidation"
+          : statusCode === 403 ? "statusForbidden"
+            : statusCode === 404 ? "statusNotFound"
+              : statusCode === 409 ? "statusConflict"
                 : "statusUpdateFailed";
-      setActionError(t(`ngoAssistance.errors.${messageKey}`));
+      toast.error({ key: `ngoAssistance.errors.${messageKey}` });
       if (statusCode === 409) retry();
     } finally {
       setIsUpdating(false);
@@ -119,29 +108,28 @@ function RequestDetail() {
 
   return (
     <section aria-labelledby="ngo-assistance-detail-title" className="mx-auto max-w-3xl">
-      <Link to="/ngo/assistance-requests" className="inline-flex min-h-11 items-center text-sm font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-        {t("ngoAssistance.backToList")}
-      </Link>
-      <article className="mt-4 rounded-2xl border border-border bg-surface p-5 shadow-sm sm:p-7">
+      {back}
+      <Card as="article">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-sm font-semibold text-primary">{t("ngoAssistance.eyebrow")}</p>
-            <h1 id="ngo-assistance-detail-title" className="mt-2 text-2xl font-bold">{t("ngoAssistance.requestNumber", { id: request.id })}</h1>
+            <h1 id="ngo-assistance-detail-title" className="mt-1 text-2xl font-bold">{t("ngoAssistance.requestNumber", { id: request.id })}</h1>
           </div>
-          <StatusBadge status={request.status} />
+          <StatusBadge status={request.status} labelPrefix="ngoAssistance.statuses" />
         </div>
-        <dl className="mt-7 grid gap-5 sm:grid-cols-2">
-          <Metadata label={t("ngoAssistance.requestType")} value={request.request_type} />
-          <Metadata label={t("ngoAssistance.patientReference")} value={request.patient_id} />
-          <Metadata label={t("ngoAssistance.doctorReference")} value={request.doctor_id} />
-          <Metadata label={t("ngoAssistance.submittedAt")} value={formatDate(request.submitted_at, i18n.language)} />
-          <Metadata label={t("ngoAssistance.createdAt")} value={formatDate(request.created_at, i18n.language)} />
-          <Metadata label={t("ngoAssistance.updatedAt")} value={formatDate(request.updated_at, i18n.language)} />
-          {request.reviewed_at && <Metadata label={t("ngoAssistance.reviewedAt")} value={formatDate(request.reviewed_at, i18n.language)} />}
-        </dl>
+        <DescriptionList
+          className="mt-6"
+          columns={2}
+          items={[
+            { label: t("ngoAssistance.requestType"), value: request.request_type },
+            { label: t("ngoAssistance.submittedAt"), value: dateTime(request.submitted_at) },
+            { label: t("ngoAssistance.updatedAt"), value: dateTime(request.updated_at) },
+            { label: t("ngoAssistance.reviewedAt"), value: dateTime(request.reviewed_at) },
+          ]}
+        />
         <div className="mt-7 border-t border-border pt-6">
           <h2 className="text-lg font-bold">{t("ngoAssistance.descriptionLabel")}</h2>
-          <p className="mt-3 whitespace-pre-wrap leading-7 text-text-secondary">{request.description || "—"}</p>
+          <p className="mt-3 whitespace-pre-wrap leading-7 text-text-secondary">{request.description}</p>
         </div>
         {(availableTransitions.length > 0 || (!resourceErrorKind && request.status === "APPROVED" && resources.length === 0)) && (
           <div className="mt-7 border-t border-border pt-6">
@@ -151,60 +139,25 @@ function RequestDetail() {
             ) : (
               <div className="mt-4 flex flex-wrap gap-3">
                 {availableTransitions.map((status) => (
-                  <button
+                  <ConfirmAction
                     key={status}
-                    type="button"
+                    tone={status === "REJECTED" ? "danger" : "primary"}
+                    label={t(`ngoAssistance.actions.${STATUS_ACTION_KEYS[status]}`)}
+                    title={t(`ngoAssistance.confirm.${status}`)}
+                    confirmLabel={t("ui.confirm")}
+                    loading={isUpdating}
                     disabled={isUpdating}
-                    onClick={() => updateStatus(status)}
-                    className={`min-h-11 rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:cursor-wait disabled:opacity-60 ${status === "REJECTED" ? "bg-danger" : "bg-primary"}`}
-                  >
-                    {isUpdating ? t("ngoAssistance.updatingStatus") : t(`ngoAssistance.actions.${STATUS_ACTION_KEYS[status]}`)}
-                  </button>
+                    onConfirm={() => updateStatus(status)}
+                  />
                 ))}
               </div>
             )}
           </div>
         )}
-        <NgoResourceAllocationsSection
-          request={request}
-          resources={resources}
-          resourceErrorKind={resourceErrorKind}
-          onRetry={retry}
-          onActionFeedback={({ error, notice }) => { setActionError(error); setActionNotice(notice); }}
-        />
-      </article>
-      <StatusToast
-        error={actionError}
-        notice={actionNotice}
-        onDismiss={() => { setActionError(""); setActionNotice(""); }}
-        dismissLabel={t("roleHome.dismissMessage")}
-      />
+        <NgoResourceAllocationsSection request={request} resources={resources} resourceErrorKind={resourceErrorKind} onRetry={retry} />
+      </Card>
     </section>
   );
-}
-
-function Metadata({ label, value }) {
-  return <div className="min-w-0"><dt className="text-xs font-semibold text-text-secondary">{label}</dt><dd className="mt-1 break-words text-sm font-medium text-text-primary">{value ?? "—"}</dd></div>;
-}
-
-function StatusBadge({ status }) {
-  const { t } = useTranslation();
-  return <span className="rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">{t(`ngoAssistance.statuses.${status}`, { defaultValue: status })}</span>;
-}
-
-function LoadError({ errorKind, onRetry }) {
-  const { t } = useTranslation();
-  const message = t(`ngoAssistance.errors.${errorKind}`);
-  return <div role="alert" className="rounded-xl border border-danger/30 bg-danger/5 p-5">
-    <p className="text-sm text-danger">{message}</p>
-    <button type="button" onClick={onRetry} className="mt-4 min-h-11 rounded-lg border border-border px-4 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{t("ngoAssistance.retry")}</button>
-  </div>;
-}
-
-function formatDate(value, locale) {
-  if (!value) return "—";
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(locale || undefined, { dateStyle: "medium", timeStyle: "short" }).format(date);
 }
 
 function NgoWorkspaceFeature() {

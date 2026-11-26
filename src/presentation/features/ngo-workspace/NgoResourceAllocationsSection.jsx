@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
+import { Badge, Button, ConfirmAction, DescriptionList, EmptyState, ErrorState, TextareaField, TextField, useToast } from "@/presentation/components/ui";
+import { useFormatDate } from "@/presentation/hooks/useFormatDate";
 
 const EMPTY_ALLOCATION = {
   resource_name: "",
@@ -68,7 +70,7 @@ function AllocationForm({ allocation, saving, onCancel, onSubmit }) {
     delivery_date: allocation.delivery_date?.slice(0, 10) ?? "",
     notes: allocation.notes ?? "",
   } : EMPTY_ALLOCATION);
-  const [validationError, setValidationError] = useState("");
+  const [validationError, setValidationError] = useState(null);
 
   function updateField(event) {
     const { name, value } = event.target;
@@ -86,37 +88,27 @@ function AllocationForm({ allocation, saving, onCancel, onSubmit }) {
     onSubmit(toPayload(values, Boolean(allocation)));
   }
 
+  const errorFor = (field) => (validationError?.field === field ? validationError.message : undefined);
+
   return (
     <form onSubmit={submit} className="mt-4 grid gap-4 rounded-xl border border-border bg-background p-4 sm:grid-cols-2" noValidate>
-      <label className="grid gap-2 text-sm font-medium sm:col-span-2">
-        {t("ngoAssistance.allocations.fields.resourceName")}
-        <input name="resource_name" value={values.resource_name} onChange={updateField} maxLength={150} required aria-invalid={validationError?.field === "resource_name"} className="min-h-11 rounded-lg border border-border bg-surface px-3 text-text-primary focus-visible:outline-2 focus-visible:outline-primary" />
-      </label>
-      <label className="grid gap-2 text-sm font-medium">
-        {t("ngoAssistance.allocations.fields.quantity")}
-        <input name="quantity" type="number" value={values.quantity} onChange={updateField} min="1" max="4294967295" step="1" required aria-invalid={validationError?.field === "quantity"} className="min-h-11 rounded-lg border border-border bg-surface px-3 text-text-primary focus-visible:outline-2 focus-visible:outline-primary" />
-      </label>
-      <label className="grid gap-2 text-sm font-medium">
-        {t("ngoAssistance.allocations.fields.deliveryDate")}
-        <input name="delivery_date" type="date" value={values.delivery_date} onChange={updateField} className="min-h-11 rounded-lg border border-border bg-surface px-3 text-text-primary focus-visible:outline-2 focus-visible:outline-primary" />
-      </label>
-      <label className="grid gap-2 text-sm font-medium sm:col-span-2">
-        {t("ngoAssistance.allocations.fields.notes")}
-        <textarea name="notes" value={values.notes} onChange={updateField} rows={3} aria-invalid={validationError?.field === "notes"} className="rounded-lg border border-border bg-surface px-3 py-2 text-text-primary focus-visible:outline-2 focus-visible:outline-primary" />
-      </label>
-      {validationError && <p role="alert" className="text-sm text-danger sm:col-span-2">{validationError.message}</p>}
+      <TextField className="sm:col-span-2" label={t("ngoAssistance.allocations.fields.resourceName")} name="resource_name" value={values.resource_name} onChange={updateField} maxLength={150} required error={errorFor("resource_name")} />
+      <TextField label={t("ngoAssistance.allocations.fields.quantity")} name="quantity" type="number" value={values.quantity} onChange={updateField} min="1" max="4294967295" step="1" required error={errorFor("quantity")} />
+      <TextField label={t("ngoAssistance.allocations.fields.deliveryDate")} name="delivery_date" type="date" value={values.delivery_date} onChange={updateField} />
+      <TextareaField className="sm:col-span-2" label={t("ngoAssistance.allocations.fields.notes")} name="notes" value={values.notes} onChange={updateField} rows={3} error={errorFor("notes")} />
       <div className="flex flex-wrap gap-3 sm:col-span-2">
-        <button type="submit" disabled={saving} className="min-h-11 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-60">
-          {saving ? t("ngoAssistance.allocations.saving") : t(allocation ? "ngoAssistance.allocations.saveChanges" : "ngoAssistance.allocations.add")}
-        </button>
-        {allocation && <button type="button" disabled={saving} onClick={onCancel} className="min-h-11 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-text-primary disabled:opacity-60">{t("ngoAssistance.allocations.cancelEdit")}</button>}
+        <Button type="submit" loading={saving} loadingText={t("ngoAssistance.allocations.saving")}>
+          {t(allocation ? "ngoAssistance.allocations.saveChanges" : "ngoAssistance.allocations.add")}
+        </Button>
+        {allocation && <Button variant="secondary" disabled={saving} onClick={onCancel}>{t("ngoAssistance.allocations.cancelEdit")}</Button>}
       </div>
     </form>
   );
 }
 
 function AllocationCard({ allocation, editable, editing, saving, onEdit, onDelete, onCancel, onSubmit }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const { date } = useFormatDate();
 
   return (
     <article className="rounded-xl border border-border bg-background p-4">
@@ -124,63 +116,78 @@ function AllocationCard({ allocation, editable, editing, saving, onEdit, onDelet
         <>
           <div className="flex flex-wrap items-start justify-between gap-3">
             <h3 className="text-base font-semibold">{allocation.resource_name}</h3>
-            <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">{t("ngoAssistance.allocations.quantityValue", { count: allocation.quantity, quantity: allocation.quantity })}</span>
+            <Badge tone="info">{t("ngoAssistance.allocations.quantityValue", { count: allocation.quantity, quantity: allocation.quantity })}</Badge>
           </div>
-          <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
-            <div><dt className="text-text-secondary">{t("ngoAssistance.allocations.fields.deliveryDate")}</dt><dd className="mt-1">{allocation.delivery_date ? new Intl.DateTimeFormat(i18n.language, { dateStyle: "medium", timeZone: "UTC" }).format(new Date(`${allocation.delivery_date.slice(0, 10)}T00:00:00Z`)) : t("ngoAssistance.allocations.notProvided")}</dd></div>
-            <div><dt className="text-text-secondary">{t("ngoAssistance.allocations.fields.notes")}</dt><dd className="mt-1 whitespace-pre-wrap break-words">{allocation.notes || t("ngoAssistance.allocations.notProvided")}</dd></div>
-          </dl>
-          {editable && <div className="mt-4 flex flex-wrap gap-3">
-            <button type="button" disabled={saving} onClick={onEdit} className="min-h-11 rounded-lg border border-primary px-4 py-2 text-sm font-semibold text-primary disabled:opacity-60">{t("ngoAssistance.allocations.edit")}</button>
-            <button type="button" disabled={saving} onClick={onDelete} className="min-h-11 rounded-lg border border-danger/40 px-4 py-2 text-sm font-semibold text-danger disabled:opacity-60">{t("ngoAssistance.allocations.delete")}</button>
-          </div>}
+          <DescriptionList
+            className="mt-3"
+            columns={2}
+            emptyText={t("ngoAssistance.allocations.notProvided")}
+            items={[
+              { label: t("ngoAssistance.allocations.fields.deliveryDate"), value: allocation.delivery_date ? date(allocation.delivery_date.slice(0, 10)) : "" },
+              { label: t("ngoAssistance.allocations.fields.notes"), value: allocation.notes },
+            ]}
+          />
+          {editable && (
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Button variant="secondary" size="sm" disabled={saving} onClick={onEdit}>{t("ngoAssistance.allocations.edit")}</Button>
+              <ConfirmAction
+                size="sm"
+                label={t("ngoAssistance.allocations.delete")}
+                title={t("ngoAssistance.allocations.confirmDelete")}
+                confirmLabel={t("ui.confirm")}
+                disabled={saving}
+                onConfirm={onDelete}
+              />
+            </div>
+          )}
         </>
       )}
     </article>
   );
 }
 
-function NgoResourceAllocationsSection({ request, resources, resourceErrorKind, onRetry, onActionFeedback }) {
+function NgoResourceAllocationsSection({ request, resources, resourceErrorKind, onRetry }) {
   const { t } = useTranslation();
   const { ngoWorkspace } = useApplicationServices();
+  const toast = useToast();
   const [editingId, setEditingId] = useState(null);
   const [saving, setSaving] = useState(false);
   const canCreate = request.status === "APPROVED";
   const canEdit = request.status !== "COMPLETED";
 
+  function fail(error) {
+    toast.error({ key: `ngoAssistance.allocations.errors.${getErrorKey(error)}` });
+    if (error.response?.status === 404 || error.response?.status === 409) onRetry();
+  }
+
   async function saveAllocation(payload) {
     setSaving(true);
-    onActionFeedback({ error: "", notice: "" });
     try {
       if (editingId) {
         await ngoWorkspace.updateResourceAllocation(request.id, editingId, payload);
-        onActionFeedback({ error: "", notice: t("ngoAssistance.allocations.updated") });
+        toast.success({ key: "ngoAssistance.allocations.updated" });
         setEditingId(null);
       } else {
         await ngoWorkspace.createResourceAllocation(request.id, payload);
-        onActionFeedback({ error: "", notice: t("ngoAssistance.allocations.created") });
+        toast.success({ key: "ngoAssistance.allocations.created" });
       }
       onRetry();
     } catch (error) {
-      onActionFeedback({ error: t(`ngoAssistance.allocations.errors.${getErrorKey(error)}`), notice: "" });
-      if (error.response?.status === 404 || error.response?.status === 409) onRetry();
+      fail(error);
     } finally {
       setSaving(false);
     }
   }
 
   async function deleteAllocation(allocationId) {
-    if (!window.confirm(t("ngoAssistance.allocations.confirmDelete"))) return;
     setSaving(true);
-    onActionFeedback({ error: "", notice: "" });
     try {
       await ngoWorkspace.deleteResourceAllocation(request.id, allocationId);
-      onActionFeedback({ error: "", notice: t("ngoAssistance.allocations.deleted") });
+      toast.success({ key: "ngoAssistance.allocations.deleted" });
       setEditingId(null);
       onRetry();
     } catch (error) {
-      onActionFeedback({ error: t(`ngoAssistance.allocations.errors.${getErrorKey(error)}`), notice: "" });
-      if (error.response?.status === 404 || error.response?.status === 409) onRetry();
+      fail(error);
     } finally {
       setSaving(false);
     }
@@ -190,35 +197,37 @@ function NgoResourceAllocationsSection({ request, resources, resourceErrorKind, 
     <section aria-labelledby="ngo-resource-allocations-title" className="mt-7 border-t border-border pt-6">
       <h2 id="ngo-resource-allocations-title" className="text-lg font-bold">{t("ngoAssistance.allocations.title")}</h2>
       <p className="mt-2 text-sm leading-6 text-text-secondary">{t("ngoAssistance.allocations.description")}</p>
-      {resourceErrorKind ? (
-        <div className="mt-4 rounded-xl border border-danger/30 bg-danger/5 p-4">
-          <p role="alert" className="text-sm text-danger">{t(`ngoAssistance.errors.${resourceErrorKind}`)}</p>
-          <button type="button" onClick={onRetry} className="mt-3 min-h-11 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-primary">{t("ngoAssistance.retry")}</button>
-        </div>
-      ) : (
-        <>
-          {resources.length === 0 ? <p role="status" className="mt-4 rounded-xl bg-background p-4 text-sm text-text-secondary">{t("ngoAssistance.allocations.empty")}</p> : (
-            <ul className="mt-4 grid gap-3">
-              {resources.map((allocation) => <li key={allocation.id}>
-                <AllocationCard
-                  allocation={allocation}
-                  editable={canEdit}
-                  editing={editingId === allocation.id}
-                  saving={saving}
-                  onEdit={() => { onActionFeedback({ error: "", notice: "" }); setEditingId(allocation.id); }}
-                  onDelete={() => deleteAllocation(allocation.id)}
-                  onCancel={() => setEditingId(null)}
-                  onSubmit={saveAllocation}
-                />
-              </li>)}
-            </ul>
+      <div className="mt-4">
+        {resourceErrorKind ? <ErrorState message={t(`ngoAssistance.errors.${resourceErrorKind}`)} onRetry={onRetry} retryLabel={t("ngoAssistance.retry")} />
+          : (
+            <>
+              {resources.length === 0 ? <EmptyState title={t("ngoAssistance.allocations.empty")} /> : (
+                <ul className="grid gap-3">
+                  {resources.map((allocation) => (
+                    <li key={allocation.id}>
+                      <AllocationCard
+                        allocation={allocation}
+                        editable={canEdit}
+                        editing={editingId === allocation.id}
+                        saving={saving}
+                        onEdit={() => setEditingId(allocation.id)}
+                        onDelete={() => deleteAllocation(allocation.id)}
+                        onCancel={() => setEditingId(null)}
+                        onSubmit={saveAllocation}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {canCreate && (
+                <div className="mt-5">
+                  <h3 className="text-base font-semibold">{t("ngoAssistance.allocations.addTitle")}</h3>
+                  <AllocationForm saving={saving} onSubmit={saveAllocation} />
+                </div>
+              )}
+            </>
           )}
-          {canCreate && <div className="mt-5">
-            <h3 className="text-base font-semibold">{t("ngoAssistance.allocations.addTitle")}</h3>
-            <AllocationForm saving={saving} onSubmit={saveAllocation} />
-          </div>}
-        </>
-      )}
+      </div>
     </section>
   );
 }

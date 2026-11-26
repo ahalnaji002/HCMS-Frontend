@@ -83,7 +83,7 @@ function WhoWeServe() {
     <section
       id="who-we-serve"
       aria-labelledby="who-we-serve-heading"
-      className="scroll-mt-20 bg-surface py-14 sm:py-24 lg:py-28"
+      className="scroll-mt-20 bg-surface py-12 sm:py-24 lg:py-28"
     >
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
@@ -101,11 +101,11 @@ function WhoWeServe() {
           </p>
         </div>
 
-        <div className="mt-8 grid gap-5 sm:mt-12 sm:grid-cols-2 lg:mt-16 xl:grid-cols-4">
+        <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:mt-16 xl:grid-cols-4">
           {roles.map(({ key, icon, capabilities }) => (
             <article
               key={key}
-              className="rounded-2xl border border-border bg-background p-6 transition duration-200 hover:-translate-y-1 hover:border-primary/50"
+              className="rounded-2xl border border-border bg-background p-5 transition duration-200 hover:-translate-y-1 hover:border-primary/50 sm:p-6"
             >
               <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <RoleIcon>{icon}</RoleIcon>
@@ -116,7 +116,7 @@ function WhoWeServe() {
               <p className="mt-3 text-sm leading-6 text-text-secondary">
                 {t(`landing.whoWeServe.roles.${key}.description`)}
               </p>
-              <ul className="mt-5 space-y-3 border-t border-border pt-5">
+              <ul className="mt-4 space-y-2 border-t border-border pt-4 sm:mt-5 sm:space-y-3 sm:pt-5">
                 {capabilities.map((capability) => (
                   <li
                     key={capability}

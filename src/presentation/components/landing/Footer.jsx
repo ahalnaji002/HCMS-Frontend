@@ -29,12 +29,12 @@ function Footer() {
             <h2 className="text-sm font-semibold text-text-primary">
               {t("landing.footer.navigationTitle")}
             </h2>
-            <ul className="mt-4 space-y-3">
+            <ul className="mt-2 space-y-1">
               {landingSectionLinks.map(({ id, translationKey }) => (
                 <li key={id}>
                   <a
                     href={`#${id}`}
-                    className="inline-flex rounded text-sm text-text-secondary transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                    className="inline-flex min-h-11 items-center rounded text-sm text-text-secondary transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
                   >
                     {t(translationKey)}
                   </a>
