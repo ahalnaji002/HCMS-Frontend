@@ -71,3 +71,15 @@ export async function listSystemSettings() {
 export async function updateSystemSetting(key, settingValue) {
   return api.patch(`/api/admin/settings/${key}`, { setting_value: settingValue });
 }
+
+export async function listUsers(params) {
+  return api.get("/api/admin/users", { params });
+}
+
+export async function updateUserStatus(userId, accountStatus) {
+  return api.patch(`/api/admin/users/${userId}/status`, { account_status: accountStatus });
+}
+
+export async function listNgos(params) {
+  return api.get("/api/admin/ngos", { params });
+}

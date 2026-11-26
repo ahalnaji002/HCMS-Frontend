@@ -25,10 +25,15 @@ const SERVER_MESSAGE_KEYS = {
   "Correction requests are available after administration starts review": "serverMessages.correctionBeforeReview",
   "Submit a patient intake before requesting a correction": "serverMessages.correctionWithoutIntake",
   "Validation failed": "serverMessages.validationFailed",
+  "You cannot change the status of your own account": "serverMessages.ownAccountStatus",
+  "The last active administrator cannot be deactivated": "serverMessages.lastActiveAdmin",
+  "Accounts awaiting approval are activated through Join Requests": "serverMessages.applicantUsesJoinRequests",
+  "User not found": "serverMessages.userNotFound",
 };
 
 const PREFIX_KEYS = [
   ["Doctor-patient assignment is already", "serverMessages.assignmentStatusUnchanged"],
+  ["User account is already", "serverMessages.userStatusUnchanged"],
 ];
 
 export function serverMessageKey(message) {
