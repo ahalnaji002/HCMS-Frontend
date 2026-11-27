@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Alert, Button, buttonClasses, TextField } from "@/presentation/components/ui";
+import { Alert, Button, buttonClasses, SelectField, TextField } from "@/presentation/components/ui";
+import { SPECIALIZATIONS, specializationKey } from "@/domain/doctor/specializations";
 
 import LanguageToggle from "@/presentation/components/common/LanguageToggle";
 import Logo from "@/presentation/components/common/Logo";
@@ -12,7 +13,7 @@ import { useApplicationServices } from "@/app/useApplicationServices";
 
 const roleFields = {
   doctor: [
-    { name: "specialization", type: "text", required: true, maxLength: 100 },
+    { name: "specialization", type: "select", required: true },
     { name: "license_number", type: "text", required: true, maxLength: 100 },
   ],
   ngo: [
@@ -44,7 +45,25 @@ const initialForm = {
 };
 
 function ProfessionalField({ field, value, error, disabled, onChange, t }) {
-  const { name, required, help, ...inputProps } = field;
+  const { name, type, required, help, ...inputProps } = field;
+
+  if (type === "select") {
+    return (
+      <SelectField
+        id={`professional-${name}`}
+        name={name}
+        label={t(`registerProfessional.fields.${name}`)}
+        value={value}
+        onChange={onChange}
+        required={required}
+        disabled={disabled}
+        error={error}
+        placeholder={t("registerProfessional.fields.specializationPlaceholder")}
+        options={SPECIALIZATIONS.map((option) => ({ value: option.value, label: t(`specializations.${option.key}`) }))}
+      />
+    );
+  }
+
   return (
     <TextField
       id={`professional-${name}`}
@@ -56,6 +75,7 @@ function ProfessionalField({ field, value, error, disabled, onChange, t }) {
       disabled={disabled}
       error={error}
       hint={help ? t("registerProfessional.passwordHint") : undefined}
+      type={type}
       {...inputProps}
     />
   );
@@ -79,7 +99,6 @@ function RegisterProfessional({ role }) {
     const maxLengths = {
       full_name: 150,
       email: 255,
-      specialization: 100,
       license_number: 100,
       organization_name: 150,
       registration_number: 100,
@@ -95,6 +114,7 @@ function RegisterProfessional({ role }) {
     for (const field of roleFields[role]) {
       const value = form[field.name].trim();
       if (field.required && !value) errors[field.name] = t(`registerProfessional.errors.${field.name}Required`);
+      else if (field.name === "specialization" && !specializationKey(value)) errors[field.name] = t("registerProfessional.errors.specializationRequired");
       else if (value.length > maxLengths[field.name]) errors[field.name] = t(`registerProfessional.errors.${field.name}TooLong`);
     }
 

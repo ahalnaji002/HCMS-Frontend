@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApplicationServices } from "@/app/useApplicationServices";
 import { Button, Card, EmptyState, ErrorState, LoadingState, StatusBadge, useToast } from "@/presentation/components/ui";
+import { useSpecializationLabel } from "@/presentation/hooks/useSpecializationLabel";
 
 function errorKey(error) {
   const status = error.response?.status;
@@ -14,6 +15,7 @@ function errorKey(error) {
 
 function DoctorPatientAssignmentsSection() {
   const { t } = useTranslation();
+  const specializationLabel = useSpecializationLabel();
   const { admin } = useApplicationServices();
   const toast = useToast();
   const [assignments, setAssignments] = useState([]);
@@ -65,7 +67,7 @@ function DoctorPatientAssignmentsSection() {
             as="article"
             padding="sm"
             title={assignment.patient?.full_name || assignment.patient_name}
-            description={[assignment.doctor?.full_name || assignment.doctor_name, assignment.doctor?.specialization || assignment.specialization].filter(Boolean).join(" · ")}
+            description={[assignment.doctor?.full_name || assignment.doctor_name, specializationLabel(assignment.doctor?.specialization || assignment.specialization)].filter(Boolean).join(" · ")}
             actions={(
               <>
                 <StatusBadge status={assignment.status} tone={active ? "success" : "neutral"} labelPrefix="adminAssignments.statuses" />

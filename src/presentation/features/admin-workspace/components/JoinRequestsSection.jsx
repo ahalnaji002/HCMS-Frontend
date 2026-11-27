@@ -2,11 +2,13 @@ import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Badge, Button, Card, DescriptionList, EmptyState, ErrorState, LoadingState, TextareaField } from "@/presentation/components/ui";
 import { useFormatDate } from "@/presentation/hooks/useFormatDate";
+import { useSpecializationLabel } from "@/presentation/hooks/useSpecializationLabel";
 import useJoinRequests from "@/presentation/features/admin-workspace/useJoinRequests";
 
 function RequestDetails({ request }) {
   const { t } = useTranslation();
   const { dateTime } = useFormatDate();
+  const specializationLabel = useSpecializationLabel();
   const professional = request.request_type === "DOCTOR" ? request.doctor : request.ngo;
   const status = request.user?.account_status;
 
@@ -19,7 +21,7 @@ function RequestDetails({ request }) {
         { label: t("adminJoinRequests.accountStatus"), value: status && t(`userManagement.statuses.${status}`, { defaultValue: status }) },
         { label: t("adminJoinRequests.submittedAt"), value: dateTime(request.created_at) },
         ...(request.request_type === "DOCTOR" ? [
-          { label: t("adminJoinRequests.specialization"), value: professional?.specialization },
+          { label: t("adminJoinRequests.specialization"), value: specializationLabel(professional?.specialization) },
           { label: t("adminJoinRequests.licenseNumber"), value: professional?.license_number },
         ] : [
           { label: t("adminJoinRequests.organizationName"), value: professional?.organization_name },

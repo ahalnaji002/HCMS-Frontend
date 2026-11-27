@@ -1,15 +1,16 @@
+import { isEmergencyEligibleSpecialization } from "@/domain/doctor/specializations";
 import EmergencyAlertContact from "@/presentation/components/common/EmergencyAlertContact";
 import { Button, Card, EmptyState, ErrorState, LoadingState, SelectField, StatusBadge } from "@/presentation/components/ui";
 import { useFormatDate } from "@/presentation/hooks/useFormatDate";
-
-const EMERGENCY_SPECIALTIES = ["General Medicine", "Emergency Medicine"];
+import { useSpecializationLabel } from "@/presentation/hooks/useSpecializationLabel";
 
 function EmergencyAlertsSection({ t, alerts, doctors, selectedDoctorIds, busyId, loading, loadError, onDoctorChange, onRefresh, onAssign }) {
   const { dateTime } = useFormatDate();
-  const eligibleDoctors = doctors.filter((doctor) => EMERGENCY_SPECIALTIES.includes(doctor.specialization));
+  const specializationLabel = useSpecializationLabel();
+  const eligibleDoctors = doctors.filter((doctor) => isEmergencyEligibleSpecialization(doctor.specialization));
   const doctorOptions = eligibleDoctors.map((doctor) => ({
     value: String(doctor.id),
-    label: `${doctor.full_name} — ${doctor.specialization} (${t(`adminIntakes.availabilityValues.${doctor.availability}`)}; ${doctor.active_assignment_count}/${doctor.capacity_limit ?? "∞"})`,
+    label: `${doctor.full_name} — ${specializationLabel(doctor.specialization)} (${t(`adminIntakes.availabilityValues.${doctor.availability}`)}; ${doctor.active_assignment_count}/${doctor.capacity_limit ?? "∞"})`,
   }));
 
   return (

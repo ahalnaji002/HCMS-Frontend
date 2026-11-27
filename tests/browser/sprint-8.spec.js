@@ -180,16 +180,17 @@ for (const role of ['patient', 'doctor', 'ngo']) {
       const values = { full_name: 'Browser Test', email: credentials.email, password: credentials.password,
         password_confirmation: credentials.password,
         ...(role === 'patient' ? { national_id: '123456789', date_of_birth: '2000-01-01' }
-          : role === 'doctor' ? { specialization: 'General Medicine', license_number: 'TEST-123' }
+          : role === 'doctor' ? { license_number: 'TEST-123' }
             : { organization_name: 'Test Organization' }),
       };
+      const selects = role === 'patient' ? { gender: 'MALE' } : role === 'doctor' ? { specialization: 'General Medicine' } : {};
       for (const [name, value] of Object.entries(values)) await page.locator(`[name="${name}"]`).fill(value);
-      if (role === 'patient') await page.locator('[name=gender]').selectOption('MALE');
+      for (const [name, value] of Object.entries(selects)) await page.locator(`[name="${name}"]`).selectOption(value);
       await page.locator('button[type=submit]').click();
       await expect(page.getByRole('alert')).toContainText(failure === 'network' ? 'Unable to connect'
         : failure === '500' ? 'The server could not'
           : failure === '429' ? 'Too many registration attempts' : /already/);
-      for (const [name, value] of Object.entries(values)) await expect(page.locator(`[name="${name}"]`)).toHaveValue(value);
+      for (const [name, value] of Object.entries({ ...values, ...selects })) await expect(page.locator(`[name="${name}"]`)).toHaveValue(value);
       await expect(page.locator('button[type=submit]')).toBeEnabled();
       expect(await storedToken(page)).toBeNull();
       failed = false;

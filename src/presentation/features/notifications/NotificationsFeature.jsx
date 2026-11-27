@@ -8,6 +8,20 @@ function isRead(notification) {
   return notification.is_read === true || notification.is_read === 1 || notification.is_read === "1";
 }
 
+// The server stores English text. When it also sends the event, build the
+// text in the reader's language; otherwise show what the server sent.
+function notificationText(t, notification) {
+  const { event, event_status: status, reference_id: id } = notification;
+  if (!event || !t(`notifications.events.${event}.title`, { defaultValue: "" })) {
+    return { title: notification.title, message: notification.message };
+  }
+  const values = { id, status: status ? t(`notifications.statuses.${status}`, { defaultValue: status }) : "" };
+  return {
+    title: t(`notifications.events.${event}.title`, values),
+    message: t(`notifications.events.${event}.message`, values),
+  };
+}
+
 function getErrorKind(error) {
   if (!error.response) return "network";
   if (error.response.status === 401) return "unauthorized";
@@ -104,15 +118,16 @@ function NotificationsFeature({ role }) {
                 <ul className="divide-y divide-border">
                   {state.items.map((notification) => {
                     const read = isRead(notification);
+                    const text = notificationText(t, notification);
                     return (
                       <li key={notification.id} className={`-mx-2 rounded-xl px-2 py-4 first:pt-2 last:pb-2 ${read ? "" : "bg-primary/[0.04]"}`}>
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                           <article className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
-                              <h2 className="font-bold">{notification.title}</h2>
+                              <h2 className="font-bold">{text.title}</h2>
                               <Badge tone={read ? "neutral" : "info"}>{t(read ? "notifications.read" : "notifications.unread")}</Badge>
                             </div>
-                            <p className="mt-2 whitespace-pre-wrap break-words text-sm leading-6 text-text-secondary">{notification.message}</p>
+                            <p className="mt-2 whitespace-pre-wrap break-words text-sm leading-6 text-text-secondary">{text.message}</p>
                             <time dateTime={notification.created_at} className="mt-3 block text-xs text-text-secondary">{dateTime(notification.created_at)}</time>
                           </article>
                           {!read && (
