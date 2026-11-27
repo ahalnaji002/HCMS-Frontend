@@ -1,5 +1,6 @@
 import { Badge, Card, DescriptionList, EmptyState, ErrorState, LoadingState } from "@/presentation/components/ui";
 import { useFormatDate } from "@/presentation/hooks/useFormatDate";
+import { useSpecializationLabel } from "@/presentation/hooks/useSpecializationLabel";
 
 // Shown on the patient home once a doctor is assigned: the care team and the
 // doctors' diagnoses.
@@ -8,6 +9,7 @@ function PatientCareSummary({
   diagnoses, diagnosesLoading, diagnosesError, onRetryDiagnoses, intake,
 }) {
   const { dateTime } = useFormatDate();
+  const specializationLabel = useSpecializationLabel();
   if (intake?.status !== "DOCTOR_ASSIGNED") return null;
 
   return (
@@ -22,7 +24,7 @@ function PatientCareSummary({
                     <div className="flex flex-wrap items-start justify-between gap-2">
                       <div>
                         <p className="font-bold">{assignment.doctor_name}</p>
-                        <p className="mt-1 text-sm text-text-secondary">{assignment.specialization}</p>
+                        <p className="mt-1 text-sm text-text-secondary">{specializationLabel(assignment.specialization)}</p>
                       </div>
                       <Badge tone="success">{t("patientWorkspace.active")}</Badge>
                     </div>
@@ -40,7 +42,7 @@ function PatientCareSummary({
               <DescriptionList
                 items={diagnoses.map((diagnosis) => ({
                   key: diagnosis.id,
-                  label: [diagnosis.doctor_name, diagnosis.specialization, dateTime(diagnosis.documented_at)].filter(Boolean).join(" · "),
+                  label: [diagnosis.doctor_name, specializationLabel(diagnosis.specialization), dateTime(diagnosis.documented_at)].filter(Boolean).join(" · "),
                   value: diagnosis.diagnosis,
                 }))}
               />

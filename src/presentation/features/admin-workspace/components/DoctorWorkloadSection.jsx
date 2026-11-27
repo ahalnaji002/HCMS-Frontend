@@ -1,6 +1,8 @@
 import { Badge, Button, Card, EmptyState, SelectField, TextField } from "@/presentation/components/ui";
+import { useSpecializationLabel } from "@/presentation/hooks/useSpecializationLabel";
 
 function DoctorWorkloadSection({ t, doctors, drafts, onDraftChange, busyId, onSave }) {
+  const specializationLabel = useSpecializationLabel();
   if (doctors.length === 0) return <div id="admin-workload"><EmptyState title={t("adminIntakes.noDoctors")} /></div>;
 
   return (
@@ -15,7 +17,7 @@ function DoctorWorkloadSection({ t, doctors, drafts, onDraftChange, busyId, onSa
             as="article"
             padding="sm"
             title={doctor.full_name}
-            description={doctor.specialization}
+            description={specializationLabel(doctor.specialization)}
             actions={full && <Badge tone="warning">{t("adminIntakes.capacityAlert")}</Badge>}
           >
             <p className="text-sm text-text-secondary">{t("adminIntakes.activeAssignments")}: {load} / {doctor.capacity_limit ?? t("adminIntakes.notConfigured")}</p>

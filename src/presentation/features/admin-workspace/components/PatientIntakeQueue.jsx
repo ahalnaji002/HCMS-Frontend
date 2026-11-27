@@ -1,4 +1,5 @@
 import { Button, Card, DescriptionList, EmptyState, LoadingState, SelectField, StatusBadge, TextField } from "@/presentation/components/ui";
+import { useSpecializationLabel } from "@/presentation/hooks/useSpecializationLabel";
 
 function answerText(t, answer, details) {
   const label = t(`patientWorkspace.answers.${answer}`);
@@ -9,13 +10,14 @@ function PatientIntakeQueue({
   t, loading, intakes, doctors, reasons, selectedDoctors, busyId,
   onReasonChange, onDoctorChange, onStartReview, onAssign,
 }) {
+  const specializationLabel = useSpecializationLabel();
   if (loading) return <div id="admin-intakes"><LoadingState label={t("adminIntakes.loading")} /></div>;
   if (intakes.length === 0) return <div id="admin-intakes"><EmptyState title={t("adminIntakes.empty")} /></div>;
 
   const doctorOptions = doctors.map((doctor) => ({
     value: String(doctor.id),
     disabled: doctor.availability === "UNAVAILABLE",
-    label: `${doctor.full_name} — ${doctor.specialization} (${t(`adminIntakes.availabilityValues.${doctor.availability}`)}; ${doctor.active_assignment_count}/${doctor.capacity_limit ?? "∞"})`,
+    label: `${doctor.full_name} — ${specializationLabel(doctor.specialization)} (${t(`adminIntakes.availabilityValues.${doctor.availability}`)}; ${doctor.active_assignment_count}/${doctor.capacity_limit ?? "∞"})`,
   }));
 
   return (

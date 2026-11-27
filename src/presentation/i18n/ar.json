@@ -282,6 +282,7 @@
       "email": "البريد الإلكتروني",
       "phone": "رقم الهاتف (اختياري)",
       "specialization": "التخصص الطبي",
+      "specializationPlaceholder": "اختر تخصصك",
       "license_number": "رقم الترخيص المهني",
       "organization_name": "اسم المؤسسة",
       "registration_number": "رقم تسجيل المؤسسة (اختياري)",
@@ -295,8 +296,7 @@
       "emailInvalid": "أدخل بريدًا إلكترونيًا صحيحًا.",
       "emailTooLong": "يجب ألا يتجاوز البريد الإلكتروني 255 حرفًا.",
       "phoneInvalid": "أدخل رقم هاتف من 10 أرقام يبدأ بـ059 أو 056.",
-      "specializationRequired": "أدخل تخصصك الطبي.",
-      "specializationTooLong": "يجب ألا يتجاوز التخصص 100 حرف.",
+      "specializationRequired": "اختر تخصصك الطبي.",
       "license_numberRequired": "أدخل رقم الترخيص المهني.",
       "license_numberTooLong": "يجب ألا يتجاوز رقم الترخيص 100 حرف.",
       "organization_nameRequired": "أدخل اسم المؤسسة.",
@@ -318,7 +318,7 @@
         "full_name": "أدخل اسمًا كاملًا لا يتجاوز 150 حرفًا.",
         "email": "أدخل بريدًا إلكترونيًا صحيحًا لا يتجاوز 255 حرفًا.",
         "phone": "أدخل رقم هاتف من 10 أرقام يبدأ بـ059 أو 056.",
-        "specialization": "أدخل تخصصًا لا يتجاوز 100 حرف.",
+        "specialization": "اختر تخصصًا من القائمة.",
         "license_number": "أدخل رقم ترخيص لا يتجاوز 100 حرف.",
         "organization_name": "أدخل اسم مؤسسة لا يتجاوز 150 حرفًا.",
         "registration_number": "أدخل رقم تسجيل لا يتجاوز 100 حرف.",
@@ -1199,6 +1199,36 @@
     "loading": "جارٍ تحميل الإشعارات...",
     "empty": "لا توجد إشعارات حاليًا.",
     "retry": "حاول مجددًا",
+    "events": {
+      "EMERGENCY_ALERT_ASSIGNED": {
+        "title": "أُسند إليك بلاغ طوارئ",
+        "message": "أُسند إليك بلاغ الطوارئ رقم {{id}}. افتحه للاستجابة."
+      },
+      "EMERGENCY_ALERT_STATUS_CHANGED": {
+        "title": "تحديث على بلاغ الطوارئ",
+        "message": "حالة بلاغ الطوارئ رقم {{id}} الآن: {{status}}."
+      },
+      "TREATMENT_PLAN_UPDATED": {
+        "title": "تم تحديث خطتك العلاجية",
+        "message": "عدّل طبيبك الخطة العلاجية رقم {{id}}."
+      },
+      "ASSISTANCE_REQUEST_STATUS_CHANGED": {
+        "title": "تحديث على طلب المساعدة",
+        "message": "حالة طلب المساعدة رقم {{id}} الآن: {{status}}."
+      },
+      "REMINDER_DUE": {
+        "title": "تذكير",
+        "message": "حان موعد تذكيرك رقم {{id}}."
+      }
+    },
+    "statuses": {
+      "IN_PROGRESS": "قيد المتابعة",
+      "RESOLVED": "تمت المعالجة",
+      "UNDER_REVIEW": "قيد المراجعة",
+      "APPROVED": "مقبول",
+      "REJECTED": "مرفوض",
+      "COMPLETED": "مكتمل"
+    },
     "notices": {
       "readOne": "تم تحديد الإشعار كمقروء.",
       "readAll": "تم تحديد جميع الإشعارات كمقروءة."
@@ -1493,5 +1523,24 @@
     "loadError": "تعذّر التحميل.",
     "retry": "إعادة المحاولة",
     "cancel": "إلغاء"
+  },
+  "specializations": {
+    "generalMedicine": "طب عام",
+    "emergencyMedicine": "طب الطوارئ",
+    "familyMedicine": "طب الأسرة",
+    "internalMedicine": "الطب الباطني",
+    "generalSurgery": "الجراحة العامة",
+    "orthopedics": "جراحة العظام",
+    "plasticSurgery": "جراحة التجميل والترميم",
+    "pediatrics": "طب الأطفال",
+    "obstetricsGynecology": "النساء والولادة",
+    "cardiology": "أمراض القلب",
+    "neurology": "الأعصاب",
+    "psychiatry": "الطب النفسي",
+    "rehabilitation": "الطب الطبيعي والتأهيل",
+    "dermatology": "الأمراض الجلدية",
+    "ophthalmology": "طب العيون",
+    "otolaryngology": "الأنف والأذن والحنجرة",
+    "anesthesiology": "التخدير"
   }
 }

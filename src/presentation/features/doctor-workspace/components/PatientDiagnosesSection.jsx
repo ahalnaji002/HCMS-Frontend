@@ -1,8 +1,10 @@
 import { Button, Card, DescriptionList, EmptyState, TextareaField } from "@/presentation/components/ui";
 import { useFormatDate } from "@/presentation/hooks/useFormatDate";
+import { useSpecializationLabel } from "@/presentation/hooks/useSpecializationLabel";
 
 function PatientDiagnosesSection({ t, diagnoses, value, onChange, isSaving, onSubmit }) {
   const { dateTime } = useFormatDate();
+  const specializationLabel = useSpecializationLabel();
   return (
     <Card id="doctor-diagnoses" title={t("doctorWorkspace.diagnosesTitle")}>
       <form onSubmit={onSubmit} className="space-y-4">
@@ -23,7 +25,7 @@ function PatientDiagnosesSection({ t, diagnoses, value, onChange, isSaving, onSu
           <DescriptionList
             items={diagnoses.map((diagnosis) => ({
               key: diagnosis.id,
-              label: [diagnosis.doctor_name, diagnosis.specialization, dateTime(diagnosis.documented_at)].filter(Boolean).join(" · "),
+              label: [diagnosis.doctor_name, specializationLabel(diagnosis.specialization), dateTime(diagnosis.documented_at)].filter(Boolean).join(" · "),
               value: diagnosis.diagnosis,
             }))}
           />

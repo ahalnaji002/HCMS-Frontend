@@ -281,6 +281,7 @@
       "email": "Email address",
       "phone": "Phone number (optional)",
       "specialization": "Specialization",
+      "specializationPlaceholder": "Choose your specialization",
       "license_number": "Professional license number",
       "organization_name": "Organization name",
       "registration_number": "Organization registration number (optional)",
@@ -294,8 +295,7 @@
       "emailInvalid": "Enter a valid email address.",
       "emailTooLong": "Email address must be 255 characters or fewer.",
       "phoneInvalid": "Enter a 10-digit phone number starting with 059 or 056.",
-      "specializationRequired": "Enter your medical specialization.",
-      "specializationTooLong": "Specialization must be 100 characters or fewer.",
+      "specializationRequired": "Choose your medical specialization.",
       "license_numberRequired": "Enter your professional license number.",
       "license_numberTooLong": "License number must be 100 characters or fewer.",
       "organization_nameRequired": "Enter the organization name.",
@@ -317,7 +317,7 @@
         "full_name": "Enter a full name of 150 characters or fewer.",
         "email": "Enter a valid email address of 255 characters or fewer.",
         "phone": "Enter a 10-digit phone number starting with 059 or 056.",
-        "specialization": "Enter a specialization of 100 characters or fewer.",
+        "specialization": "Choose a specialization from the list.",
         "license_number": "Enter a license number of 100 characters or fewer.",
         "organization_name": "Enter an organization name of 150 characters or fewer.",
         "registration_number": "Enter a registration number of 100 characters or fewer.",
@@ -1194,6 +1194,36 @@
     "loading": "Loading notifications...",
     "empty": "You have no notifications yet.",
     "retry": "Try again",
+    "events": {
+      "EMERGENCY_ALERT_ASSIGNED": {
+        "title": "Emergency alert assigned to you",
+        "message": "Emergency alert #{{id}} has been assigned to you. Open it to respond."
+      },
+      "EMERGENCY_ALERT_STATUS_CHANGED": {
+        "title": "Your emergency alert was updated",
+        "message": "Emergency alert #{{id}} is now: {{status}}."
+      },
+      "TREATMENT_PLAN_UPDATED": {
+        "title": "Your treatment plan was updated",
+        "message": "Your doctor made changes to treatment plan #{{id}}."
+      },
+      "ASSISTANCE_REQUEST_STATUS_CHANGED": {
+        "title": "Assistance request updated",
+        "message": "Assistance request #{{id}} is now: {{status}}."
+      },
+      "REMINDER_DUE": {
+        "title": "Reminder",
+        "message": "Your reminder #{{id}} is due now."
+      }
+    },
+    "statuses": {
+      "IN_PROGRESS": "In progress",
+      "RESOLVED": "Resolved",
+      "UNDER_REVIEW": "Under review",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "COMPLETED": "Completed"
+    },
     "notices": {
       "readOne": "Notification marked as read.",
       "readAll": "All notifications marked as read."
@@ -1484,5 +1514,24 @@
     "loadError": "This could not be loaded.",
     "retry": "Try again",
     "cancel": "Cancel"
+  },
+  "specializations": {
+    "generalMedicine": "General Medicine",
+    "emergencyMedicine": "Emergency Medicine",
+    "familyMedicine": "Family Medicine",
+    "internalMedicine": "Internal Medicine",
+    "generalSurgery": "General Surgery",
+    "orthopedics": "Orthopedics",
+    "plasticSurgery": "Plastic and Reconstructive Surgery",
+    "pediatrics": "Pediatrics",
+    "obstetricsGynecology": "Obstetrics and Gynecology",
+    "cardiology": "Cardiology",
+    "neurology": "Neurology",
+    "psychiatry": "Psychiatry",
+    "rehabilitation": "Physical Medicine and Rehabilitation",
+    "dermatology": "Dermatology",
+    "ophthalmology": "Ophthalmology",
+    "otolaryngology": "Ear, Nose and Throat (ENT)",
+    "anesthesiology": "Anesthesiology"
   }
 }
