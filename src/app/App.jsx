@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
+import AppErrorBoundary from "@/presentation/components/common/AppErrorBoundary";
 import RequireRole from "@/presentation/components/auth/RequireRole";
 import RouteLoadingFallback from "@/presentation/components/common/RouteLoadingFallback";
 import { ToastProvider } from "@/presentation/components/ui";
@@ -18,12 +19,16 @@ const PatientHome = lazy(() => import("@/presentation/pages/role/PatientHome"));
 const AdminHome = lazy(() => import("@/presentation/pages/role/AdminHome"));
 const DoctorHome = lazy(() => import("@/presentation/pages/role/DoctorHome"));
 const NgoHome = lazy(() => import("@/presentation/pages/role/NgoHome"));
+const NotFound = lazy(() => import("@/presentation/pages/NotFound"));
 // Component gallery: development builds only, never shipped.
 const UiGallery = import.meta.env.DEV ? lazy(() => import("@/presentation/pages/dev/UiGallery")) : null;
 
 function App() {
+  const location = useLocation();
+
   return (
     <ToastProvider>
+    <AppErrorBoundary resetKey={location.pathname}>
     <Suspense fallback={<RouteLoadingFallback />}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -59,8 +64,10 @@ function App() {
             }
           />
         ))}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
+    </AppErrorBoundary>
     </ToastProvider>
   );
 }

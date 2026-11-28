@@ -942,6 +942,7 @@
     "errors": { "validation": "Check the assignment status and try again.", "forbidden": "You do not have permission to change assignment status.", "notFound": "This assignment no longer exists.", "conflict": "The assignment status changed. Refresh and try again.", "server": "Could not update the assignment. Try again." }
   },
   "doctorWorkspace": {
+    "myNotes": "My notes",
     "tabs": {
       "label": "Patient file",
       "summary": "Health report",
@@ -1533,5 +1534,16 @@
     "ophthalmology": "Ophthalmology",
     "otolaryngology": "Ear, Nose and Throat (ENT)",
     "anesthesiology": "Anesthesiology"
+  },
+  "appError": {
+    "title": "Something went wrong",
+    "description": "This page could not be displayed. Reload to try again; your saved data is safe.",
+    "reload": "Reload page",
+    "home": "Go to the home page"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has moved.",
+    "home": "Go to the home page"
   }
 }

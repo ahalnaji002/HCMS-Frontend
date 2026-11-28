@@ -8,6 +8,13 @@ import { AuthProvider } from "@/presentation/context/AuthContext.jsx";
 import { ThemeProvider } from "@/presentation/context/ThemeContext.jsx";
 import { ApplicationServicesProvider } from "@/app/ApplicationServicesProvider";
 import applicationServices from "@/app/applicationServices";
+import { reloadOnceForNewVersion } from "@/presentation/utils/chunkReload";
+
+// Vite reports a chunk that failed to preload (usually: a new version was
+// deployed while this tab was open). Reload once to pick up the new files.
+window.addEventListener("vite:preloadError", (event) => {
+  if (reloadOnceForNewVersion()) event.preventDefault();
+});
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
