@@ -18,8 +18,14 @@ export function clearAuthToken() {
 // was revoked). AuthProvider listens and ends the session in the UI.
 export const SESSION_EXPIRED_EVENT = "hcms:session-expired";
 
+// A request that gets no answer within this time fails like a lost
+// connection, so the screen shows its "check your connection" message
+// instead of loading forever on a weak network.
+export const REQUEST_TIMEOUT_MS = 20000;
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  timeout: REQUEST_TIMEOUT_MS,
   headers: {
     Accept: "application/json",
   },
